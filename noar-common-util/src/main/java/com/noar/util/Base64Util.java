@@ -1,63 +1,108 @@
-/**
- * 
- */
 package com.noar.util;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.InputStream;
+import java.util.Base64;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
-
-/**
- * @author SK.YOON
- * 
- */
 public class Base64Util {
 
 	/**
-	 * Base64Encoding 방식으로 바이트 배열을 아스키 문자열로 인코딩한다. In-Binany, Out-Ascii
+	 * Base64 Encode
 	 * 
-	 * @param encodeBytes
-	 *            인코딩할 바이트 배열(byte[])
-	 * @return 인코딩된 아스키 문자열(String)
-	 * @throws IOException
+	 * @param value
+	 * @return
 	 */
-	public static String encode(byte[] encodeBytes) throws IOException {
-		byte[] buf = null;
-		String strResult = null;
-
-		BASE64Encoder base64Encoder = new BASE64Encoder();
-		ByteArrayInputStream bin = new ByteArrayInputStream(encodeBytes);
-		ByteArrayOutputStream bout = new ByteArrayOutputStream();
-
-		base64Encoder.encodeBuffer(bin, bout);
-
-		buf = bout.toByteArray();
-		strResult = new String(buf).trim();
-		return strResult;
+	public static byte[] encode(byte[] value) {
+		return Base64.getEncoder().encode(value);
 	}
 
 	/**
-	 * Base64Decoding 방식으로 아스키 문자열을 바이트 배열로 디코딩한다. In-Ascii, Out-Binany
+	 * Base64 Encode
 	 * 
-	 * @param strDecode
-	 *            디코딩할 아스키 문자열(String)
-	 * @return 디코딩된 바이트 배열(byte[])
-	 * @throws IOException 
+	 * @param value
+	 * @return
 	 */
-	public static byte[] decode(String strDecode) throws IOException {
-		byte[] buf = null;
+	public static byte[] encode(String value) {
+		return Base64.getEncoder().encode(value.getBytes());
+	}
 
-		BASE64Decoder base64Decoder = new BASE64Decoder();
-		ByteArrayInputStream bin = new ByteArrayInputStream(
-				strDecode.getBytes());
-		ByteArrayOutputStream bout = new ByteArrayOutputStream();
+	/**
+	 * Base64 Encode To String
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public static String encodeToString(String value) {
+		return encodeToString(value.getBytes());
+	}
 
-		base64Decoder.decodeBuffer(bin, bout);
+	/**
+	 * Base64 Encode To String
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public static String encodeToString(byte[] value) {
+		return Base64.getEncoder().encodeToString(value);
+	}
 
-		buf = bout.toByteArray();
-		return buf;
+	/**
+	 * Base64 Decode
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public static byte[] decode(byte[] value) {
+		return Base64.getDecoder().decode(value);
+	}
+
+	/**
+	 * Base64 Decode
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public static byte[] decode(String value) {
+		return Base64.getDecoder().decode(value);
+	}
+
+	/**
+	 * Base64 Decode To String
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public static String decodeToString(byte[] value) {
+		return new String(Base64.getDecoder().decode(value));
+	}
+
+	/**
+	 * Base64 Decode To String
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public static String decodeToString(String value) {
+		return new String(Base64.getDecoder().decode(value));
+	}
+
+	/**
+	 * Base64 Decode To InputStream
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public static InputStream base64DecodeToInputStream(byte[] value) {
+		return new ByteArrayInputStream(Base64.getDecoder().decode(value));
+	}
+
+	/**
+	 * Base64 Decode To InputStream
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public static InputStream decodeToInputStream(String value) {
+		return new ByteArrayInputStream(Base64.getDecoder().decode(value));
 	}
 }

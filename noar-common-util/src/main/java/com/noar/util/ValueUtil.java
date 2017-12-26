@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.noar.util;
 
 import java.io.IOException;
@@ -32,11 +29,9 @@ import com.google.gson.Gson;
 
 /**
  * @author Minu.Kim
- *
  */
 public class ValueUtil {
 	private static final Logger logger = LoggerFactory.getLogger(ValueUtil.class);
-	
 
 	public static final String DATEPATTERN_XSDDATETIME = "yyyy-MM-dd'T'HH:mm:ss'.'S";
 	public static final String DATEPATTERN_XSDSMALLDATETIME = "yyyy-MM-dd'T'HH:mm:ss";
@@ -299,6 +294,7 @@ public class ValueUtil {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> Set<T> toSet(T... value) {
 		if (isEmpty(value))
 			return new HashSet<T>(0);
