@@ -11,7 +11,9 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.AbstractRefreshableApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.stereotype.Service;
 
+@Service
 public class BeanUtil implements ApplicationContextAware {
 
 	private static ApplicationContext applicationContext;

@@ -25,8 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 
-import com.google.gson.Gson;
-
 /**
  * @author Minu.Kim
  */
@@ -218,29 +216,6 @@ public class ValueUtil {
 	@SuppressWarnings("unchecked")
 	public static <T> T checkValue(Object data, T defaultValue) {
 		return !isEmpty(data) ? (T) data : defaultValue;
-	}
-
-	/**
-	 * Convert Object To JSON String
-	 * 
-	 * @param item
-	 * @return
-	 */
-	public static String toJsonString(Object item) {
-		Gson gson = new Gson();
-		return gson.toJson(item);
-	}
-
-	/**
-	 * Convert JSON String To Object
-	 * 
-	 * @param jsonStr
-	 * @param inputType
-	 * @return
-	 */
-	public static <T> T jsonToObject(String jsonStr, Class<T> inputType) {
-		Gson gson = new Gson();
-		return gson.fromJson(jsonStr, inputType);
 	}
 
 	/**
