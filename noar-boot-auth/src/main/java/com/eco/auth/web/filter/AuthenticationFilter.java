@@ -123,6 +123,9 @@ public class AuthenticationFilter extends AbstractSecurityWebApplicationInitiali
 			String encodePass = SecurityUtil.encodePassword(password);
 			authResult = providerManager.authenticate(new UsernamePasswordAuthenticationToken(id, encodePass));
 		}
+		
+		// 인증정보 Context에 저장.
+		SecurityContextHolder.getContext().setAuthentication(authResult);
 
 		return authResult;
 	}
