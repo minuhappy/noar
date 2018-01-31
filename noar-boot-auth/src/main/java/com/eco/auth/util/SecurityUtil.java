@@ -16,11 +16,6 @@ import com.noar.util.BeanUtil;
  * @author Minu.Kim
  */
 public class SecurityUtil {
-
-	public static final String PARAMNAME_USERNAME = "j_username";
-	public static final String PARAMNAME_PASSWORD = "j_password";
-	public static final String USERID_ANONYMOUS = "anonymous";
-
 	/**
 	 * 승인 여부 확인.
 	 * 

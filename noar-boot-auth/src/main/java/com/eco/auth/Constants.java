@@ -3,6 +3,7 @@ package com.eco.auth;
 public class Constants {
 	public static final String PARAMNAME_USERNAME = "j_username";
 	public static final String PARAMNAME_PASSWORD = "j_password";
+	public static final String USERID_ANONYMOUS = "anonymous";
 	
 	public static final String AUTH_TYPE = "Authorization-Type";
 	public static final String AUTH_KEY = "Authorization-Key";
