@@ -13,6 +13,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,6 +40,8 @@ import com.noar.util.ValueUtil;
 
 @Service
 public class AuthenticationFilter extends AbstractSecurityWebApplicationInitializer implements Filter {
+	private static final String APPNAME_LOGOUT_URL = "/auth/logout";
+
 	@Autowired
 	private UserDetailsService userDetailsService;
 
@@ -46,6 +49,12 @@ public class AuthenticationFilter extends AbstractSecurityWebApplicationInitiali
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
+
+		String appName = this.toAppNameByRequestUri(request);
+		if (APPNAME_LOGOUT_URL.equals(appName)) {
+			this.logout(request);
+			return;
+		}
 
 		/**
 		 * 인증된 사용자일 경우, 인증을 실행하지 않음.
@@ -123,7 +132,7 @@ public class AuthenticationFilter extends AbstractSecurityWebApplicationInitiali
 			String encodePass = SecurityUtil.encodePassword(password);
 			authResult = providerManager.authenticate(new UsernamePasswordAuthenticationToken(id, encodePass));
 		}
-		
+
 		// 인증정보 Context에 저장.
 		SecurityContextHolder.getContext().setAuthentication(authResult);
 
@@ -165,6 +174,46 @@ public class AuthenticationFilter extends AbstractSecurityWebApplicationInitiali
 			SecurityContextHolder.getContext().setAuthentication(authResult);
 			SessionUtil.setAttribute(Constants.AUTH_TYPE, Constants.AUTH_TYPE_TOKEN);
 		}
+	}
+
+	private String toAppNameByRequestUri(HttpServletRequest request) {
+		String appName = request.getRequestURI();
+
+		int pathParamIndex = appName.indexOf(';');
+		if (pathParamIndex > 0) {
+			// strip everything from the first semi-colon
+			appName = appName.substring(0, pathParamIndex);
+		}
+
+		int queryParamIndex = appName.indexOf('?');
+		if (queryParamIndex > 0) {
+			// strip everything from the first question mark
+			appName = appName.substring(0, queryParamIndex);
+		}
+
+		appName = appName.replaceFirst(request.getContextPath(), "");
+
+		return appName;
+	}
+
+	/**
+	 * Logout
+	 * 후처리 작업은 LogoutSuccessHandler 인터페이스를 이용하여 구현.
+	 * 
+	 * @param req
+	 * @param res
+	 * @return
+	 */
+	private boolean logout(HttpServletRequest req) {
+		SecurityContextHolder.clearContext();
+
+		if (req != null) {
+			HttpSession session = req.getSession();
+			if (session != null) {
+				session.invalidate();
+			}
+		}
+		return true;
 	}
 
 	@Override

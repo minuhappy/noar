@@ -5,6 +5,8 @@ public class Constants {
 	public static final String PARAMNAME_PASSWORD = "j_password";
 	public static final String USERID_ANONYMOUS = "anonymous";
 	
+	public static final String PASSWORD_ENCODER_SALT = "SPICY";
+	
 	public static final String AUTH_TYPE = "Authorization-Type";
 	public static final String AUTH_KEY = "Authorization-Key";
 

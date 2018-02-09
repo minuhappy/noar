@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.eco.auth.Constants;
 import com.eco.auth.security.EcoUserDetails;
 import com.eco.auth.security.IUser;
 import com.noar.util.BeanUtil;
@@ -61,7 +62,7 @@ public class SecurityUtil {
 	 * @return
 	 */
 	public static String encodePassword(String value) {
-		return BeanUtil.get(MessageDigestPasswordEncoder.class).encodePassword(value, null);
+		return BeanUtil.get(MessageDigestPasswordEncoder.class).encodePassword(value, Constants.PASSWORD_ENCODER_SALT);
 	}
 
 	/**
@@ -72,7 +73,7 @@ public class SecurityUtil {
 	 * @return
 	 */
 	public static boolean isPasswordValid(String encPass, String rawPass) {
-		return BeanUtil.get(MessageDigestPasswordEncoder.class).isPasswordValid(encPass, rawPass, null);
+		return BeanUtil.get(MessageDigestPasswordEncoder.class).isPasswordValid(encPass, rawPass, Constants.PASSWORD_ENCODER_SALT);
 	}
 
 	/**
