@@ -20,7 +20,7 @@ import com.minu.orm.Constants;
 import com.minu.orm.model.Page;
 import com.minu.orm.model.SearchCondition;
 import com.minu.orm.model.SortCondition;
-import com.noar.util.ValueUtil;
+import com.noar.common.util.ValueUtil;
 
 public class MongoDaoHandler {
 

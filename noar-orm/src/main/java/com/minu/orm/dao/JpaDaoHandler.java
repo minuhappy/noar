@@ -28,7 +28,9 @@ import com.minu.orm.model.Page;
 import com.minu.orm.model.SearchCondition;
 import com.minu.orm.model.SortCondition;
 import com.minu.orm.processor.VelocityProcessor;
-import com.noar.util.ValueUtil;
+import com.noar.common.util.ClassUtil;
+import com.noar.common.util.FileUtil;
+import com.noar.common.util.ValueUtil;
 
 @Service
 @Qualifier("jpaDaoHandler")
@@ -39,7 +41,7 @@ public class JpaDaoHandler implements Dao {
 
 	@Autowired
 	private VelocityProcessor processor;
-	
+
 	/**
 	 * Logger
 	 */
@@ -130,7 +132,7 @@ public class JpaDaoHandler implements Dao {
 		Field[] fields = entity.getClass().getDeclaredFields();
 
 		for (Field field : fields) {
-			Object value = ValueUtil.getFieldValue(entity, field.getName());
+			Object value = ClassUtil.getFieldValue(entity, field.getName());
 			if (ValueUtil.isNotEmpty(value)) {
 				searchConditionList.add(new SearchCondition(field.getName(), Constants.EQUAL, value));
 			}
@@ -160,7 +162,7 @@ public class JpaDaoHandler implements Dao {
 
 	@SuppressWarnings("unchecked")
 	public <T> List<T> listByPath(String path, Class<T> clazz, Map<String, Object> paramMap) {
-		String value = ValueUtil.getValueByFilePath(path);
+		String value = FileUtil.read(path);
 		String sql = processor.process(value, paramMap);
 		Query query = entityManager.createNativeQuery(sql, clazz);
 
@@ -187,7 +189,7 @@ public class JpaDaoHandler implements Dao {
 		Field[] fields = entity.getClass().getDeclaredFields();
 
 		for (Field field : fields) {
-			Object value = ValueUtil.getFieldValue(entity, field.getName());
+			Object value = ClassUtil.getFieldValue(entity, field.getName());
 			if (ValueUtil.isNotEmpty(value)) {
 				searchConditionList.add(new SearchCondition(field.getName(), Constants.EQUAL, value));
 			}
@@ -195,8 +197,7 @@ public class JpaDaoHandler implements Dao {
 		return (Page<T>) search(entity.getClass(), countPage, offset);
 	}
 
-	public <T> Page<T> search(Class<T> entityClass, int countPage, int offset, List<SearchCondition> searchConds,
-			List<SortCondition> sortConds) {
+	public <T> Page<T> search(Class<T> entityClass, int countPage, int offset, List<SearchCondition> searchConds, List<SortCondition> sortConds) {
 		// Criteria Builder
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		// Total Count Query
@@ -238,8 +239,7 @@ public class JpaDaoHandler implements Dao {
 	 * @param criteriaQuery
 	 * @param input
 	 */
-	private void setupCriteriaQuery(CriteriaBuilder cb, Root<?> root, CriteriaQuery<?> criteriaQuery,
-			List<SearchCondition> searchConds, List<SortCondition> sortConds) {
+	private void setupCriteriaQuery(CriteriaBuilder cb, Root<?> root, CriteriaQuery<?> criteriaQuery, List<SearchCondition> searchConds, List<SortCondition> sortConds) {
 		List<Predicate> predicateList = new ArrayList<Predicate>();
 		List<Order> orderList = new ArrayList<Order>();
 
@@ -304,7 +304,7 @@ public class JpaDaoHandler implements Dao {
 
 		switch (operator) {
 		// 'equal' 연산자 : '='
-		case Constants.EQUAL: {
+		case Constants.EQUAL : {
 			if (!isEmpty) {
 				p = cb.equal(root.get(name), value);
 			}
@@ -312,7 +312,7 @@ public class JpaDaoHandler implements Dao {
 		}
 
 		// 'notequal' 연산자 : '!='
-		case Constants.NOT_EQUAL: {
+		case Constants.NOT_EQUAL : {
 			if (!isEmpty) {
 				p = cb.notEqual(root.get(name), value);
 			}
@@ -320,7 +320,7 @@ public class JpaDaoHandler implements Dao {
 		}
 
 		// 'like' 연산자 : 'like'
-		case Constants.LIKE: {
+		case Constants.LIKE : {
 			if (!isEmpty) {
 				p = cb.like(root.get(name), "%" + value + "%");
 			}
@@ -328,7 +328,7 @@ public class JpaDaoHandler implements Dao {
 		}
 
 		// 'starts with' 연산자 : 'like'
-		case Constants.STARTS_WITH: {
+		case Constants.STARTS_WITH : {
 			if (!isEmpty) {
 				p = cb.like(root.get(name), value + "%");
 			}
@@ -336,7 +336,7 @@ public class JpaDaoHandler implements Dao {
 		}
 
 		// 'ends with' 연산자 : 'like'
-		case Constants.ENDS_WITH: {
+		case Constants.ENDS_WITH : {
 			if (!isEmpty) {
 				p = cb.like(root.get(name), "%" + value);
 			}
@@ -344,7 +344,7 @@ public class JpaDaoHandler implements Dao {
 		}
 
 		// 'not like' 연산자 : 'notlike'
-		case Constants.NOT_LIKE: {
+		case Constants.NOT_LIKE : {
 			if (!isEmpty) {
 				p = cb.notLike(root.get(name), "%" + value + "%");
 			}
@@ -352,13 +352,13 @@ public class JpaDaoHandler implements Dao {
 		}
 
 		// 'does not start with' 연산자 : 'notlike'
-		case Constants.DOES_NOT_START_WITH: {
+		case Constants.DOES_NOT_START_WITH : {
 			p = cb.notLike(root.get(name), value + "%");
 			break;
 		}
 
 		// 'does not end with' 연산자 : 'notlike'
-		case Constants.DOES_NOT_END_WITH: {
+		case Constants.DOES_NOT_END_WITH : {
 			if (!isEmpty) {
 				p = cb.notLike(root.get(name), "%" + value);
 			}
@@ -434,19 +434,19 @@ public class JpaDaoHandler implements Dao {
 		// }
 
 		// 'is null' 연산자 : 'is null'
-		case Constants.IS_NULL: {
+		case Constants.IS_NULL : {
 			p = cb.isNull(root.get(name));
 			break;
 		}
 
 		// 'is not null' 연산자 : 'is not null'
-		case Constants.IS_NOT_NULL: {
+		case Constants.IS_NOT_NULL : {
 			p = cb.isNotNull(root.get(name));
 			break;
 		}
 
 		// 'is blank' 연산자 : 'is null or '=' '
-		case Constants.IS_BLANK: {
+		case Constants.IS_BLANK : {
 			Predicate p1 = cb.isNull(root.get(name));
 			Predicate p2 = cb.equal(root.get(name), "");
 			p = cb.or(p1, p2);
@@ -454,7 +454,7 @@ public class JpaDaoHandler implements Dao {
 		}
 
 		// 'is present' 연산자 : 'is not null or '=' '
-		case Constants.IS_PRESENT: {
+		case Constants.IS_PRESENT : {
 			Predicate p1 = cb.isNotNull(root.get(name));
 			Predicate p2 = cb.notEqual(root.get(name), "");
 			p = cb.or(p1, p2);
@@ -462,7 +462,7 @@ public class JpaDaoHandler implements Dao {
 		}
 
 		// 'in' 연산자 : 'in' - TODO Not In
-		case Constants.IN: {
+		case Constants.IN : {
 			if (!isEmpty) {
 				// in 값은 ','로 구분되어 넘어오게 되므로 ','로 잘라서 Array를 만든다.
 				String values = (String) value;
