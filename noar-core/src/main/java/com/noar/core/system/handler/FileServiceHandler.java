@@ -5,11 +5,11 @@ import java.io.File;
 import org.apache.commons.io.FileUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.noar.common.util.PropertyUtil;
 import com.noar.core.exception.ServerException;
 import com.noar.core.exception.ServiceException;
 import com.noar.core.system.ConfigConstants;
 import com.noar.core.system.Constants;
-import com.noar.core.util.PropertyUtil;
 import com.noar.core.util.ValueUtil;
 
 public class FileServiceHandler {

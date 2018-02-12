@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
-import com.minu.orm.dao.Dao;
+import com.noar.orm.dao.Dao;
 
 /**
  * Entity에 대한 Create, Update, Delete, Search, Find 등의 공통 함수 유틸리티

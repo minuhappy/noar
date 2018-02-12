@@ -8,9 +8,9 @@ import javax.websocket.server.ServerEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.noar.common.util.BeanUtil;
 import com.noar.core.system.base.ServiceInfo;
 import com.noar.core.system.handler.JsonServiceHandler;
-import com.noar.core.util.BeanUtil;
 
 /**
  * WebSocket Controller

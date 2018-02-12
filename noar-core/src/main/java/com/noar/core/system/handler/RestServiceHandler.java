@@ -12,13 +12,13 @@ import org.apache.commons.lang.ClassUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.noar.common.util.PropertyUtil;
 import com.noar.common.util.ThreadPropertyUtil;
 import com.noar.core.exception.SystemException;
 import com.noar.core.system.ConfigConstants;
 import com.noar.core.system.Constants;
 import com.noar.core.system.base.ServiceInfo;
 import com.noar.core.util.CrudUtil;
-import com.noar.core.util.PropertyUtil;
 import com.noar.core.util.ValueUtil;
 
 import net.sf.common.util.Closure;

@@ -1,13 +1,15 @@
-/* Copyright © HatioLab Inc. All rights reserved. */
 package com.noar.common.util;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,9 +23,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
-/**
- * @author Minu.Kim
- */
 public class HttpUtil {
 
 	/**
@@ -163,6 +162,59 @@ public class HttpUtil {
 		osw.close();
 		bfReader.close();
 		return response.toString();
+	}
+
+	/**
+	 * Request에서 파라미터 명이 name인 값을 찾는다.
+	 * 
+	 * @param name
+	 * @param request
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static String[] findParamValue(String name, HttpServletRequest request) {
+		String[] values = null;
+
+		Iterator<String> keyIter = request.getParameterMap().keySet().iterator();
+		while (keyIter.hasNext()) {
+			String paramName = keyIter.next();
+			if (ValueUtil.isEqual(name, paramName)) {
+				values = request.getParameterValues(name);
+				break;
+			}
+		}
+		return values;
+	}
+
+	/**
+	 * Request에서 파라미터 명이 name인 값 중 첫번째 값을 찾는다.
+	 * 
+	 * @param name
+	 * @param request
+	 * @return
+	 */
+	public static String findFirstParamValue(String name, HttpServletRequest request) {
+		String[] values = findParamValue(name, request);
+		return values != null && values.length >= 1 ? values[0] : null;
+	}
+
+	/**
+	 * Request 모든 Header를 문자열로 리턴
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static String getAllHeader(HttpServletRequest request) {
+		StringBuilder str = new StringBuilder();
+
+		Enumeration<String> headerNames = request.getHeaderNames();
+		while (headerNames.hasMoreElements()) {
+			String header = headerNames.nextElement();
+			str.append(header).append("=").append(request.getHeader(header)).append(File.separator);
+		}
+
+		return str.toString();
 	}
 
 	/**

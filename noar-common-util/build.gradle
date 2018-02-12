@@ -16,15 +16,10 @@ targetCompatibility = 1.8
 
 ext {
 	springVersion = '4.3.13.RELEASE'
-//	springVersion = '5.0.2.RELEASE'
-			
-			
+	// springVersion = '5.0.2.RELEASE'
 }
 
 dependencies {
-	compile("org.springframework:spring-beans:${springVersion}")
-	compile("org.springframework:spring-context:${springVersion}")
-	
 	compile("javax.servlet:servlet-api:2.5")
 	compile("commons-lang:commons-lang:2.6")
 	compile("org.slf4j:slf4j-api:1.7.25")
@@ -33,4 +28,7 @@ dependencies {
 	compile("com.googlecode.json-simple:json-simple:1.1.1")
 	compile("org.apache.httpcomponents:httpcore:4.4.8")
 	compile("org.apache.httpcomponents:httpclient:4.5.4")
+	
+	compile("org.springframework:spring-beans:${springVersion}")
+	compile("org.springframework:spring-context:${springVersion}")
 }

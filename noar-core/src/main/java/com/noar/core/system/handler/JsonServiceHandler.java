@@ -9,12 +9,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.commons.lang.ClassUtils;
 import org.springframework.util.StringUtils;
 
+import com.noar.common.util.BeanUtil;
+import com.noar.common.util.PropertyUtil;
 import com.noar.core.exception.ServerException;
 import com.noar.core.system.ConfigConstants;
 import com.noar.core.system.Constants;
 import com.noar.core.system.base.ServiceInfo;
-import com.noar.core.util.BeanUtil;
-import com.noar.core.util.PropertyUtil;
 import com.noar.core.util.TransactionUtil;
 import com.noar.core.util.ValueUtil;
 
