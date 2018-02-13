@@ -82,5 +82,4 @@ public class AbstractEntity {
 	public void setTotalPage(int totalPage) {
 		this.totalPage = totalPage;
 	}
-
 }

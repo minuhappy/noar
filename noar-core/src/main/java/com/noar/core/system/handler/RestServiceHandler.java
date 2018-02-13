@@ -8,22 +8,20 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.ClassUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.noar.common.util.ClassUtil;
+import com.noar.common.util.IScope;
+import com.noar.common.util.JsonUtil;
 import com.noar.common.util.PropertyUtil;
+import com.noar.common.util.SynchCtrlUtil;
 import com.noar.common.util.ThreadPropertyUtil;
+import com.noar.common.util.ValueUtil;
 import com.noar.core.exception.SystemException;
 import com.noar.core.system.ConfigConstants;
 import com.noar.core.system.Constants;
 import com.noar.core.system.base.ServiceInfo;
-import com.noar.core.util.CrudUtil;
-import com.noar.core.util.ValueUtil;
-
-import net.sf.common.util.Closure;
-import net.sf.common.util.SyncCtrlUtils;
-import net.sf.common.util.ValueUtils;
 
 /**
  * @author Administrator
@@ -36,9 +34,9 @@ public class RestServiceHandler {
 	 * 
 	 * @param request
 	 * @return
-	 * @throws Exception
+	 * @throws Throwable
 	 */
-	public ServiceInfo get(final HttpServletRequest req) throws Exception {
+	public ServiceInfo get(final HttpServletRequest req) throws Throwable {
 		String name = req.getRequestURI();
 		if (name.endsWith("/")) {
 			name = name.substring(0, name.lastIndexOf("/"));
@@ -49,14 +47,14 @@ public class RestServiceHandler {
 		return get(name);
 	}
 
-	public ServiceInfo get(String name) throws Exception {
+	public ServiceInfo get(String name) throws Throwable {
 		// Set Service Info.
 		Map<String, Object> serviceInfoMap = setServiceInfoMap(name);
 		// URL을 변환한 Service Path를 통해, 호출할 Service 경로 추출.
 		String reqPath = String.valueOf(serviceInfoMap.get(Constants.REQUEST_PATH));
 		if (REST_CACHE.containsKey(reqPath))
 			return REST_CACHE.get(reqPath);
-		return SyncCtrlUtils.wrap(reqPath, REST_CACHE, reqPath, new Closure<ServiceInfo, Exception>() {
+		return SynchCtrlUtil.wrap(reqPath, REST_CACHE, reqPath, new IScope<ServiceInfo>() {
 			@Override
 			public ServiceInfo execute() throws Exception {
 				Class<?> entityClass = (Class<?>) serviceInfoMap.get(Constants.ENTITY_CLASS);
@@ -90,16 +88,16 @@ public class RestServiceHandler {
 
 		// Read
 		if (ValueUtil.isEqual(RequestMethod.GET, method)) {
-			return CrudUtil.read(entity, inputParam);
+			// return CrudUtil.read(entity, inputParam);
 		}
 
-		Object input = ValueUtil.jsonToObject(inputParam, entity);
+		Object input = JsonUtil.jsonToObject(inputParam, entity);
 		if (ValueUtil.isEqual(RequestMethod.POST, method)) {
-			CrudUtil.create(input);
+			// CrudUtil.create(input);
 		} else if (ValueUtil.isEqual(RequestMethod.PUT, method)) {
-			CrudUtil.update(input);
+			// CrudUtil.update(input);
 		} else if (ValueUtil.isEqual(RequestMethod.DELETE, method)) {
-			CrudUtil.delete(input);
+			// CrudUtil.delete(input);
 		}
 
 		return input;
@@ -159,12 +157,12 @@ public class RestServiceHandler {
 
 				// 하이픈(-)이 포함되어 있을 경우, 제거 또는 CamelCase로 변경.
 				packagePath = StringUtils.replace(packagePath, "-", "_");
-				className = ValueUtils.toCamelCase(className, '-', true);
+				className = ValueUtil.toCamelCase(className, '-', true);
 
 				StringBuilder sb = new StringBuilder();
 				sb.append(packagePath).append(Constants.DOT).append(className);
 
-				entityClass = ClassUtils.getClass(sb.toString());
+				entityClass = ClassUtil.forName(sb.toString());
 			} catch (Exception e) {
 				entityClass = null;
 				requestPath = null;
@@ -197,8 +195,8 @@ public class RestServiceHandler {
 			Map<String, String> map = new HashMap<String, String>();
 			String classPath = servicePath.substring(0, servicePath.lastIndexOf(Constants.DOT));
 			String packagePath = servicePath.substring(0, classPath.lastIndexOf(Constants.DOT));
-			String className = ValueUtil.subStringPlusOne(classPath);
-			String restParam = ValueUtil.subStringPlusOne(servicePath);
+			String className = classPath.substring(0, classPath.lastIndexOf(Constants.DOT) + 1);
+			String restParam = servicePath.substring(0, classPath.lastIndexOf(Constants.DOT) + 1);
 
 			map.put(Constants.REQUEST_PATH, uri.substring(0, uri.lastIndexOf("/")));
 			map.put(Constants.PACKAGE_PATH, packagePath);
@@ -212,7 +210,7 @@ public class RestServiceHandler {
 			// Rest-List
 			Map<String, String> map = new HashMap<String, String>();
 			String packagePath = servicePath.substring(0, servicePath.lastIndexOf(Constants.DOT));
-			String className = ValueUtil.subStringPlusOne(servicePath);
+			String className = servicePath.substring(0, servicePath.lastIndexOf(Constants.DOT) + 1);
 
 			map.put(Constants.REQUEST_PATH, uri);
 			map.put(Constants.CLASS_PATH, servicePath);

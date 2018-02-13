@@ -2,19 +2,19 @@ package com.noar.core.system.handler;
 
 import java.io.File;
 
-import org.apache.commons.io.FileUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.noar.common.util.FileUtil;
 import com.noar.common.util.PropertyUtil;
+import com.noar.common.util.ValueUtil;
 import com.noar.core.exception.ServerException;
 import com.noar.core.exception.ServiceException;
 import com.noar.core.system.ConfigConstants;
 import com.noar.core.system.Constants;
-import com.noar.core.util.ValueUtil;
 
 public class FileServiceHandler {
 	public String fileUpload(String id, String path, MultipartFile... files) {
-		
+
 		StringBuilder savePath = new StringBuilder();
 		savePath.append(PropertyUtil.getProperty(ConfigConstants.FILE_BASE_PATH, "C:\\"));
 		savePath.append(path);
@@ -55,9 +55,8 @@ public class FileServiceHandler {
 			try {
 				StringBuilder fullPath = new StringBuilder();
 				fullPath.append(id);
-				
-				File newFile = new File(fullPath.toString());
-				FileUtils.copyInputStreamToFile(file.getInputStream(), newFile);
+
+				FileUtil.copyInputStreamToFile(file.getInputStream(), new File(fullPath.toString()));
 			} catch (Exception e) {
 				throw new ServerException(e.getMessage(), e);
 			}

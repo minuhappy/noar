@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.noar.common.util.ValueUtil;
 import com.noar.core.exception.SystemException;
-import com.noar.core.util.ValueUtil;
 
 /**
  * RestController에 대한 Controller Advice (ExceptionHandler)

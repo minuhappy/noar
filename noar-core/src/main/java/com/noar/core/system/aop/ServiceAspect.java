@@ -10,10 +10,9 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.noar.common.util.IScope;
 import com.noar.core.exception.ServerException;
 import com.noar.core.util.TransactionUtil;
-
-import net.sf.common.util.Closure;
 
 /**
  * 클라이언트 서비스 요청을 받아 처리하는 서비스 핸들러에 대한 Filtering Aspect
@@ -23,7 +22,7 @@ import net.sf.common.util.Closure;
 @Aspect
 @Component
 public class ServiceAspect {
-	
+
 	@Pointcut("execution(* com.minu.core..*Biz.*(..)) || execution(* com.minu.core.system.handler.RestServiceHandler.invoke(..))")
 	public void targetMethod() {
 	}
@@ -46,7 +45,7 @@ public class ServiceAspect {
 
 		String name = new StringBuffer().append(clazz.getName()).append(".").append(method.getName()).toString();
 
-		return TransactionUtil.doScope(name, transactional, new Closure<Object, Throwable>() {
+		return TransactionUtil.doScope(name, transactional, new IScope<Object>() {
 			@Override
 			public Object execute() throws Throwable {
 				return call.proceed();
@@ -56,6 +55,7 @@ public class ServiceAspect {
 
 	/**
 	 * Get Method
+	 * 
 	 * @param signature
 	 * @return
 	 */

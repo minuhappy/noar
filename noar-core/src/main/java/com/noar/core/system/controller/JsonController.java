@@ -21,7 +21,7 @@ import com.noar.core.system.handler.JsonServiceHandler;
 public class JsonController {
 	@RequestMapping(value = "**/service/**/*", headers = "Accept=application/json;charset=UTF-8")
 	public @ResponseBody Object jsonService(HttpServletRequest req, HttpServletResponse res) throws Throwable {
-		return ThreadPropertyUtil.doScope(new IScope() {
+		return ThreadPropertyUtil.doScope(new IScope<Object>() {
 			@Override
 			public Object execute() throws Throwable {
 				// Controller 앞 단에 실행 될 수 있도록 수정.

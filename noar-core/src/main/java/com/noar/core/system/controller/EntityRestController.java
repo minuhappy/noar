@@ -12,20 +12,18 @@ import org.springframework.web.bind.annotation.RestController;
 import com.noar.common.util.BeanUtil;
 import com.noar.common.util.IScope;
 import com.noar.common.util.ThreadPropertyUtil;
+import com.noar.common.util.ValueUtil;
 import com.noar.core.exception.ServerException;
 import com.noar.core.system.Constants;
 import com.noar.core.system.base.ServiceInfo;
 import com.noar.core.system.handler.RestServiceHandler;
 import com.noar.core.util.TransactionUtil;
-import com.noar.core.util.ValueUtil;
-
-import net.sf.common.util.Closure;
 
 @RestController
 public class EntityRestController {
 	@RequestMapping(value = "**/entity/**/*", headers = "Accept=application/json;charset=UTF-8")
 	public @ResponseBody Object restService(HttpServletRequest req, HttpServletResponse res) throws Throwable {
-		return ThreadPropertyUtil.doScope(new IScope() {
+		return ThreadPropertyUtil.doScope(new IScope<Object>() {
 			@Override
 			public Object execute() throws Throwable {
 				// Controller 앞 단에 실행 될 수 있도록 수정.
@@ -46,7 +44,7 @@ public class EntityRestController {
 		}
 
 		final String restInput = inputPram;
-		return TransactionUtil.doScope("RestServiceUtil.Invoke", new Closure<Object, Throwable>() {
+		return TransactionUtil.doScope("RestServiceUtil.Invoke", new IScope<Object>() {
 			@Override
 			public Object execute() throws Throwable {
 				return restServiceHandler.invoke(serviceInfo, req.getMethod(), restInput);
