@@ -22,9 +22,7 @@ public class DdlStartUpService {
 	@EventListener({ ContextRefreshedEvent.class })
 	public void start() {
 		String ddlEnable = env.getProperty("dbist.ddl.enable", "false");
-		if (!ValueUtils.toBoolean(ddlEnable))
-			return;
-
-		ddl.createTable();
+		if (ValueUtils.toBoolean(ddlEnable))
+			ddl.createTable();
 	}
 }
