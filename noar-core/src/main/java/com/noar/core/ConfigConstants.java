@@ -1,4 +1,4 @@
-package com.noar.core.system;
+package com.noar.core;
 
 public class ConfigConstants {
 	public static final int TX_TIMEOUT = 180;

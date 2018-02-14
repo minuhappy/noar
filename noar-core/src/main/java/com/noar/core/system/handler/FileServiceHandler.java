@@ -7,10 +7,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.noar.common.util.FileUtil;
 import com.noar.common.util.PropertyUtil;
 import com.noar.common.util.ValueUtil;
+import com.noar.core.ConfigConstants;
+import com.noar.core.Constants;
 import com.noar.core.exception.ServerException;
 import com.noar.core.exception.ServiceException;
-import com.noar.core.system.ConfigConstants;
-import com.noar.core.system.Constants;
 
 public class FileServiceHandler {
 	public String fileUpload(String id, String path, MultipartFile... files) {

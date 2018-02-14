@@ -29,7 +29,7 @@ import org.springframework.web.socket.sockjs.client.SockJsClient;
 import org.springframework.web.socket.sockjs.client.Transport;
 import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
-import com.noar.core.system.ConfigConstants;
+import com.noar.core.ConfigConstants;
 
 @Service
 public class StompWebSocketHandler implements Runnable {

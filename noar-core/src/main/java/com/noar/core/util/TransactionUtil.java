@@ -9,8 +9,8 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.noar.common.util.BeanUtil;
 import com.noar.common.util.IScope;
+import com.noar.core.ConfigConstants;
 import com.noar.core.exception.ServerException;
-import com.noar.core.system.ConfigConstants;
 
 /**
  * @author Minu.Kim

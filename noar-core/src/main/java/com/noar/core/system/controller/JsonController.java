@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.noar.common.util.BeanUtil;
 import com.noar.common.util.IScope;
 import com.noar.common.util.ThreadPropertyUtil;
+import com.noar.core.Constants;
 import com.noar.core.exception.ServerException;
-import com.noar.core.system.Constants;
 import com.noar.core.system.base.ServiceInfo;
 import com.noar.core.system.handler.JsonServiceHandler;
 

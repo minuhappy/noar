@@ -1,4 +1,4 @@
-package com.noar.core.system;
+package com.noar.core;
 
 public class Constants {
 	public static final String BIZ_SUBFIX = "Biz";

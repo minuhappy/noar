@@ -18,10 +18,11 @@ import com.noar.common.util.PropertyUtil;
 import com.noar.common.util.SynchCtrlUtil;
 import com.noar.common.util.ThreadPropertyUtil;
 import com.noar.common.util.ValueUtil;
+import com.noar.core.ConfigConstants;
+import com.noar.core.Constants;
 import com.noar.core.exception.SystemException;
-import com.noar.core.system.ConfigConstants;
-import com.noar.core.system.Constants;
 import com.noar.core.system.base.ServiceInfo;
+import com.noar.core.util.CrudUtil;
 
 /**
  * @author Administrator
@@ -88,16 +89,16 @@ public class RestServiceHandler {
 
 		// Read
 		if (ValueUtil.isEqual(RequestMethod.GET, method)) {
-			// return CrudUtil.read(entity, inputParam);
+			 return CrudUtil.select(inputParam);
 		}
 
 		Object input = JsonUtil.jsonToObject(inputParam, entity);
 		if (ValueUtil.isEqual(RequestMethod.POST, method)) {
-			// CrudUtil.create(input);
+			 CrudUtil.insert(input);
 		} else if (ValueUtil.isEqual(RequestMethod.PUT, method)) {
-			// CrudUtil.update(input);
+			 CrudUtil.update(input);
 		} else if (ValueUtil.isEqual(RequestMethod.DELETE, method)) {
-			// CrudUtil.delete(input);
+			 CrudUtil.delete(input);
 		}
 
 		return input;
@@ -122,7 +123,7 @@ public class RestServiceHandler {
 		}
 
 		StringBuffer sb = new StringBuffer();
-		sb.append(PropertyUtil.getProperty(ConfigConstants.BASE_PATH, "com.minu.core"));
+		sb.append(PropertyUtil.getProperty(ConfigConstants.BASE_PATH, "com.noar.core"));
 		sb.append(Constants.DOT);
 		sb.append((uri.substring(startIndex, lastIndex)).replaceAll("/", "."));
 

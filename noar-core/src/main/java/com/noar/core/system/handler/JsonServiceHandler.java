@@ -15,9 +15,9 @@ import com.noar.common.util.JsonUtil;
 import com.noar.common.util.PropertyUtil;
 import com.noar.common.util.SynchCtrlUtil;
 import com.noar.common.util.ValueUtil;
+import com.noar.core.ConfigConstants;
+import com.noar.core.Constants;
 import com.noar.core.exception.ServerException;
-import com.noar.core.system.ConfigConstants;
-import com.noar.core.system.Constants;
 import com.noar.core.system.base.ServiceInfo;
 import com.noar.core.util.TransactionUtil;
 
