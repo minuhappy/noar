@@ -33,7 +33,7 @@ import com.noar.dbist.ddl.mapper.DdlMapperMysql;
 import com.noar.dbist.ddl.mapper.DdlMapperOracle;
 import com.noar.dbist.ddl.mapper.DdlMapperPostgresql;
 import com.noar.dbist.ddl.mapper.DdlMapperSqlserver;
-import com.noar.dbist.dml.impl.DmlJdbc2;
+import com.noar.dbist.dml.impl.DmlJdbc;
 import com.noar.dbist.exception.DbistRuntimeException;
 import com.noar.dbist.metadata.TableCol;
 import com.noar.dbist.metadata.TableIdx;
@@ -58,7 +58,7 @@ public abstract class AbstractDdl implements Ddl {
 	public Environment env;
 
 	@Resource(name = "dml")
-	public DmlJdbc2 dml;
+	public DmlJdbc dml;
 
 	/**
 	 * DDL Mapper
@@ -138,11 +138,11 @@ public abstract class AbstractDdl implements Ddl {
 		return this.domain;
 	}
 
-	public DmlJdbc2 getDml() {
+	public DmlJdbc getDml() {
 		return dml;
 	}
 
-	public void setDml(DmlJdbc2 dml) {
+	public void setDml(DmlJdbc dml) {
 		this.dml = dml;
 	}
 

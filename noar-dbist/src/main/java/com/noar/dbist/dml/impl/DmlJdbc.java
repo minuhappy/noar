@@ -1,9 +1,12 @@
 /**
  * Copyright 2011-2014 the original author or authors.
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,6 +23,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -42,6 +46,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
+import com.noar.dbist.DbistConstants;
 import com.noar.dbist.annotation.Ignore;
 import com.noar.dbist.annotation.PrimaryKey;
 import com.noar.dbist.annotation.Relation;
@@ -54,7 +59,9 @@ import com.noar.dbist.dml.Order;
 import com.noar.dbist.dml.Page;
 import com.noar.dbist.dml.Query;
 import com.noar.dbist.dml.jdbc.QueryMapper;
+import com.noar.dbist.dml.jdbc.QueryMapperCassandra;
 import com.noar.dbist.dml.jdbc.QueryMapperDb2;
+import com.noar.dbist.dml.jdbc.QueryMapperH2;
 import com.noar.dbist.dml.jdbc.QueryMapperMysql;
 import com.noar.dbist.dml.jdbc.QueryMapperOracle;
 import com.noar.dbist.dml.jdbc.QueryMapperPostgresql;
@@ -81,19 +88,27 @@ import net.sf.common.util.ValueUtils;
  * @since 2011. 6. 2. (version 0.0.1)
  */
 public class DmlJdbc extends AbstractDml implements Dml {
+	
+	/**
+	 * Logger
+	 */
 	private static final Logger logger = LoggerFactory.getLogger(DmlJdbc.class);
-
+	
+	/**
+	 * Column Alias Rule
+	 */
 	public static final String COLUMNALIASRULE_DEFAULT = "default";
 	public static final String COLUMNALIASRULE_UPPERCASE = "uppercase";
 	public static final String COLUMNALIASRULE_LOWERCASE = "lowercase";
 	public static final String COLUMNALIASRULE_CAMELCASE = "camelcase";
-	private static final List<String> COLUMNALIASRULE_LIST = ValueUtils.toList(COLUMNALIASRULE_DEFAULT, COLUMNALIASRULE_UPPERCASE, COLUMNALIASRULE_LOWERCASE,
-			COLUMNALIASRULE_CAMELCASE);
+	private static final List<String> COLUMNALIASRULE_LIST = ValueUtils.toList(COLUMNALIASRULE_DEFAULT, COLUMNALIASRULE_UPPERCASE,
+			COLUMNALIASRULE_LOWERCASE, COLUMNALIASRULE_CAMELCASE);
 
+	
 	private boolean isSupported() {
 		return queryMapper != null;
 	}
-
+	
 	private boolean isSupportedPaginationQuery() {
 		return queryMapper.isSupportedPaginationQuery();
 	}
@@ -101,7 +116,7 @@ public class DmlJdbc extends AbstractDml implements Dml {
 	private String domain;
 	private List<String> domainList = new ArrayList<String>(2);
 	private String columnAliasRuleForMapKey;
-	private int columnAliasRule = 2;
+	private int columnAliasRule;
 	private JdbcOperations jdbcOperations;
 	private NamedParameterJdbcOperations namedParameterJdbcOperations;
 	private int maxSqlByPathCacheSize = 1000;
@@ -123,37 +138,34 @@ public class DmlJdbc extends AbstractDml implements Dml {
 			DatabaseMetaData metadata = this.getDataSource().getConnection().getMetaData();
 			setDbType(metadata.getDatabaseProductName().toLowerCase());
 			if (getDbType().startsWith("microsoft sql server")) {
-				setDbType("sqlserver");
+				setDbType(DbistConstants.SQLSERVER);
 			} else if (getDbType().startsWith("db2/")) {
-				setDbType("db2");
+				setDbType(DbistConstants.DB2);
 			}
 		}
+		
 		if (getQueryMapper() == null) {
-			if (getDbType().equals("mysql")) {
+			if (getDbType().equals(DbistConstants.MYSQL)) {
 				setQueryMapper(new QueryMapperMysql());
-			} else if (getDbType().equals("postgresql")) {
+			} else if (getDbType().equals(DbistConstants.POSTGRESQL)) {
 				setQueryMapper(new QueryMapperPostgresql());
-			} else if (getDbType().equals("oracle")) {
+			} else if (getDbType().equals(DbistConstants.ORACLE)) {
 				setQueryMapper(new QueryMapperOracle());
 				columnAliasRuleForMapKey = COLUMNALIASRULE_LOWERCASE;
-			} else if (getDbType().equals("db2")) {
+			} else if (getDbType().equals(DbistConstants.DB2)) {
 				setQueryMapper(new QueryMapperDb2());
-			} else if (getDbType().equals("sqlserver")) {
+			} else if (getDbType().equals(DbistConstants.SQLSERVER)) {
 				setQueryMapper(new QueryMapperSqlserver());
+			} else if (getDbType().equals(DbistConstants.H2)) {
+				setQueryMapper(new QueryMapperH2());
+				columnAliasRuleForMapKey = COLUMNALIASRULE_LOWERCASE;
+			} else if (getDbType().equals(DbistConstants.CASSANDRA)) {
+				setQueryMapper(new QueryMapperCassandra());
 			}
 		}
+		
 		if (!isSupported())
 			throw new IllegalArgumentException("Unsupported dbType: " + getDbType());
-
-		if ("sqlserver".equals(getDbType())) {
-			List<String> domainList = new ArrayList<String>(this.domainList.size());
-			for (String domain : this.domainList) {
-				if (domain.indexOf('.') != -1)
-					continue;
-				domainList.add(domain + ".dbo");
-			}
-			this.domainList = domainList;
-		}
 
 		if (ValueUtils.isEmpty(columnAliasRuleForMapKey))
 			columnAliasRuleForMapKey = COLUMNALIASRULE_DEFAULT;
@@ -166,7 +178,7 @@ public class DmlJdbc extends AbstractDml implements Dml {
 		if (debug)
 			logger.debug("dml loaded (dbType: " + getDbType() + ")");
 	}
-
+	
 	public void clear() {
 		logger.info("Clearing DmlJdbc bean: " + getBeanName() + "...");
 		classFieldCache.clear();
@@ -234,10 +246,10 @@ public class DmlJdbc extends AbstractDml implements Dml {
 		String sql = table.getUpdateSql(fieldNames);
 		fieldNames = toFieldNamesForUpdate(table, fieldNames);
 		Map<String, Object> paramMap = toParamMap(table, data, fieldNames);
-		if (updateBySql(sql, paramMap) != 1)
+		if (updateBySql(sql, paramMap) != 1 && !this.getDbType().equals(DbistConstants.CASSANDRA))
 			throw new DataNotFoundException(toNotFoundErrorMessage(table, data, toParamMap(table, data, table.getPkFieldNames())));
 	}
-
+	
 	private static <T> String toNotFoundErrorMessage(Table table, T data, Map<String, ?> paramMap) {
 		StringBuffer buf = new StringBuffer("Couldn't find data for update ").append(data.getClass().getName());
 		int i = 0;
@@ -251,13 +263,14 @@ public class DmlJdbc extends AbstractDml implements Dml {
 			return;
 		Table table = getTable(list.get(0));
 		if (ValueUtils.isEmpty(table.getPkFieldNames()))
-			throw new DbistRuntimeException("More than 1 primary key field is required in the class " + table.getClazz().getName() + " to update batch");
+			throw new DbistRuntimeException("More than 1 primary key field is required in the class " + table.getClazz().getName()
+					+ " to update batch");
 		String sql = table.getUpdateSql(fieldNames);
 		fieldNames = toFieldNamesForUpdate(table, fieldNames);
 		List<Map<String, ?>> paramMapList = toParamMapList(table, list, fieldNames);
 		updateBatchBySql(sql, paramMapList);
 	}
-
+	
 	private static String[] toFieldNamesForUpdate(Table table, String... fieldNames) {
 		if (ValueUtils.isEmpty(fieldNames))
 			return fieldNames;
@@ -287,7 +300,8 @@ public class DmlJdbc extends AbstractDml implements Dml {
 			return;
 		Table table = getTable(list.get(0));
 		if (ValueUtils.isEmpty(table.getPkFieldNames()))
-			throw new DbistRuntimeException("More than 1 primary key field is required in the class " + table.getClazz().getName() + " to delete batch");
+			throw new DbistRuntimeException("More than 1 primary key field is required in the class " + table.getClazz().getName()
+					+ " to delete batch");
 		String sql = table.getDeleteSql();
 		List<Map<String, ?>> paramMapList = toParamMapList(table, list, table.getPkFieldNames());
 		updateBatchBySql(sql, paramMapList);
@@ -305,14 +319,13 @@ public class DmlJdbc extends AbstractDml implements Dml {
 	private StringBuffer appendName(Table table, StringBuffer buf, String name) {
 		return table.appendName(buf, name);
 	}
-
 	private <T> List<Map<String, ?>> toParamMapList(Table table, List<T> list, String... fieldNames) throws Exception {
 		List<Map<String, ?>> paramMapList = new ArrayList<Map<String, ?>>();
 		for (T data : list)
 			paramMapList.add(toParamMap(table, data, fieldNames));
 		return paramMapList;
 	}
-
+	
 	private <T> Map<String, Object> toParamMap(Table table, T data, String... fieldNames) throws Exception {
 		@SuppressWarnings("unchecked")
 		Map<String, Object> paramMap = new ListOrderedMap();
@@ -330,12 +343,13 @@ public class DmlJdbc extends AbstractDml implements Dml {
 		for (String fieldName : fieldNames) {
 			Field field = table.getField(fieldName);
 			if (field == null)
-				throw new DbistRuntimeException("Couldn't find column of table[" + table.getDomain() + "." + table.getName() + "] by fieldName[" + fieldName + "]");
+				throw new DbistRuntimeException("Couldn't find column of table[" + table.getDomain() + "." + table.getName() + "] by fieldName["
+						+ fieldName + "]");
 			paramMap.put(fieldName, toParamData(field.get(data)));
 		}
 		return paramMap;
 	}
-
+	
 	private static Object toParamData(Object data) {
 		if (data instanceof Character)
 			return data.toString();
@@ -343,7 +357,9 @@ public class DmlJdbc extends AbstractDml implements Dml {
 	}
 
 	private void appendFromWhere(Table table, Query query, StringBuffer buf, Map<String, Object> paramMap, Map<String, Column> relColMap) {
-		if (relColMap != null && table.containsLinkedTable() && (!ValueUtils.isEmpty(query.getSelect()) || !ValueUtils.isEmpty(query.getUnselect())))
+		// Select 필드가 없어도 Reference에 대해서 Join이 실행되도록 수정.
+		// if (relColMap != null && table.containsLinkedTable() && (!ValueUtils.isEmpty(query.getSelect()) || !ValueUtils.isEmpty(query.getUnselect())))
+		if (relColMap != null && table.containsLinkedTable())
 			populateRelColMap(table, query, relColMap);
 
 		// From
@@ -377,21 +393,26 @@ public class DmlJdbc extends AbstractDml implements Dml {
 		// Where
 		appendWhere(buf, table, query, 0, paramMap);
 	}
-
+	
 	private void populateRelColMap(Table table, Filters filters, Map<String, Column> relColMap) {
 		if (relColMap == null)
 			return;
+		
 		if (!ValueUtils.isEmpty(filters.getFilter())) {
 			for (Filter filter : filters.getFilter()) {
 				if (!filter.getLeftOperand().contains("."))
 					continue;
+		
 				String lo = filter.getLeftOperand();
 				String fieldName = lo.substring(0, lo.indexOf('.'));
 				Column column = toColumn(table, fieldName);
+				
 				if (column.getRelation() == null)
 					throw new DbistRuntimeException("filter: " + lo + " is not a joined condition.");
+				
 				if (relColMap.containsKey(column.getName()))
 					continue;
+				
 				relColMap.put(column.getName(), column);
 			}
 		}
@@ -401,7 +422,7 @@ public class DmlJdbc extends AbstractDml implements Dml {
 				populateRelColMap(table, fs, relColMap);
 		}
 	}
-
+	
 	public int selectSize(Class<?> clazz, Object condition) throws Exception {
 		ValueUtils.assertNotNull("clazz", clazz);
 		ValueUtils.assertNotNull("condition", condition);
@@ -463,12 +484,14 @@ public class DmlJdbc extends AbstractDml implements Dml {
 			query.setLock(lockObj);
 		}
 
-		String sql = applyPagination(buf.toString(), paramMap, query.getPageIndex(), query.getPageSize(), query.getFirstResultIndex(), query.getMaxResultSize());
+		String sql = applyPagination(buf.toString(), paramMap, query.getPageIndex(), query.getPageSize(), query.getFirstResultIndex(),
+				query.getMaxResultSize());
 
-		List<T> list = query(sql, paramMap, clazz, table, query.getPageIndex(), query.getPageSize(), query.getFirstResultIndex(), query.getMaxResultSize());
+		List<T> list = query(sql, paramMap, clazz, table, query.getPageIndex(), query.getPageSize(), query.getFirstResultIndex(),
+				query.getMaxResultSize());
 		return list;
 	}
-
+	
 	private void appendSelectSql(StringBuffer buf, Map<String, Object> paramMap, Table table, Query query, boolean groupBy, boolean ignoreOrderBy) {
 		boolean joined = table.containsLinkedTable();
 		@SuppressWarnings("unchecked")
@@ -483,7 +506,8 @@ public class DmlJdbc extends AbstractDml implements Dml {
 				for (String fieldName : query.getSelect()) {
 					if (group.contains(fieldName))
 						continue;
-					throw new DbistRuntimeException("Grouping query cannot be executed with some other fields: " + table.getClazz().getName() + "." + fieldName);
+					throw new DbistRuntimeException("Grouping query cannot be executed with some other fields: " + table.getClazz().getName() + "."
+							+ fieldName);
 				}
 			}
 			int i = 0;
@@ -503,12 +527,13 @@ public class DmlJdbc extends AbstractDml implements Dml {
 			}
 			// Except some fields
 			else {
-				List<String> unselects = new ArrayList<String>(query.getUnselect().size());
-				for (String unselect : query.getUnselect())
-					unselects.add(toColumnName(table, unselect));
+				List<String> unselects = query.getUnselect();
+				
 				for (Column column : table.getColumnList()) {
-					if (unselects.contains(column.getName()))
+					if(unselects.contains(column.getName()) || unselects.contains(ValueUtils.toCamelCase(column.getName(), '_'))) {
 						continue;
+					}
+
 					i = appendColumn(buf, table, column, relColMap, i);
 				}
 			}
@@ -552,7 +577,7 @@ public class DmlJdbc extends AbstractDml implements Dml {
 
 		appendLock(buf, query.getLock());
 	}
-
+	
 	private int appendColumn(StringBuffer buf, Table table, Column column, Map<String, Column> relColMap, int i) {
 		if (column.getRelation() == null) {
 			buf.append(i++ == 0 ? " " : ", ");
@@ -577,10 +602,10 @@ public class DmlJdbc extends AbstractDml implements Dml {
 	private void appendLock(StringBuffer buf, Lock lock) {
 		if (lock == null)
 			return;
-		// if (DBTYPE_DB2.equals(getDbType())) {
-		// buf.append(" for read only with rs");
-		// return;
-		// }
+		//		if (DBTYPE_DB2.equals(getDbType())) {
+		//			buf.append(" for read only with rs");
+		//			return;
+		//		}
 		if (lock.getTimeout() == null) {
 			lock = new Lock();
 			lock.setTimeout(defaultLockTimeout);
@@ -595,8 +620,8 @@ public class DmlJdbc extends AbstractDml implements Dml {
 		return queryMapper.applyPagination(sql, paramMap, pageIndex, pageSize, firstResultIndex, maxResultSize);
 	}
 
-	private <T> List<T> query(String sql, Map<String, ?> paramMap, final Class<T> requiredType, final Table table, int pageIndex, int pageSize, int firstResultIndex,
-			int maxResultSize) throws Exception {
+	private <T> List<T> query(String sql, Map<String, ?> paramMap, final Class<T> requiredType, final Table table, int pageIndex, int pageSize,
+			int firstResultIndex, int maxResultSize) throws Exception {
 		boolean pagination = pageIndex >= 0 && pageSize > 0;
 		boolean fragment = firstResultIndex > 0 || maxResultSize > 0;
 
@@ -607,6 +632,8 @@ public class DmlJdbc extends AbstractDml implements Dml {
 					return newInstance(rs, requiredType, table);
 				}
 			});
+			
+			// TODO MSSQL이고 Pagination 쿼리라면 프로시져 호출 ...
 		} else {
 			if (!pagination) {
 				pageIndex = 0;
@@ -636,8 +663,9 @@ public class DmlJdbc extends AbstractDml implements Dml {
 					for (int i = 0; i < _offset; i++) {
 						if (rs.next())
 							continue;
-						return list;
+						//return list;
 					}
+					
 					int i = 0;
 					while (rs.next()) {
 						if (i++ == _limit)
@@ -650,6 +678,13 @@ public class DmlJdbc extends AbstractDml implements Dml {
 		}
 		return list;
 	}
+	
+	/**
+	 * 객체의 키 필드를 검색하여, 조건 Bind.
+	 */
+	public Query toPkQuery(Object obj) throws Exception{
+		return super.toPkQuery(obj.getClass(), obj);
+	}
 
 	private static Map<Class<?>, Map<String, Field>> classFieldCache = new ConcurrentHashMap<Class<?>, Map<String, Field>>();
 	private static Map<Class<?>, Map<String, Field>> classSubFieldCache = new ConcurrentHashMap<Class<?>, Map<String, Field>>();
@@ -661,10 +696,9 @@ public class DmlJdbc extends AbstractDml implements Dml {
 
 		ResultSetMetaData metadata = rs.getMetaData();
 		Map<String, Field> fieldCache;
-		Map<String, Field> subFieldCache;
-		if (classFieldCache.containsKey(clazz)) {
+		Map<String, Field> subFieldCache = classSubFieldCache.get(clazz);
+		if (classFieldCache.containsKey(clazz) && subFieldCache != null) {
 			fieldCache = classFieldCache.get(clazz);
-			subFieldCache = classSubFieldCache.get(clazz);
 		} else {
 			fieldCache = new ConcurrentHashMap<String, Field>();
 			classFieldCache.put(clazz, fieldCache);
@@ -685,18 +719,18 @@ public class DmlJdbc extends AbstractDml implements Dml {
 				i++;
 				String name = metadata.getColumnLabel(i);
 				switch (columnAliasRule) {
-				case 0 : {
+				case 0: {
 					break;
 				}
-				case 1 : {
+				case 1: {
 					name = name.toUpperCase();
 					break;
 				}
-				case 2 : {
+				case 2: {
 					name = name.toLowerCase();
 					break;
 				}
-				case 3 : {
+				case 3: {
 					name = ValueUtils.toCamelCase(name, '_');
 					break;
 				}
@@ -745,7 +779,7 @@ public class DmlJdbc extends AbstractDml implements Dml {
 		}
 		return data;
 	}
-
+	
 	private static Field getField(Class<?> clazz, Table table, String name) {
 		Field field = null;
 
@@ -771,15 +805,17 @@ public class DmlJdbc extends AbstractDml implements Dml {
 
 		return field;
 	}
-
+	
 	private static void setFieldValue(ResultSet rs, int index, Object data, Field field, Field subField) throws SQLException {
 		if (subField == null) {
 			try {
 				field.set(data, toRequiredType(rs, index, field.getType()));
 			} catch (IllegalArgumentException e) {
-				throw new DbistRuntimeException(e);
+				// FIXME Ref Bug 발생 (오류 조치 : 695-696 line, 이상 없을 경우 주석 해제)
+				// throw new DbistRuntimeException(e);
 			} catch (IllegalAccessException e) {
-				throw new DbistRuntimeException(e);
+				// FIXME Ref Bug 발생 (오류 조치 : 695-696 line, 이상 없을 경우 주석 해제)
+				// throw new DbistRuntimeException(e);
 			}
 			return;
 		}
@@ -819,7 +855,7 @@ public class DmlJdbc extends AbstractDml implements Dml {
 			throw new DbistRuntimeException(e);
 		}
 	}
-
+	
 	private static Object toRequiredType(ResultSet rs, int index, Class<?> requiredType) throws SQLException {
 		if (requiredType == null)
 			return rs.getObject(index);
@@ -856,20 +892,44 @@ public class DmlJdbc extends AbstractDml implements Dml {
 
 	@SuppressWarnings("unchecked")
 	private static final List<?> CASECHECK_TYPELIST = ValueUtils.toList(String.class, Character.class, char.class);
-
+	
+	/**
+	 * create where conditions
+	 * 
+	 * @param buf
+	 * @param table
+	 * @param filters
+	 * @param i
+	 * @param paramMap
+	 * @return
+	 */
 	private int appendWhere(StringBuffer buf, Table table, Filters filters, int i, Map<String, Object> paramMap) {
 		String logicalOperator = " " + ValueUtils.toString(filters.getOperator(), "and").trim().toLowerCase() + " ";
-
 		int j = 0;
+		
 		if (!ValueUtils.isEmpty(filters.getFilter())) {
 			String defaultAlias = table.containsLinkedTable() ? table.getName() : null;
+			
 			for (Filter filter : filters.getFilter()) {
 				String operator = ValueUtils.toString(filter.getOperator(), "=").trim().toLowerCase();
 				if ("!=".equals(operator))
 					operator = "<>";
+				
 				String lo = filter.getLeftOperand();
-				String alias;
-				Column column;
+				
+				buf.append(i++ == 0 ? " where " : j == 0 ? "" : logicalOperator);
+				j++;
+				
+				// geolocation field인 경우 where 문 처리 ...
+				if(RESERVED_FIELDS_FOR_GEOLOC.contains(lo)) {
+					this.appendWhereForGeolocField(buf, table, filter, i, paramMap, defaultAlias);
+					continue;
+				}
+				
+				String alias = null;
+				Column column = null;
+			
+				// 1. relation 필드인 경우 
 				if (lo.contains(".")) {
 					int index = lo.indexOf('.');
 					String fieldName = lo.substring(0, index);
@@ -879,14 +939,15 @@ public class DmlJdbc extends AbstractDml implements Dml {
 					alias = column.getName();
 					String subFieldName = lo.substring(index + 1);
 					column = toColumn(column.getTable(), subFieldName);
+				
+				// 2. 일반적인 필드 
 				} else {
 					alias = defaultAlias;
 					column = toColumn(table, lo);
 				}
-				buf.append(i++ == 0 ? " where " : j == 0 ? "" : logicalOperator);
-				j++;
 
 				String columnName;
+				
 				if (alias == null) {
 					columnName = appendName(table, new StringBuffer(), column.getName()).toString();
 				} else {
@@ -895,85 +956,51 @@ public class DmlJdbc extends AbstractDml implements Dml {
 					appendName(table, colBuf, column.getName());
 					columnName = colBuf.toString();
 				}
+				
 				List<?> rightOperand = filter.getRightOperand();
-
-				// case: 'is null' or 'is not null'
-				if (ValueUtils.isEmpty(rightOperand)) {
-					appendNullCondition(buf, columnName, operator);
-					continue;
-				}
-
-				Class<?> type = column.getField().getType();
-
-				// check and process case sensitive
-				List<Object> newRightOperand = new ArrayList<Object>(rightOperand.size());
-				if (!filter.isCaseSensitive() && CASECHECK_TYPELIST.contains(type)) {
-					columnName = getFunctionLowerCase() + "(" + columnName + ")";
-					for (Object ro : rightOperand) {
-						if (ro == null)
-							;
-						else if (ro instanceof String)
-							ro = ((String) ro).toLowerCase();
-						else
-							ro = ro.toString().toLowerCase();
-						newRightOperand.add(ro);
-					}
+				
+				// case : empty value operators
+				if(isEmptyValueOperator(operator)) {
+					queryMapper.appendEmptyValueCondition(buf, columnName, operator);
+					
+				// case : one or more value needed operators
 				} else {
-					for (Object ro : rightOperand)
-						newRightOperand.add(toParamValue(ro, type));
-				}
-				rightOperand = newRightOperand;
-
-				// case only one filter
-				if (rightOperand.size() == 1) {
-					Object value = rightOperand.get(0);
-
-					// case: is null or is not null
-					if (value == null) {
-						appendNullCondition(buf, columnName, operator);
-						continue;
-					}
-
-					// case x = 'l' or x != 'l'
+					// check case sensitive and convert if not case sensitive
+					Class<?> fieldType = column.getField().getType();
+					columnName = this.checkColumnNameByCaseSensitive(fieldType, filter, columnName);
+					rightOperand = this.checkValueByCaseSensitive(fieldType, filter, rightOperand, column);
 					String key = lo + i;
-					paramMap.put(key, value);
-					buf.append(columnName).append(" ").append(operator).append(" :").append(key);
-					if ("like".equals(operator) && !ValueUtils.isEmpty(filter.getEscape()))
-						buf.append(applyEscapement(filter.getEscape()));
-					continue;
-				}
-
-				// case: has null so... (x = 'l' or x is null or...)
-				if (rightOperand.contains(null)) {
-					if ("in".equals(operator))
-						operator = "=";
-					else if ("not in".equals(operator))
-						operator = "<>";
-					String subLogicalOperator = "<>".equals(operator) ? " and " : " or ";
-					buf.append("(");
-					int k = 0;
-					for (Object value : rightOperand) {
-						buf.append(k++ == 0 ? "" : subLogicalOperator);
-						if (value == null) {
-							appendNullCondition(buf, columnName, operator);
-							continue;
+					
+					// case : single value needed operators
+					if(!isMultiValueOperator(operator)) {
+						Object value = rightOperand.get(0);
+						if(value != null) {
+							Object realValue = this.appendSingleValueCondition(buf, columnName, key, operator, filter.getEscape(), value);
+							paramMap.put(key, realValue);
 						}
-						String key = lo + i++;
-						paramMap.put(key, value);
-						buf.append(columnName).append(" ").append(operator).append(" :").append(key);
-					}
-					buf.append(")");
-					continue;
+						
+					// case : multiple value operators
+					} else {
+						// case : has null so... (x = 'l' or x is null or...)
+						if (rightOperand.contains(null)) {
+							i = appendHasNullMultiValueCondition(buf, columnName, lo, operator, rightOperand, paramMap, i);
+							
+						// case : between
+						} else if(operator.equalsIgnoreCase("between")) {
+							String fromKey = key;
+							paramMap.put(fromKey, rightOperand.get(0));
+							i = i + 1;
+							String toKey = lo + i;
+							paramMap.put(toKey, rightOperand.get(1));
+							appendBetweenValueCondition(buf, columnName, fromKey, toKey, operator);
+					
+						// case in/not in
+						} else {
+							paramMap.put(key, rightOperand);				
+							appendMultiValueCondition(buf, columnName, key, operator);							
+						}
+					}					
 				}
-
-				// case: in ('x', 'y', 'z')
-				String key = lo + i;
-				paramMap.put(key, rightOperand);
-				if ("=".equals(operator))
-					operator = "in";
-				else if ("<>".equals(operator))
-					operator = "not in";
-				buf.append(columnName).append(" ").append(operator).append(" (:").append(key).append(")");
 			}
 		}
 
@@ -989,11 +1016,383 @@ public class DmlJdbc extends AbstractDml implements Dml {
 
 		return i;
 	}
+	
+	/**
+	 * Geolocation 검색 조건(where) 추가
+	 *  
+	 * @param buf
+	 * @param table
+	 * @param filter
+	 * @param i
+	 * @param paramMap
+	 * @param alias
+	 * @return
+	 */
+	private int appendWhereForGeolocField(StringBuffer buf, Table table, Filter filter, int i, Map<String, Object> paramMap, String alias) {
+		
+		StringBuffer colLatBuf = new StringBuffer();
+		appendName(table, colLatBuf, alias).append(".");
+		appendName(table, colLatBuf, "lat");
+		String latFieldName = colLatBuf.toString();
+		
+		StringBuffer colLngBuf = new StringBuffer();
+		appendName(table, colLngBuf, alias).append(".");
+		appendName(table, colLngBuf, "lng");
+		String lngFieldName = colLngBuf.toString();
+		
+		String lo = filter.getLeftOperand();
+		if(lo.equalsIgnoreCase("$box")) {
+			return this.appendWhereForGeoBox(buf, filter, i, paramMap, latFieldName, lngFieldName);
+			
+		} else if(lo.equalsIgnoreCase("$circle")) {
+			return this.appendWhereForGeoCircle(buf, filter, i, paramMap, latFieldName, lngFieldName);
+			
+		} else if(lo.equalsIgnoreCase("$polygon")) {
+			return this.appendWhereForGeoPolygon(buf, filter, i, paramMap, latFieldName, lngFieldName);
+			
+		} else {
+			return i;
+		}
+	}
+	
+	/**
+	 * Box 영역의 검색 조건(where) 추가
+	 * 
+	 * @param buf
+	 * @param filter
+	 * @param i
+	 * @param paramMap
+	 * @param latFieldName
+	 * @param lngFieldName
+	 * @return
+	 */
+	private int appendWhereForGeoBox(StringBuffer buf, Filter filter, int i, Map<String, Object> paramMap, String latFieldName, String lngFieldName) {
+		String operator = filter.getOperator();
+		buf.append("((").append(latFieldName).append(" is not null AND ").append(lngFieldName).append(" is not null) AND ");
+		if(!ValueUtils.isEmpty(operator) && operator.equalsIgnoreCase("$out")) {
+			buf.append(" not ");
+		}
+		
+		if(ValueUtils.isEmpty(filter.getRightOperand())) {
+			throw new DbistRuntimeException("$box query must have one parameter value");
+		}
+		
+		Object valueObj = filter.getRightOperand().get(0);
+		if(ValueUtils.isEmpty(valueObj)) {
+			throw new DbistRuntimeException("$box query must have one parameter value");
+		}
+		
+		String[] values = valueObj.toString().split(",");
+		
+		if(values.length != 4) {
+			throw new DbistRuntimeException("$box query must have one parameter value - 4 comma separated value. ex) 37.48,127.12669,37.38,127.10");
+		}		
+		
+		// BOX 좌측 상단 포인트와 우측 하단 포인트 네 자리를 ','로 구분 ex) 37.48,127.12669,37.38,127.10 (top latitude, top longitude, bottom latitude, bottom longitude)
+		double topLat = ValueUtils.toDouble(values[0]);
+		double topLng = ValueUtils.toDouble(values[1]);
+		double bottomLat = ValueUtils.toDouble(values[2]);
+		double bottomLng = ValueUtils.toDouble(values[3]);		
+		
+		// 날짜 변경선 처리 ex) lng >= -180 and lng -97.64 and lng >= 105.02 and lng =< 180 
+		if(topLng < bottomLng) {
+			buf.append("((").append(latFieldName).append(" >= ").append(bottomLat).append(" AND ").append(latFieldName).append(" <= ").append(topLat).append(") AND ((")
+			   .append(lngFieldName).append(" >= -180 AND ").append(lngFieldName).append(" <= ").append(topLng).append(") OR (")
+			   .append(lngFieldName).append(" >= ").append(bottomLng).append(" AND ").append(lngFieldName).append(" <= 180)))) ");
+		} else {
+			buf.append("(").append(latFieldName).append(" >= ").append(bottomLat).append(" AND ").append(latFieldName).append(" <= ").append(topLat).append(" AND ")
+			   .append(lngFieldName).append(" >= ").append(bottomLng).append(" AND ").append(lngFieldName).append(" <= ").append(topLng).append("))");
+		}
+		
+		return i;
+	}
+	
+	/**
+	 * Circle 영역의 검색 조건(where) 추가
+	 * 
+	 * @param buf
+	 * @param filter
+	 * @param i
+	 * @param paramMap
+	 * @param latFieldName
+	 * @param lngFieldName
+	 * @return
+	 */
+	private int appendWhereForGeoCircle(StringBuffer buf, Filter filter, int i, Map<String, Object> paramMap, String latFieldName, String lngFieldName) {
+		// filter value : 기준 좌표 위도, 경도, 반경(m) ex) 37.3892200, 127.0897300, 8000
+		// TODO 
+		return i;
+	}
+	
+	/**
+	 * Polygon 영역의 검색 조건(where) 추가 
+	 * FIXME Postgres dependency
+	 * 
+	 * @param buf
+	 * @param filter
+	 * @param i
+	 * @param paramMap
+	 * @param latFieldName
+	 * @param lngFieldName
+	 * @return
+	 */
+	private int appendWhereForGeoPolygon(StringBuffer buf, Filter filter, int i, Map<String, Object> paramMap, String latFieldName, String lngFieldName) {
+		String operator = filter.getOperator();
+		buf.append("((").append(latFieldName).append(" is not null AND ").append(lngFieldName).append(" is not null) AND ");
+		if(!ValueUtils.isEmpty(operator) && operator.equalsIgnoreCase("$out")) {
+			buf.append(" not ");
+		}
+		
+		if(ValueUtils.isEmpty(filter.getRightOperand())) {
+			throw new DbistRuntimeException("$polygon query must have one parameter value");
+		}
+		
+		Object valueObj = filter.getRightOperand().get(0);
+		if(ValueUtils.isEmpty(valueObj)) {
+			throw new DbistRuntimeException("$polygon query must have one parameter value");
+		}
+		
+		String[] values = valueObj.toString().split(",");
+		
+		if(values.length != 4) {
+			throw new DbistRuntimeException("$polygon query must have one parameter value - 4 comma separated point value. ex) ((37.475530, 127.114709), (37.422681, 127.116052), (37.423248, 127.150960), (37.482399, 127.142386))");
+		}
+		
+		// polygon 정보 - multiple point ex: ((37.475530, 127.114709), (37.422681, 127.116052), (37.423248, 127.150960), (37.482399, 127.142386))
+		String value = filter.getRightOperand().get(0).toString();
+		buf.append("( point(").append(latFieldName).append(",").append(lngFieldName).append(") <@ polygon '").append(value).append("'))");
+		return i;
+	}
+	
+	/**
+	 * 값이 필요없는 operator
+	 */
+	private static String[] EMPTY_VALUE_OPERATORS = new String[] { "is null", "is not null", "is present", "is blank", "is true", "is false", "is not true", "is not false", "is empty numeric id" };
+	
+	/**
+	 * Multi Value가 필요한 operator
+	 */
+	private static String[] MULTI_VALUE_OPERATORS = new String[] { "in", "not in", "between" };
+	
+	/**
+	 * 위치 기반 정보 조회를 위한 예약 필드명 
+	 */
+	private static List<String> RESERVED_FIELDS_FOR_GEOLOC = Arrays.asList(new String[] { "$box", "$circle", "$polygon" });	
+	
+	/**
+	 * check if value is not required operator
+	 * 
+	 * @param operator
+	 * @return
+	 */
+	private static boolean isEmptyValueOperator(String operator) {
+		 for(int i = 0 ; i < EMPTY_VALUE_OPERATORS.length ; i++) {
+			 if(operator.equalsIgnoreCase(EMPTY_VALUE_OPERATORS[i])) {
+				 return true;
+			 }
+		 }
 
+		 return false;
+	}
+	
+	/**
+	 * check if multiple value needed operator
+	 * 
+	 * @param operator
+	 * @return
+	 */
+	private static boolean isMultiValueOperator(String operator) {
+		 for(int i = 0 ; i < MULTI_VALUE_OPERATORS.length ; i++) {
+			 if(operator.equalsIgnoreCase(MULTI_VALUE_OPERATORS[i])) {
+				 return true;
+			 }
+		 }
+
+		 return false;
+	}
+	
+	/**
+	 * Append where statement single value case
+	 * 
+	 * @param buf
+	 * @param columnName
+	 * @param paramKey
+	 * @param operator
+	 * @param escape
+	 * @param value
+	 */
+	private Object appendSingleValueCondition(StringBuffer buf, String columnName, String paramKey, String operator, Character escape, Object value) {
+		Object realValue = value;
+		String realOperator = operator;
+		
+		// like, not like
+		if(operator.equalsIgnoreCase("like") || operator.equalsIgnoreCase("not like")) {
+			realValue = "%" + value + "%";
+			
+		// contains
+		} else if(operator.equalsIgnoreCase("contains")) {
+			realOperator = "like";
+			realValue = "%" + value + "%";
+			
+		// start with
+		} else if(operator.equalsIgnoreCase("sw")) {
+			realOperator = "like";
+			realValue = value + "%";
+			
+		// end with
+		} else if(operator.equalsIgnoreCase("ew")) {
+			realOperator = "like";
+			realValue = "%" + value;
+			
+		// does not start with
+		} else if(operator.equalsIgnoreCase("dnsw")) {
+			realOperator = "not like";
+			realValue = value + "%";
+			
+		// does not end with
+		} else if(operator.equalsIgnoreCase("dnew")) {
+			realOperator = "not like";
+			realValue = "%" + value;
+			
+		// 위치 기반 검색 - box 내 존재하는 위치 검색 - 테이블에 lat, lng 필드가 있다고 가정한다.
+		} else if(operator.equalsIgnoreCase("in-box")) {
+			
+		// 위치 기반 검색 - box 외 존재하는 위치 검색 - 테이블에 lat, lng 필드가 있다고 가정한다.
+		} else if(operator.equalsIgnoreCase("out-box")) {
+			
+		}
+		
+		buf.append(columnName).append(" ").append(realOperator).append(" :").append(paramKey);
+		
+		if (("like".equalsIgnoreCase(realOperator) || "not like".equalsIgnoreCase(realOperator)) && !ValueUtils.isEmpty(escape)) {
+			buf.append(applyEscapement(escape));
+		}
+		
+		return realValue; 
+	}
+	
+	/**
+	 * Append where statement multiple value case
+	 * 
+	 * @param buf
+	 * @param columnName
+	 * @param paramKey
+	 * @param operator
+	 */
+	private void appendMultiValueCondition(StringBuffer buf, String columnName, String paramKey, String operator) {
+		// case: in ('x', 'y', 'z') or not in
+		if ("=".equals(operator))
+			operator = "in";
+		else if ("<>".equals(operator))
+			operator = "not in";
+		
+		buf.append(columnName).append(" ").append(operator).append(" (:").append(paramKey).append(")");
+	}
+	
+	/**
+	 * Append where statement between operator case
+	 * 
+	 * @param buf
+	 * @param columnName
+	 * @param fromKey
+	 * @param toKey
+	 * @param operator
+	 */
+	private void appendBetweenValueCondition(StringBuffer buf, String columnName, String fromKey, String toKey, String operator) {		
+		buf.append("(").append(columnName).append(" ").append(operator).append(" :").append(fromKey).append(" and :").append(toKey).append(")");
+	}
+	
+	/**
+	 * Append where statement multiple value and has null case
+	 * 
+	 * @param buf
+	 * @param columnName
+	 * @param leftOperand
+	 * @param operator
+	 * @param rightOperand
+	 * @param paramMap
+	 * @param keyIndex
+	 * @return
+	 */
+	private int appendHasNullMultiValueCondition(StringBuffer buf, String columnName, String leftOperand, String operator, List<?> rightOperand, Map<String, Object> paramMap, int keyIndex) {
+		if ("in".equals(operator))
+			operator = "=";
+		else if ("not in".equals(operator))
+			operator = "<>";
+		
+		String subLogicalOperator = "<>".equals(operator) ? " and " : " or ";
+		buf.append("(");
+		int k = 0;
+		
+		for (Object value : rightOperand) {
+			buf.append(k++ == 0 ? "" : subLogicalOperator);
+			if (value == null) {
+				appendNullCondition(buf, columnName, operator);
+				continue;
+			}
+			
+			String key = leftOperand + keyIndex++;
+			paramMap.put(key, value);
+			buf.append(columnName).append(" ").append(operator).append(" :").append(key);
+		}
+		
+		buf.append(")");
+		return keyIndex + 1;
+	}
+	
+	/**
+	 * Check CaseSensitive and create new right operand 
+	 * 
+	 * @param fieldType
+	 * @param filter
+	 * @param rightOperand
+	 * @param column
+	 * @return
+	 */
+	private List<?> checkValueByCaseSensitive(Class<?> fieldType, Filter filter, List<?> rightOperand, Column column) {
+		if(rightOperand == null) {
+			throw new DbistRuntimeException(column.getField().toString() + " value is null.");
+		}
+		
+		List<Object> newRightOperand = new ArrayList<Object>(rightOperand.size());
+
+		if (!filter.isCaseSensitive() && CASECHECK_TYPELIST.contains(fieldType)) {
+			for (Object ro : rightOperand) {
+				if (ro == null)
+					;
+				else if (ro instanceof String)
+					ro = ((String) ro).toLowerCase();
+				else
+					ro = ro.toString().toLowerCase();
+				newRightOperand.add(ro);
+			}
+		} else {
+			for (Object ro : rightOperand)
+				newRightOperand.add(toParamValue(ro, fieldType));
+		}
+		
+		return newRightOperand;
+	}
+
+	/**
+	 * Check CaseSensitive and create new columnName 
+	 * 
+	 * @param fieldType
+	 * @param filter
+	 * @param columnName
+	 * @return
+	 */
+	private String checkColumnNameByCaseSensitive(Class<?> fieldType, Filter filter, String columnName) {
+		if (!filter.isCaseSensitive() && CASECHECK_TYPELIST.contains(fieldType)) {
+			return getFunctionLowerCase() + "(" + columnName + ")";
+		} else {
+			return columnName;
+		}
+	}
+	
 	private static Column toColumn(Table table, String name) {
 		return table.getColumn(toColumnName(table, name));
 	}
-
 	private static String toColumnName(Table table, String name) {
 		String columnName = table.toColumnName(name);
 		if (columnName != null)
@@ -1031,8 +1430,8 @@ public class DmlJdbc extends AbstractDml implements Dml {
 		buf.append(" ").append(operator).append(" null");
 	}
 
-	public <T> List<T> selectListByQl(String ql, Map<String, ?> paramMap, Class<T> requiredType, int pageIndex, int pageSize, int firstResultIndex, int maxResultSize)
-			throws Exception {
+	public <T> List<T> selectListByQl(String ql, Map<String, ?> paramMap, Class<T> requiredType, int pageIndex, int pageSize, int firstResultIndex,
+			int maxResultSize) throws Exception {
 		ValueUtils.assertNotEmpty("ql", ql);
 		ValueUtils.assertNotEmpty("requiredType", requiredType);
 		paramMap = paramMap == null ? new HashMap<String, Object>() : paramMap;
@@ -1043,7 +1442,6 @@ public class DmlJdbc extends AbstractDml implements Dml {
 		adjustParamMap(paramMap);
 		return query(ql, paramMap, requiredType, null, pageIndex, pageSize, firstResultIndex, maxResultSize);
 	}
-
 	private static void adjustParamMap(Map<String, ?> paramMap) {
 		if (paramMap == null || paramMap.isEmpty())
 			return;
@@ -1095,13 +1493,13 @@ public class DmlJdbc extends AbstractDml implements Dml {
 		return selectByQl(ql, paramMap, Integer.class);
 	}
 
-	public <T> List<T> selectListByQlPath(String qlPath, Map<String, ?> paramMap, Class<T> requiredType, int pageIndex, int pageSize, int firstResultIndex, int maxResultSize)
-			throws Exception {
+	public <T> List<T> selectListByQlPath(String qlPath, Map<String, ?> paramMap, Class<T> requiredType, int pageIndex, int pageSize,
+			int firstResultIndex, int maxResultSize) throws Exception {
 		return selectListByQl(getSqlByPath(qlPath), paramMap, requiredType, pageIndex, pageSize, firstResultIndex, maxResultSize);
 	}
 
-	public <T> Page<T> selectPageByQlPath(String qlPath, Map<String, ?> paramMap, Class<T> requiredType, int pageIndex, int pageSize, int firstResultIndex, int maxResultSize)
-			throws Exception {
+	public <T> Page<T> selectPageByQlPath(String qlPath, Map<String, ?> paramMap, Class<T> requiredType, int pageIndex, int pageSize,
+			int firstResultIndex, int maxResultSize) throws Exception {
 		return selectPageByQl(getSqlByPath(qlPath), paramMap, requiredType, pageIndex, pageSize, firstResultIndex, maxResultSize);
 	}
 
@@ -1110,7 +1508,6 @@ public class DmlJdbc extends AbstractDml implements Dml {
 	}
 
 	private Map<String, String> sqlByPathCache;
-
 	private String getSqlByPath(final String path) throws IOException {
 		ValueUtils.assertNotNull("path", path);
 		if (sqlByPathCache == null)
@@ -1125,7 +1522,6 @@ public class DmlJdbc extends AbstractDml implements Dml {
 			}
 		});
 	}
-
 	private String _getSqlByPath(String path) throws IOException {
 		String _path = path;
 		if (_path.endsWith("/") || ResourceUtils.isDirectory(_path)) {
@@ -1179,11 +1575,9 @@ public class DmlJdbc extends AbstractDml implements Dml {
 	public String getDbType() {
 		return queryMapper == null ? super.getDbType() : queryMapper.getDbType();
 	}
-
 	public String getDomain() {
 		return domain;
 	}
-
 	public void setDomain(String domain) {
 		this.domain = domain;
 		if (ValueUtils.isEmpty(domain)) {
@@ -1193,59 +1587,45 @@ public class DmlJdbc extends AbstractDml implements Dml {
 		for (String d : StringUtils.tokenizeToStringArray(domain, ","))
 			domainList.add(d);
 	}
-
 	public String getColumnAliasRuleForMapKey() {
 		return columnAliasRuleForMapKey;
 	}
-
 	public void setColumnAliasRuleForMapKey(String columnAliasRuleForMapKey) {
 		this.columnAliasRuleForMapKey = columnAliasRuleForMapKey;
 	}
-
 	public JdbcOperations getJdbcOperations() {
 		return jdbcOperations;
 	}
-
 	public void setJdbcOperations(JdbcOperations jdbcOperations) {
 		this.jdbcOperations = jdbcOperations;
 	}
-
 	public NamedParameterJdbcOperations getNamedParameterJdbcOperations() {
 		return namedParameterJdbcOperations;
 	}
-
 	public void setNamedParameterJdbcOperations(NamedParameterJdbcOperations namedParameterJdbcOperations) {
 		this.namedParameterJdbcOperations = namedParameterJdbcOperations;
 	}
-
 	public int getMaxSqlByPathCacheSize() {
 		return maxSqlByPathCacheSize;
 	}
-
 	public void setMaxSqlByPathCacheSize(int maxSqlByPathCacheSize) {
 		this.maxSqlByPathCacheSize = maxSqlByPathCacheSize;
 	}
-
 	public int getDefaultLockTimeout() {
 		return defaultLockTimeout;
 	}
-
 	public void setDefaultLockTimeout(int defaultLockTimeout) {
 		this.defaultLockTimeout = defaultLockTimeout;
 	}
-
 	public boolean isReservedWordTolerated() {
 		return reservedWordTolerated;
 	}
-
 	public void setReservedWordTolerated(boolean reservedWordTolerated) {
 		this.reservedWordTolerated = reservedWordTolerated;
 	}
-
 	public QueryMapper getQueryMapper() {
 		return queryMapper;
 	}
-
 	public void setQueryMapper(QueryMapper queryMapper) {
 		this.queryMapper = queryMapper;
 	}
@@ -1295,7 +1675,6 @@ public class DmlJdbc extends AbstractDml implements Dml {
 			}
 		});
 	}
-
 	private static final Map<String, CtClass> CTCLASS_BY_DBDATATYPE_MAP;
 	static {
 		CTCLASS_BY_DBDATATYPE_MAP = new HashMap<String, CtClass>();
@@ -1322,7 +1701,6 @@ public class DmlJdbc extends AbstractDml implements Dml {
 			logger.warn(e.getMessage(), e);
 		}
 	}
-
 	private static CtClass toCtClass(String dbDataType) throws NotFoundException {
 		if (CTCLASS_BY_DBDATATYPE_MAP.containsKey(dbDataType))
 			return CTCLASS_BY_DBDATATYPE_MAP.get(dbDataType);
@@ -1335,12 +1713,13 @@ public class DmlJdbc extends AbstractDml implements Dml {
 		final Class<?> clazz = obj instanceof Class ? (Class<?>) obj : obj.getClass();
 
 		final boolean debug = logger.isDebugEnabled();
-
-		if (tableByClassCache.containsKey(clazz)) {
-			if (debug)
-				logger.debug("get table metadata from map cache by class: " + clazz.getName());
-			return tableByClassCache.get(clazz);
-		}
+		
+		// if (tableByClassCache.containsKey(clazz)) {
+		// if (debug)
+		// logger.debug("get table metadata from map cache by class: " +
+		// clazz.getName());
+		// return tableByClassCache.get(clazz);
+		// }
 
 		return SyncCtrlUtils.wrap("DmlJdbc.tableByClass." + clazz.getName(), tableByClassCache, clazz, new Closure<Table, RuntimeException>() {
 			public Table execute() {
@@ -1363,9 +1742,8 @@ public class DmlJdbc extends AbstractDml implements Dml {
 				}
 
 				String simpleName = clazz.getSimpleName();
-				String[] tableNameCandidates = ValueUtils.isEmpty(table.getName())
-						? new String[] { ValueUtils.toDelimited(simpleName, '_', false), ValueUtils.toDelimited(simpleName, '_', true), simpleName.toLowerCase() }
-						: new String[] { table.getName() };
+				String[] tableNameCandidates = ValueUtils.isEmpty(table.getName()) ? new String[] { ValueUtils.toDelimited(simpleName, '_', false),
+						ValueUtils.toDelimited(simpleName, '_', true), simpleName.toLowerCase() } : new String[] { table.getName() };
 				checkAndPopulateDomainAndName(table, tableNameCandidates);
 
 				// Columns
@@ -1381,12 +1759,13 @@ public class DmlJdbc extends AbstractDml implements Dml {
 
 	private static final String MSG_QUERYNOTFOUND = "Couldn't find ${queryName} query of dbType: ${dbType}. this type maybe unsupported yet.";
 
-	// private static final
+	//	private static final
 	private <T> Table checkAndPopulateDomainAndName(Table table, String... tableNameCandidates) {
 		// Check table existence and populate
 		String sql = getQueryCountTable();
 		if (sql == null)
-			throw new IllegalArgumentException(ValueUtils.populate(MSG_QUERYNOTFOUND, ValueUtils.toMap("queryName: number of table", "dbType:" + getDbType())));
+			throw new IllegalArgumentException(ValueUtils.populate(MSG_QUERYNOTFOUND,
+					ValueUtils.toMap("queryName: number of table", "dbdType:" + getDbType())));
 		String vsql = getQueryCountView();
 		boolean checkView = !ValueUtils.isEmpty(vsql) && !sql.equals(vsql);
 
@@ -1418,17 +1797,29 @@ public class DmlJdbc extends AbstractDml implements Dml {
 		}
 
 		if (!populated) {
-			String errMsg = "Couldn't find table[${table}] from this(these) domain(s)[${domain}]";
-			throw new IllegalArgumentException(ValueUtils.populate(errMsg, ValueUtils.toMap("domain:" + mapOr(domainNameList), "table:" + mapOr(tableNameCandidates))));
+			String errMsg = "Couldn't find table [${table}] from this(these) domain(s) [${domain}]";
+			throw new IllegalArgumentException(ValueUtils.populate(errMsg,
+					ValueUtils.toMap("domain:" + mapOr(domainNameList), "table:" + mapOr(tableNameCandidates))));
 		}
 
 		// populate PK name
 		sql = getQueryPkColumnNames();
 		if (sql == null)
-			throw new IllegalArgumentException(ValueUtils.populate(MSG_QUERYNOTFOUND, ValueUtils.toMap("queryName: primary key", "dbType:" + getDbType())));
+			throw new IllegalArgumentException(ValueUtils.populate(MSG_QUERYNOTFOUND,
+					ValueUtils.toMap("queryName: primary key", "dbType:" + getDbType())));
 
 		sql = StringUtils.replace(sql, "${domain}", toFirstDomainName(table.getDomain()));
-		table.setPkColumnNameList(jdbcOperations.queryForList(sql, String.class, table.getName()));
+		
+		List<String> pkNameList = new ArrayList<String>();
+		List<String> pkNames = jdbcOperations.queryForList(sql, String.class, table.getName());
+		for (String pk : pkNames) {
+			String[] pks = StringUtils.tokenizeToStringArray(pk, ",");
+			for (String value : pks) {
+				pkNameList.add(StringUtils.trimWhitespace(value));
+			}
+		}
+
+		table.setPkColumnNameList(pkNameList);
 		if (ValueUtils.isEmpty(table.getPkColumnNameList())) {
 			List<String> list = new ArrayList<String>();
 			for (Field field : ReflectionUtils.getFieldList(table.getClazz(), false)) {
@@ -1442,27 +1833,27 @@ public class DmlJdbc extends AbstractDml implements Dml {
 
 		return table;
 	}
-
 	private static String toFirstDomainName(String domainName) {
 		int dotIndex = domainName.indexOf('.');
 		return dotIndex < 0 ? domainName : domainName.substring(0, dotIndex);
 	}
 
 	private static final RowMapper<TableColumn> TABLECOLUMN_ROWMAPPER = new TableColumnRowMapper();
-
-	private List<TableColumn> getTableColumnList(Table table) {
+	private static final RowMapper<TableColumn> CASSANDRA_TABLECOLUMN_ROWMAPPER = new CassandraTableColumnRowMapper();
+	
+	public List<TableColumn> getTableColumnList(Table table) {
 		String sql = "view".equals(table.getType()) ? getQueryViewColumns() : getQueryColumns();
 		if (sql == null)
-			throw new IllegalArgumentException(ValueUtils.populate(MSG_QUERYNOTFOUND, ValueUtils.toMap("queryName: table columns", "dbType:" + getDbType())));
+			throw new IllegalArgumentException(ValueUtils.populate(MSG_QUERYNOTFOUND,
+					ValueUtils.toMap("queryName: table columns", "dbType:" + getDbType())));
 
 		sql = StringUtils.replace(sql, "${domain}", toFirstDomainName(table.getDomain()));
 		String tableName = table.getName();
 
-		return jdbcOperations.query(sql, new Object[] { tableName }, TABLECOLUMN_ROWMAPPER);
+		return jdbcOperations.query(sql, new Object[] { tableName }, this.getTableColumnRowMapper());
 	}
 
 	private static final String MSG_COLUMNNOTFOUND = "Couldn't find column[${column}] of table[${table}].";
-
 	private void addColumn(Table table, Field field) {
 		Ignore ignoreAnn = field.getAnnotation(Ignore.class);
 		if (ignoreAnn != null)
@@ -1476,15 +1867,16 @@ public class DmlJdbc extends AbstractDml implements Dml {
 		Relation relAnn = field.getAnnotation(Relation.class);
 		if (relAnn != null) {
 			if (relAnn.field().length == 0)
-				throw new DbistRuntimeException("@Relation of " + table.getClazz().getName() + "." + field.getName() + " requires linked field value.");
+				throw new DbistRuntimeException("@Relation of " + table.getClazz().getName() + "." + field.getName()
+						+ " requires linked field value.");
 			column.setRelation(relAnn);
 
 			Class<?> linkedClass = field.getType();
 			Table linkedTable = getTable(linkedClass);
 
 			if (relAnn.field().length != linkedTable.getPkColumnNameList().size())
-				throw new DbistRuntimeException(
-						"@Relation.field.length of " + table.getClazz().getName() + "." + field.getName() + " must same with the primary key size of " + table.getName());
+				throw new DbistRuntimeException("@Relation.field.length of " + table.getClazz().getName() + "." + field.getName()
+						+ " must same with the primary key size of " + table.getName());
 
 			column.setTable(linkedTable);
 			table.setContainsLinkedTable(true);
@@ -1504,7 +1896,8 @@ public class DmlJdbc extends AbstractDml implements Dml {
 		{
 			String sql = "view".equals(table.getType()) ? getQueryViewColumn() : getQueryColumn();
 			if (sql == null)
-				throw new IllegalArgumentException(ValueUtils.populate(MSG_QUERYNOTFOUND, ValueUtils.toMap("queryName: table column", "dbType:" + getDbType())));
+				throw new IllegalArgumentException(ValueUtils.populate(MSG_QUERYNOTFOUND,
+						ValueUtils.toMap("queryName: table column", "dbType:" + getDbType())));
 
 			sql = StringUtils.replace(sql, "${domain}", toFirstDomainName(table.getDomain()));
 			com.noar.dbist.annotation.Column columnAnn = field.getAnnotation(com.noar.dbist.annotation.Column.class);
@@ -1513,10 +1906,10 @@ public class DmlJdbc extends AbstractDml implements Dml {
 			if (columnAnn != null) {
 				if (!ValueUtils.isEmpty(columnAnn.name())) {
 					try {
-						tabColumn = jdbcOperations.queryForObject(sql, TABLECOLUMN_ROWMAPPER, tableName, columnAnn.name().toLowerCase());
+						tabColumn = jdbcOperations.queryForObject(sql, this.getTableColumnRowMapper(), tableName, columnAnn.name().toLowerCase());
 					} catch (EmptyResultDataAccessException e) {
-						throw new DbistRuntimeException(
-								ValueUtils.populate(MSG_COLUMNNOTFOUND, ValueUtils.toMap("column:" + columnAnn.name(), "table:" + table.getDomain() + "." + tableName)));
+						throw new DbistRuntimeException(ValueUtils.populate(MSG_COLUMNNOTFOUND,
+								ValueUtils.toMap("column:" + columnAnn.name(), "table:" + table.getDomain() + "." + tableName)));
 					}
 				}
 				column.setType(ValueUtils.toNull(columnAnn.type().value()));
@@ -1538,7 +1931,7 @@ public class DmlJdbc extends AbstractDml implements Dml {
 					if (checkedSet.contains(columnName))
 						continue;
 					try {
-						tabColumn = jdbcOperations.queryForObject(sql, TABLECOLUMN_ROWMAPPER, tableName, columnName);
+						tabColumn = jdbcOperations.queryForObject(sql, this.getTableColumnRowMapper(), tableName, columnName);
 					} catch (EmptyResultDataAccessException e) {
 						checkedSet.add(columnName);
 						continue;
@@ -1546,13 +1939,15 @@ public class DmlJdbc extends AbstractDml implements Dml {
 					break;
 				}
 				if (tabColumn == null)
-					throw new DbistRuntimeException(
-							ValueUtils.populate(MSG_COLUMNNOTFOUND, ValueUtils.toMap("column:" + mapOr(columnNameCandidates), "table:" + table.getDomain() + "." + tableName)));
+					throw new DbistRuntimeException(ValueUtils.populate(MSG_COLUMNNOTFOUND,
+							ValueUtils.toMap("column:" + mapOr(columnNameCandidates), "table:" + table.getDomain() + "." + tableName)));
 			}
 
 			column.setName(tabColumn.getName());
 			column.setPrimaryKey(table.getPkColumnNameList().contains(tabColumn.getName()));
 			column.setDataType(tabColumn.getDataType().toLowerCase());
+			column.setLength(tabColumn.getLength());
+			column.setNullable(tabColumn.isNullable());
 		}
 
 		// Identity / Sequence
@@ -1592,56 +1987,51 @@ public class DmlJdbc extends AbstractDml implements Dml {
 
 					if (!populated) {
 						String errMsg = "Couldn't find sequence[${sequence}] from this(these) domain(s)[${domain}]";
-						throw new IllegalArgumentException(ValueUtils.populate(errMsg, ValueUtils.toMap("domain:" + mapOr(domainNameList), "sequence:" + name)));
+						throw new IllegalArgumentException(ValueUtils.populate(errMsg,
+								ValueUtils.toMap("domain:" + mapOr(domainNameList), "sequence:" + name)));
 					}
 				}
 			}
 		}
 	}
+	
+	private RowMapper<TableColumn> getTableColumnRowMapper() {
+		return this.getDbType().equals(DbistConstants.CASSANDRA) ? CASSANDRA_TABLECOLUMN_ROWMAPPER : TABLECOLUMN_ROWMAPPER;
+	}
 
 	private String getFunctionLowerCase() {
 		return queryMapper.getFunctionLowerCase();
 	}
-
 	private String applyEscapement(char escape) {
 		String str = queryMapper.toEscapement(escape);
 		if (ValueUtils.isEmpty(str))
 			return "";
 		return " " + str;
 	}
-
 	private String getQueryCountTable() {
 		return queryMapper.getQueryCountTable();
 	}
-
 	private String getQueryCountView() {
 		return queryMapper.getQueryCountView();
 	}
-
 	private String getQueryPkColumnNames() {
 		return queryMapper.getQueryPkColumnNames();
 	}
-
 	private String getQueryColumns() {
 		return queryMapper.getQueryColumns();
 	}
-
 	private String getQueryViewColumns() {
 		return queryMapper.getQueryViewColumns();
 	}
-
 	private String getQueryColumn() {
 		return queryMapper.getQueryColumn();
 	}
-
 	private String getQueryViewColumn() {
 		return queryMapper.getQueryViewColumn();
 	}
-
 	private String getQueryCountIdentity() {
 		return queryMapper.getQueryCountIdentity();
 	}
-
 	private String getQueryCountSequence() {
 		return queryMapper.getQueryCountSequence();
 	}
@@ -1650,7 +2040,18 @@ public class DmlJdbc extends AbstractDml implements Dml {
 		public TableColumn mapRow(ResultSet rs, int rowNum) throws SQLException {
 			TableColumn tabColumn = new TableColumn();
 			tabColumn.setName(rs.getString("name"));
-			tabColumn.setDataType(rs.getString("dataType"));
+			tabColumn.setDataType(rs.getString("datatype"));
+			tabColumn.setLength(rs.getInt("length"));
+			tabColumn.setNullable(rs.getString("nullable"));
+			return tabColumn;
+		}
+	}
+	
+	static class CassandraTableColumnRowMapper implements RowMapper<TableColumn> {
+		public TableColumn mapRow(ResultSet rs, int rowNum) throws SQLException {
+			TableColumn tabColumn = new TableColumn();
+			tabColumn.setName(rs.getString("name"));
+			tabColumn.setDataType(rs.getString("datatype"));
 			return tabColumn;
 		}
 	}
@@ -1658,21 +2059,32 @@ public class DmlJdbc extends AbstractDml implements Dml {
 	static class TableColumn {
 		private String name;
 		private String dataType;
-
+		private Integer length;
+		private String nullable;
+		
 		public String getName() {
 			return name;
 		}
-
 		public void setName(String name) {
 			this.name = name;
 		}
-
 		public String getDataType() {
 			return dataType;
 		}
-
 		public void setDataType(String type) {
 			this.dataType = type;
+		}
+		public Integer getLength() {
+			return length;
+		}
+		public void setLength(Integer length) {
+			this.length = length;
+		}
+		public String isNullable() {
+			return nullable;
+		}
+		public void setNullable(String nullable) {
+			this.nullable = nullable;
 		}
 	}
 
@@ -1686,7 +2098,6 @@ public class DmlJdbc extends AbstractDml implements Dml {
 		}
 		return buf.toString();
 	}
-
 	private static String mapOr(List<String> valueList) {
 		StringBuffer buf = new StringBuffer();
 		int i = 0;
@@ -1700,56 +2111,72 @@ public class DmlJdbc extends AbstractDml implements Dml {
 
 	@Override
 	public void callProcedure(String name) throws Exception {
-		// TODO Auto-generated method stub
-
+		this.callProcedure(name, new HashMap<String, Object>());
 	}
 
 	@Override
 	public void callProcedure(String name, Map<String, ?> paramMap) throws Exception {
-		// TODO Auto-generated method stub
-
+		this.callProcedureBySql(queryMapper.callProcedure(name, paramMap), paramMap);
 	}
 
 	@Override
 	public <T> T callReturnProcedure(String name, Map<String, ?> paramMap, Class<T> requiredType) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return select(this.callReturnListProcedure(name, paramMap, requiredType));
 	}
 
 	@Override
 	public <T> List<T> callReturnListProcedure(String name, Map<String, ?> paramMap, Class<T> requiredType) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return this.executeCallProcedure(queryMapper.callProcedure(name, paramMap), paramMap, requiredType);
 	}
 
 	@Override
 	public void callProcedureBySql(String sql) throws Exception {
-		// TODO Auto-generated method stub
-
+		this.callProcedureBySql(sql, new HashMap<String, Object>());
 	}
 
 	@Override
 	public void callProcedureBySql(String sql, Map<String, ?> paramMap) throws Exception {
-		// TODO Auto-generated method stub
-
+		this.executeCallProcedure(sql, paramMap, Object.class);
 	}
 
 	@Override
 	public <T> T callReturnProcedureBySql(String sql, Map<String, ?> paramMap, Class<T> requiredType) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return select(this.callReturnListProcedureBySql(sql, paramMap, requiredType));
 	}
 
 	@Override
 	public <T> List<T> callReturnListProcedureBySql(String sql, Map<String, ?> paramMap, Class<T> requiredType) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return this.executeCallProcedure(sql, paramMap, requiredType);
+	}
+
+	/**
+	 * Procedure 실행.
+	 * 
+	 * @param name
+	 * @param paramMap
+	 * @param requiredType
+	 * @return
+	 * @throws Exception
+	 */
+	private <T> List<T> executeCallProcedure(String sql, Map<String, ?> paramMap, Class<T> requiredType) throws Exception {
+		ValueUtils.assertNotEmpty("sql", sql);
+		ValueUtils.assertNotEmpty("requiredType", requiredType);
+
+		paramMap = paramMap == null ? new HashMap<String, Object>() : paramMap;
+		sql = sql.trim();
+
+		if (getPreprocessor() != null)
+			sql = getPreprocessor().process(sql, paramMap);
+
+		adjustParamMap(paramMap);
+
+		return query(sql, paramMap, requiredType, null, 0, 0, 0, 0);
 	}
 
 	@Override
 	@SuppressWarnings("rawtypes")
 	public List<Map> getProcedureParameters(String name) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = queryMapper.procedureParameters(name);
+		return query(sql, new HashMap<String, Object>(), Map.class, null, 0, 0, 0, 0);
 	}
 }
