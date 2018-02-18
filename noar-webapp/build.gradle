@@ -36,12 +36,19 @@ dependencies {
     // Transaction, JDBC
     compile 'org.springframework.boot:spring-boot-starter-jdbc:1.3.1.RELEASE'
     //JPA(Hibernate..)
-    compile 'org.springframework.boot:spring-boot-starter-data-jpa:1.3.1.RELEASE'
+//    compile 'org.springframework.boot:spring-boot-starter-data-jpa:1.3.1.RELEASE'
+    
+	// Database
+//	runtime("com.h2database:h2:1.4.190")
+//	compile("com.oracle:ojdbc6:0.0.1")
+	//compile("mysql:mysql-connector-java")
+	compile("postgresql:postgresql:9.1-901-1.jdbc4")
+//	compile("com.microsoft:sqljdbc41:0.0.1")
     
 	// Database
 	// com.minu.core.config.h2
     runtime 'com.h2database:h2:1.4.190'
-    compile 'org.springframework.boot:spring-boot-starter-data-mongodb:1.3.1.RELEASE'
+//    compile 'org.springframework.boot:spring-boot-starter-data-mongodb:1.3.1.RELEASE'
     
     compile 'com.google.code.gson:gson:2.5'
     // HttpUtil

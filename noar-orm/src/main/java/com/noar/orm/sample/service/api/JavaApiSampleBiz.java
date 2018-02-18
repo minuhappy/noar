@@ -1,4 +1,4 @@
-package com.noar.webapp.sample.service.api;
+package com.noar.orm.sample.service.api;
 
 import java.io.File;
 import java.util.ArrayList;

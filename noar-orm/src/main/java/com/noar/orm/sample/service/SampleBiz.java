@@ -1,3 +1,4 @@
+package com.noar.orm.sample.service;
 //package com.noar.webapp.sample.service;
 //
 //import java.util.ArrayList;

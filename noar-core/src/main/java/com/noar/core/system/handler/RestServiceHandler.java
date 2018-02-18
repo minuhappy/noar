@@ -43,8 +43,6 @@ public class RestServiceHandler {
 			name = name.substring(0, name.lastIndexOf("/"));
 		}
 
-		if (REST_CACHE.containsKey(name))
-			return REST_CACHE.get(name);
 		return get(name);
 	}
 
@@ -53,8 +51,8 @@ public class RestServiceHandler {
 		Map<String, Object> serviceInfoMap = setServiceInfoMap(name);
 		// URL을 변환한 Service Path를 통해, 호출할 Service 경로 추출.
 		String reqPath = String.valueOf(serviceInfoMap.get(Constants.REQUEST_PATH));
-		if (REST_CACHE.containsKey(reqPath))
-			return REST_CACHE.get(reqPath);
+		// if (REST_CACHE.containsKey(reqPath))
+		// return REST_CACHE.get(reqPath);
 		return SynchCtrlUtil.wrap(reqPath, REST_CACHE, reqPath, new IScope<ServiceInfo>() {
 			@Override
 			public ServiceInfo execute() throws Exception {
@@ -123,7 +121,7 @@ public class RestServiceHandler {
 		}
 
 		StringBuffer sb = new StringBuffer();
-		sb.append(PropertyUtil.getProperty(ConfigConstants.BASE_PATH, "com.noar.core"));
+		sb.append(PropertyUtil.getProperty(ConfigConstants.BASE_PATH, "com.noar.webapp"));
 		sb.append(Constants.DOT);
 		sb.append((uri.substring(startIndex, lastIndex)).replaceAll("/", "."));
 
@@ -211,7 +209,7 @@ public class RestServiceHandler {
 			// Rest-List
 			Map<String, String> map = new HashMap<String, String>();
 			String packagePath = servicePath.substring(0, servicePath.lastIndexOf(Constants.DOT));
-			String className = servicePath.substring(0, servicePath.lastIndexOf(Constants.DOT) + 1);
+			String className = servicePath.substring(servicePath.lastIndexOf(Constants.DOT) + 1);
 
 			map.put(Constants.REQUEST_PATH, uri);
 			map.put(Constants.CLASS_PATH, servicePath);

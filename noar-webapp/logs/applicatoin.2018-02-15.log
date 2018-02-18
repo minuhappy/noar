@@ -154,3 +154,603 @@ Caused by: java.lang.ClassNotFoundException: xyz.elidom.dbist.dml.impl.DmlJdbc2
 	at org.springframework.beans.factory.support.AbstractBeanFactory.doResolveBeanClass(AbstractBeanFactory.java:1432)
 	at org.springframework.beans.factory.support.AbstractBeanFactory.resolveBeanClass(AbstractBeanFactory.java:1377)
 	... 29 common frames omitted
+2018:02:15 02:45:34.663 INFO  --- [main] com.noar.webapp.ApplicationMain : Starting ApplicationMain on MinuKimui-MacBook-Pro.local with PID 15081 (/Users/minu/git/noar/noar-webapp/bin started by minu in /Users/minu/git/noar/noar-webapp) 
+2018:02:15 02:45:34.680 INFO  --- [main] com.noar.webapp.ApplicationMain : No active profile set, falling back to default profiles: default 
+2018:02:15 02:45:34.753 INFO  --- [main] o.s.b.c.e.AnnotationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@5ccbeb64: startup date [Thu Feb 15 02:45:34 KST 2018]; root of context hierarchy 
+2018:02:15 02:45:35.251 INFO  --- [main] o.s.core.annotation.AnnotationUtils : Failed to introspect annotations on [class org.springframework.boot.actuate.autoconfigure.EndpointWebMvcHypermediaManagementContextConfiguration]: java.lang.ArrayStoreException: sun.reflect.annotation.TypeNotPresentExceptionProxy 
+2018:02:15 02:45:35.254 INFO  --- [main] o.s.core.annotation.AnnotationUtils : Failed to introspect annotations on [class org.springframework.boot.actuate.autoconfigure.EndpointWebMvcHypermediaManagementContextConfiguration]: java.lang.ArrayStoreException: sun.reflect.annotation.TypeNotPresentExceptionProxy 
+2018:02:15 02:45:35.483 INFO  --- [main] o.s.b.f.xml.XmlBeanDefinitionReader : Loading XML bean definitions from class path resource [WEB-INF/application-context.xml] 
+2018:02:15 02:45:35.629 INFO  --- [main] o.s.b.f.xml.XmlBeanDefinitionReader : Loading XML bean definitions from class path resource [WEB-INF/dataSource-context.xml] 
+2018:02:15 02:45:35.745 INFO  --- [main] o.s.b.f.s.DefaultListableBeanFactory : Overriding bean definition for bean 'dataSource' with a different definition: replacing [Root bean: class [null]; scope=; abstract=false; lazyInit=false; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=org.springframework.boot.autoconfigure.jdbc.DataSourceConfiguration$Dbcp; factoryMethodName=dataSource; initMethodName=null; destroyMethodName=(inferred); defined in class path resource [org/springframework/boot/autoconfigure/jdbc/DataSourceConfiguration$Dbcp.class]] with [Root bean: class [null]; scope=; abstract=false; lazyInit=false; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=org.springframework.boot.autoconfigure.jdbc.DataSourceConfiguration$Tomcat; factoryMethodName=dataSource; initMethodName=null; destroyMethodName=(inferred); defined in class path resource [org/springframework/boot/autoconfigure/jdbc/DataSourceConfiguration$Tomcat.class]] 
+2018:02:15 02:45:35.889 INFO  --- [main] o.s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode! 
+2018:02:15 02:45:35.924 INFO  --- [main] o.s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode! 
+2018:02:15 02:45:36.133 INFO  --- [main] o.s.c.s.PropertySourcesPlaceholderConfigurer : Loading properties file from class path resource [application.properties] 
+2018:02:15 02:45:36.136 INFO  --- [main] o.s.c.s.PropertySourcesPlaceholderConfigurer : Loading properties file from class path resource [application.properties] 
+2018:02:15 02:45:36.196 WARN  --- [main] o.s.b.c.p.ConfigurationPropertiesBindingPostProcessor : Multiple PropertySourcesPlaceholderConfigurer beans registered [org.springframework.context.support.PropertySourcesPlaceholderConfigurer#0, org.springframework.context.support.PropertySourcesPlaceholderConfigurer#1], falling back to Environment 
+2018:02:15 02:45:36.244 WARN  --- [main] o.s.b.c.e.AnnotationConfigEmbeddedWebApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'dataSourceInitializerPostProcessor': Unsatisfied dependency expressed through field 'beanFactory'; nested exception is org.springframework.beans.factory.CannotLoadBeanClassException: Cannot find class [xyz.elidom.dbist.ddl.impl.DdlJdbc] for bean with name 'ddl' defined in class path resource [WEB-INF/dataSource-context.xml]; nested exception is java.lang.ClassNotFoundException: xyz.elidom.dbist.ddl.impl.DdlJdbc 
+2018:02:15 02:45:36.246 ERROR --- [main] o.s.b.f.s.DefaultListableBeanFactory : Destroy method on bean with name 'org.springframework.boot.context.properties.ConfigurationPropertiesBindingPostProcessor' threw an exception 
+java.lang.IllegalStateException: ApplicationEventMulticaster not initialized - call 'refresh' before multicasting events via the context: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@5ccbeb64: startup date [Thu Feb 15 02:45:34 KST 2018]; root of context hierarchy
+	at org.springframework.context.support.AbstractApplicationContext.getApplicationEventMulticaster(AbstractApplicationContext.java:404)
+	at org.springframework.context.support.ApplicationListenerDetector.postProcessBeforeDestruction(ApplicationListenerDetector.java:97)
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:253)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroyBean(DefaultSingletonBeanRegistry.java:578)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingleton(DefaultSingletonBeanRegistry.java:554)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingleton(DefaultListableBeanFactory.java:961)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingletons(DefaultSingletonBeanRegistry.java:523)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingletons(DefaultListableBeanFactory.java:968)
+	at org.springframework.context.support.AbstractApplicationContext.destroyBeans(AbstractApplicationContext.java:1033)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:555)
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:762)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:372)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:316)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1187)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1176)
+	at com.noar.webapp.ApplicationMain.main(ApplicationMain.java:13)
+2018:02:15 02:45:36.246 ERROR --- [main] o.s.b.f.s.DefaultListableBeanFactory : Destroy method on bean with name 'org.springframework.boot.autoconfigure.internalCachingMetadataReaderFactory' threw an exception 
+java.lang.IllegalStateException: ApplicationEventMulticaster not initialized - call 'refresh' before multicasting events via the context: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@5ccbeb64: startup date [Thu Feb 15 02:45:34 KST 2018]; root of context hierarchy
+	at org.springframework.context.support.AbstractApplicationContext.getApplicationEventMulticaster(AbstractApplicationContext.java:404)
+	at org.springframework.context.support.ApplicationListenerDetector.postProcessBeforeDestruction(ApplicationListenerDetector.java:97)
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:253)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroyBean(DefaultSingletonBeanRegistry.java:578)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingleton(DefaultSingletonBeanRegistry.java:554)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingleton(DefaultListableBeanFactory.java:961)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingletons(DefaultSingletonBeanRegistry.java:523)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingletons(DefaultListableBeanFactory.java:968)
+	at org.springframework.context.support.AbstractApplicationContext.destroyBeans(AbstractApplicationContext.java:1033)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:555)
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:762)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:372)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:316)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1187)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1176)
+	at com.noar.webapp.ApplicationMain.main(ApplicationMain.java:13)
+2018:02:15 02:45:36.253 ERROR --- [main] o.s.boot.SpringApplication : Application startup failed 
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'dataSourceInitializerPostProcessor': Unsatisfied dependency expressed through field 'beanFactory'; nested exception is org.springframework.beans.factory.CannotLoadBeanClassException: Cannot find class [xyz.elidom.dbist.ddl.impl.DdlJdbc] for bean with name 'ddl' defined in class path resource [WEB-INF/dataSource-context.xml]; nested exception is java.lang.ClassNotFoundException: xyz.elidom.dbist.ddl.impl.DdlJdbc
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:588)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:88)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:366)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1264)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:553)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.registerBeanPostProcessors(PostProcessorRegistrationDelegate.java:223)
+	at org.springframework.context.support.AbstractApplicationContext.registerBeanPostProcessors(AbstractApplicationContext.java:702)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:527)
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:762)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:372)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:316)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1187)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1176)
+	at com.noar.webapp.ApplicationMain.main(ApplicationMain.java:13)
+Caused by: org.springframework.beans.factory.CannotLoadBeanClassException: Cannot find class [xyz.elidom.dbist.ddl.impl.DdlJdbc] for bean with name 'ddl' defined in class path resource [WEB-INF/dataSource-context.xml]; nested exception is java.lang.ClassNotFoundException: xyz.elidom.dbist.ddl.impl.DdlJdbc
+	at org.springframework.beans.factory.support.AbstractBeanFactory.resolveBeanClass(AbstractBeanFactory.java:1385)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.determineTargetType(AbstractAutowireCapableBeanFactory.java:641)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.predictBeanType(AbstractAutowireCapableBeanFactory.java:609)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.isFactoryBean(AbstractBeanFactory.java:1484)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doGetBeanNamesForType(DefaultListableBeanFactory.java:425)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.getBeanNamesForType(DefaultListableBeanFactory.java:395)
+	at org.springframework.beans.factory.BeanFactoryUtils.beanNamesForTypeIncludingAncestors(BeanFactoryUtils.java:220)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.findAutowireCandidates(DefaultListableBeanFactory.java:1260)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1101)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1066)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:585)
+	... 19 common frames omitted
+Caused by: java.lang.ClassNotFoundException: xyz.elidom.dbist.ddl.impl.DdlJdbc
+	at java.net.URLClassLoader.findClass(URLClassLoader.java:381)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:424)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:335)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+	at org.springframework.util.ClassUtils.forName(ClassUtils.java:250)
+	at org.springframework.beans.factory.support.AbstractBeanDefinition.resolveBeanClass(AbstractBeanDefinition.java:401)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doResolveBeanClass(AbstractBeanFactory.java:1432)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.resolveBeanClass(AbstractBeanFactory.java:1377)
+	... 29 common frames omitted
+2018:02:15 02:46:38.985 INFO  --- [main] com.noar.webapp.ApplicationMain : Starting ApplicationMain on MinuKimui-MacBook-Pro.local with PID 15154 (/Users/minu/git/noar/noar-webapp/bin started by minu in /Users/minu/git/noar/noar-webapp) 
+2018:02:15 02:46:38.996 INFO  --- [main] com.noar.webapp.ApplicationMain : No active profile set, falling back to default profiles: default 
+2018:02:15 02:46:39.032 INFO  --- [main] o.s.b.c.e.AnnotationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@6d23017e: startup date [Thu Feb 15 02:46:39 KST 2018]; root of context hierarchy 
+2018:02:15 02:46:39.504 INFO  --- [main] o.s.core.annotation.AnnotationUtils : Failed to introspect annotations on [class org.springframework.boot.actuate.autoconfigure.EndpointWebMvcHypermediaManagementContextConfiguration]: java.lang.ArrayStoreException: sun.reflect.annotation.TypeNotPresentExceptionProxy 
+2018:02:15 02:46:39.505 INFO  --- [main] o.s.core.annotation.AnnotationUtils : Failed to introspect annotations on [class org.springframework.boot.actuate.autoconfigure.EndpointWebMvcHypermediaManagementContextConfiguration]: java.lang.ArrayStoreException: sun.reflect.annotation.TypeNotPresentExceptionProxy 
+2018:02:15 02:46:39.733 INFO  --- [main] o.s.b.f.xml.XmlBeanDefinitionReader : Loading XML bean definitions from class path resource [WEB-INF/application-context.xml] 
+2018:02:15 02:46:39.870 INFO  --- [main] o.s.b.f.xml.XmlBeanDefinitionReader : Loading XML bean definitions from class path resource [WEB-INF/dataSource-context.xml] 
+2018:02:15 02:46:39.965 INFO  --- [main] o.s.b.f.s.DefaultListableBeanFactory : Overriding bean definition for bean 'dataSource' with a different definition: replacing [Root bean: class [null]; scope=; abstract=false; lazyInit=false; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=org.springframework.boot.autoconfigure.jdbc.DataSourceConfiguration$Dbcp; factoryMethodName=dataSource; initMethodName=null; destroyMethodName=(inferred); defined in class path resource [org/springframework/boot/autoconfigure/jdbc/DataSourceConfiguration$Dbcp.class]] with [Root bean: class [null]; scope=; abstract=false; lazyInit=false; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=org.springframework.boot.autoconfigure.jdbc.DataSourceConfiguration$Tomcat; factoryMethodName=dataSource; initMethodName=null; destroyMethodName=(inferred); defined in class path resource [org/springframework/boot/autoconfigure/jdbc/DataSourceConfiguration$Tomcat.class]] 
+2018:02:15 02:46:40.076 INFO  --- [main] o.s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode! 
+2018:02:15 02:46:40.113 INFO  --- [main] o.s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode! 
+2018:02:15 02:46:40.318 INFO  --- [main] o.s.c.s.PropertySourcesPlaceholderConfigurer : Loading properties file from class path resource [application.properties] 
+2018:02:15 02:46:40.321 INFO  --- [main] o.s.c.s.PropertySourcesPlaceholderConfigurer : Loading properties file from class path resource [application.properties] 
+2018:02:15 02:46:40.375 WARN  --- [main] o.s.b.c.p.ConfigurationPropertiesBindingPostProcessor : Multiple PropertySourcesPlaceholderConfigurer beans registered [org.springframework.context.support.PropertySourcesPlaceholderConfigurer#0, org.springframework.context.support.PropertySourcesPlaceholderConfigurer#1], falling back to Environment 
+2018:02:15 02:46:40.493 INFO  --- [main] o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker : Bean '(inner bean)#6b0f266e' of type [class org.springframework.aop.aspectj.AspectJAroundAdvice] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying) 
+2018:02:15 02:46:40.587 INFO  --- [main] o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.aop.aspectj.AspectJPointcutAdvisor#0' of type [class org.springframework.aop.aspectj.AspectJPointcutAdvisor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying) 
+2018:02:15 02:46:40.630 INFO  --- [main] o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [class org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$51fa16a4] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying) 
+2018:02:15 02:46:40.656 WARN  --- [main] o.s.b.c.e.AnnotationConfigEmbeddedWebApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'embeddedServletContainerCustomizerBeanPostProcessor': BeanPostProcessor before instantiation of bean failed; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration': Initialization of bean failed; nested exception is java.lang.IllegalArgumentException: warning no match for this type name: com.minu.core.system.handler.RestServiceHandler [Xlint:invalidAbsoluteTypeName] 
+2018:02:15 02:46:40.658 ERROR --- [main] o.s.b.f.s.DefaultListableBeanFactory : Destroy method on bean with name 'org.springframework.context.annotation.internalScheduledAnnotationProcessor' threw an exception 
+java.lang.IllegalStateException: ApplicationEventMulticaster not initialized - call 'refresh' before multicasting events via the context: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@6d23017e: startup date [Thu Feb 15 02:46:39 KST 2018]; root of context hierarchy
+	at org.springframework.context.support.AbstractApplicationContext.getApplicationEventMulticaster(AbstractApplicationContext.java:404)
+	at org.springframework.context.support.ApplicationListenerDetector.postProcessBeforeDestruction(ApplicationListenerDetector.java:97)
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:253)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroyBean(DefaultSingletonBeanRegistry.java:578)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingleton(DefaultSingletonBeanRegistry.java:554)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingleton(DefaultListableBeanFactory.java:961)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingletons(DefaultSingletonBeanRegistry.java:523)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingletons(DefaultListableBeanFactory.java:968)
+	at org.springframework.context.support.AbstractApplicationContext.destroyBeans(AbstractApplicationContext.java:1033)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:555)
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:762)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:372)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:316)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1187)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1176)
+	at com.noar.webapp.ApplicationMain.main(ApplicationMain.java:13)
+2018:02:15 02:46:40.659 ERROR --- [main] o.s.b.f.s.DefaultListableBeanFactory : Destroy method on bean with name 'org.springframework.boot.context.properties.ConfigurationPropertiesBindingPostProcessor' threw an exception 
+java.lang.IllegalStateException: ApplicationEventMulticaster not initialized - call 'refresh' before multicasting events via the context: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@6d23017e: startup date [Thu Feb 15 02:46:39 KST 2018]; root of context hierarchy
+	at org.springframework.context.support.AbstractApplicationContext.getApplicationEventMulticaster(AbstractApplicationContext.java:404)
+	at org.springframework.context.support.ApplicationListenerDetector.postProcessBeforeDestruction(ApplicationListenerDetector.java:97)
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:253)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroyBean(DefaultSingletonBeanRegistry.java:578)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingleton(DefaultSingletonBeanRegistry.java:554)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingleton(DefaultListableBeanFactory.java:961)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingletons(DefaultSingletonBeanRegistry.java:523)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingletons(DefaultListableBeanFactory.java:968)
+	at org.springframework.context.support.AbstractApplicationContext.destroyBeans(AbstractApplicationContext.java:1033)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:555)
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:762)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:372)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:316)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1187)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1176)
+	at com.noar.webapp.ApplicationMain.main(ApplicationMain.java:13)
+2018:02:15 02:46:40.659 ERROR --- [main] o.s.b.f.s.DefaultListableBeanFactory : Destroy method on bean with name 'org.springframework.boot.autoconfigure.internalCachingMetadataReaderFactory' threw an exception 
+java.lang.IllegalStateException: ApplicationEventMulticaster not initialized - call 'refresh' before multicasting events via the context: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@6d23017e: startup date [Thu Feb 15 02:46:39 KST 2018]; root of context hierarchy
+	at org.springframework.context.support.AbstractApplicationContext.getApplicationEventMulticaster(AbstractApplicationContext.java:404)
+	at org.springframework.context.support.ApplicationListenerDetector.postProcessBeforeDestruction(ApplicationListenerDetector.java:97)
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:253)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroyBean(DefaultSingletonBeanRegistry.java:578)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingleton(DefaultSingletonBeanRegistry.java:554)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingleton(DefaultListableBeanFactory.java:961)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingletons(DefaultSingletonBeanRegistry.java:523)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingletons(DefaultListableBeanFactory.java:968)
+	at org.springframework.context.support.AbstractApplicationContext.destroyBeans(AbstractApplicationContext.java:1033)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:555)
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:762)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:372)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:316)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1187)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1176)
+	at com.noar.webapp.ApplicationMain.main(ApplicationMain.java:13)
+2018:02:15 02:46:40.666 ERROR --- [main] o.s.boot.SpringApplication : Application startup failed 
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'embeddedServletContainerCustomizerBeanPostProcessor': BeanPostProcessor before instantiation of bean failed; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration': Initialization of bean failed; nested exception is java.lang.IllegalArgumentException: warning no match for this type name: com.minu.core.system.handler.RestServiceHandler [Xlint:invalidAbsoluteTypeName]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:479)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.registerBeanPostProcessors(PostProcessorRegistrationDelegate.java:235)
+	at org.springframework.context.support.AbstractApplicationContext.registerBeanPostProcessors(AbstractApplicationContext.java:702)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:527)
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:762)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:372)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:316)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1187)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1176)
+	at com.noar.webapp.ApplicationMain.main(ApplicationMain.java:13)
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration': Initialization of bean failed; nested exception is java.lang.IllegalArgumentException: warning no match for this type name: com.minu.core.system.handler.RestServiceHandler [Xlint:invalidAbsoluteTypeName]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:564)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:372)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1173)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1067)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:513)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.aop.framework.autoproxy.BeanFactoryAdvisorRetrievalHelper.findAdvisorBeans(BeanFactoryAdvisorRetrievalHelper.java:92)
+	at org.springframework.aop.framework.autoproxy.AbstractAdvisorAutoProxyCreator.findCandidateAdvisors(AbstractAdvisorAutoProxyCreator.java:101)
+	at org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator.findCandidateAdvisors(AnnotationAwareAspectJAutoProxyCreator.java:88)
+	at org.springframework.aop.aspectj.autoproxy.AspectJAwareAdvisorAutoProxyCreator.shouldSkip(AspectJAwareAdvisorAutoProxyCreator.java:103)
+	at org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator.postProcessBeforeInstantiation(AbstractAutoProxyCreator.java:248)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyBeanPostProcessorsBeforeInstantiation(AbstractAutowireCapableBeanFactory.java:1037)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.resolveBeforeInstantiation(AbstractAutowireCapableBeanFactory.java:1011)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:473)
+	... 14 common frames omitted
+Caused by: java.lang.IllegalArgumentException: warning no match for this type name: com.minu.core.system.handler.RestServiceHandler [Xlint:invalidAbsoluteTypeName]
+	at org.aspectj.weaver.tools.PointcutParser.parsePointcutExpression(PointcutParser.java:301)
+	at org.springframework.aop.aspectj.AspectJExpressionPointcut.buildPointcutExpression(AspectJExpressionPointcut.java:217)
+	at org.springframework.aop.aspectj.AspectJExpressionPointcut.checkReadyToMatch(AspectJExpressionPointcut.java:190)
+	at org.springframework.aop.aspectj.AspectJExpressionPointcut.getClassFilter(AspectJExpressionPointcut.java:169)
+	at org.springframework.aop.support.AopUtils.canApply(AopUtils.java:220)
+	at org.springframework.aop.support.AopUtils.canApply(AopUtils.java:279)
+	at org.springframework.aop.support.AopUtils.findAdvisorsThatCanApply(AopUtils.java:311)
+	at org.springframework.aop.framework.autoproxy.AbstractAdvisorAutoProxyCreator.findAdvisorsThatCanApply(AbstractAdvisorAutoProxyCreator.java:118)
+	at org.springframework.aop.framework.autoproxy.AbstractAdvisorAutoProxyCreator.findEligibleAdvisors(AbstractAdvisorAutoProxyCreator.java:88)
+	at org.springframework.aop.framework.autoproxy.AbstractAdvisorAutoProxyCreator.getAdvicesAndAdvisorsForBean(AbstractAdvisorAutoProxyCreator.java:69)
+	at org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator.wrapIfNecessary(AbstractAutoProxyCreator.java:346)
+	at org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator.postProcessAfterInitialization(AbstractAutoProxyCreator.java:298)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyBeanPostProcessorsAfterInitialization(AbstractAutowireCapableBeanFactory.java:423)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1633)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:555)
+	... 36 common frames omitted
+2018:02:15 02:49:09.368 INFO  --- [main] com.noar.webapp.ApplicationMain : Starting ApplicationMain on MinuKimui-MacBook-Pro.local with PID 15323 (/Users/minu/git/noar/noar-webapp/bin started by minu in /Users/minu/git/noar/noar-webapp) 
+2018:02:15 02:49:09.382 INFO  --- [main] com.noar.webapp.ApplicationMain : No active profile set, falling back to default profiles: default 
+2018:02:15 02:49:09.430 INFO  --- [main] o.s.b.c.e.AnnotationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@5ccbeb64: startup date [Thu Feb 15 02:49:09 KST 2018]; root of context hierarchy 
+2018:02:15 02:49:09.908 INFO  --- [main] o.s.core.annotation.AnnotationUtils : Failed to introspect annotations on [class org.springframework.boot.actuate.autoconfigure.EndpointWebMvcHypermediaManagementContextConfiguration]: java.lang.ArrayStoreException: sun.reflect.annotation.TypeNotPresentExceptionProxy 
+2018:02:15 02:49:09.909 INFO  --- [main] o.s.core.annotation.AnnotationUtils : Failed to introspect annotations on [class org.springframework.boot.actuate.autoconfigure.EndpointWebMvcHypermediaManagementContextConfiguration]: java.lang.ArrayStoreException: sun.reflect.annotation.TypeNotPresentExceptionProxy 
+2018:02:15 02:49:10.133 INFO  --- [main] o.s.b.f.xml.XmlBeanDefinitionReader : Loading XML bean definitions from class path resource [WEB-INF/application-context.xml] 
+2018:02:15 02:49:10.276 INFO  --- [main] o.s.b.f.xml.XmlBeanDefinitionReader : Loading XML bean definitions from class path resource [WEB-INF/dataSource-context.xml] 
+2018:02:15 02:49:10.372 INFO  --- [main] o.s.b.f.s.DefaultListableBeanFactory : Overriding bean definition for bean 'dataSource' with a different definition: replacing [Root bean: class [null]; scope=; abstract=false; lazyInit=false; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=org.springframework.boot.autoconfigure.jdbc.DataSourceConfiguration$Dbcp; factoryMethodName=dataSource; initMethodName=null; destroyMethodName=(inferred); defined in class path resource [org/springframework/boot/autoconfigure/jdbc/DataSourceConfiguration$Dbcp.class]] with [Root bean: class [null]; scope=; abstract=false; lazyInit=false; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=org.springframework.boot.autoconfigure.jdbc.DataSourceConfiguration$Tomcat; factoryMethodName=dataSource; initMethodName=null; destroyMethodName=(inferred); defined in class path resource [org/springframework/boot/autoconfigure/jdbc/DataSourceConfiguration$Tomcat.class]] 
+2018:02:15 02:49:10.485 INFO  --- [main] o.s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode! 
+2018:02:15 02:49:10.516 INFO  --- [main] o.s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode! 
+2018:02:15 02:49:10.711 INFO  --- [main] o.s.c.s.PropertySourcesPlaceholderConfigurer : Loading properties file from class path resource [application.properties] 
+2018:02:15 02:49:10.714 INFO  --- [main] o.s.c.s.PropertySourcesPlaceholderConfigurer : Loading properties file from class path resource [application.properties] 
+2018:02:15 02:49:10.773 WARN  --- [main] o.s.b.c.p.ConfigurationPropertiesBindingPostProcessor : Multiple PropertySourcesPlaceholderConfigurer beans registered [org.springframework.context.support.PropertySourcesPlaceholderConfigurer#0, org.springframework.context.support.PropertySourcesPlaceholderConfigurer#1], falling back to Environment 
+2018:02:15 02:49:10.878 INFO  --- [main] o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker : Bean '(inner bean)#36c07c75' of type [class org.springframework.aop.aspectj.AspectJAroundAdvice] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying) 
+2018:02:15 02:49:10.920 INFO  --- [main] o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.aop.aspectj.AspectJPointcutAdvisor#0' of type [class org.springframework.aop.aspectj.AspectJPointcutAdvisor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying) 
+2018:02:15 02:49:10.960 INFO  --- [main] o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [class org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$9d3c075c] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying) 
+2018:02:15 02:49:10.980 WARN  --- [main] o.s.b.c.e.AnnotationConfigEmbeddedWebApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'embeddedServletContainerCustomizerBeanPostProcessor': BeanPostProcessor before instantiation of bean failed; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration': Initialization of bean failed; nested exception is java.lang.IllegalArgumentException: warning no match for this type name: com.minu.core.system.handler.RestServiceHandler [Xlint:invalidAbsoluteTypeName] 
+2018:02:15 02:49:10.981 ERROR --- [main] o.s.b.f.s.DefaultListableBeanFactory : Destroy method on bean with name 'org.springframework.context.annotation.internalScheduledAnnotationProcessor' threw an exception 
+java.lang.IllegalStateException: ApplicationEventMulticaster not initialized - call 'refresh' before multicasting events via the context: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@5ccbeb64: startup date [Thu Feb 15 02:49:09 KST 2018]; root of context hierarchy
+	at org.springframework.context.support.AbstractApplicationContext.getApplicationEventMulticaster(AbstractApplicationContext.java:404)
+	at org.springframework.context.support.ApplicationListenerDetector.postProcessBeforeDestruction(ApplicationListenerDetector.java:97)
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:253)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroyBean(DefaultSingletonBeanRegistry.java:578)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingleton(DefaultSingletonBeanRegistry.java:554)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingleton(DefaultListableBeanFactory.java:961)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingletons(DefaultSingletonBeanRegistry.java:523)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingletons(DefaultListableBeanFactory.java:968)
+	at org.springframework.context.support.AbstractApplicationContext.destroyBeans(AbstractApplicationContext.java:1033)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:555)
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:762)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:372)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:316)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1187)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1176)
+	at com.noar.webapp.ApplicationMain.main(ApplicationMain.java:13)
+2018:02:15 02:49:10.982 ERROR --- [main] o.s.b.f.s.DefaultListableBeanFactory : Destroy method on bean with name 'org.springframework.boot.context.properties.ConfigurationPropertiesBindingPostProcessor' threw an exception 
+java.lang.IllegalStateException: ApplicationEventMulticaster not initialized - call 'refresh' before multicasting events via the context: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@5ccbeb64: startup date [Thu Feb 15 02:49:09 KST 2018]; root of context hierarchy
+	at org.springframework.context.support.AbstractApplicationContext.getApplicationEventMulticaster(AbstractApplicationContext.java:404)
+	at org.springframework.context.support.ApplicationListenerDetector.postProcessBeforeDestruction(ApplicationListenerDetector.java:97)
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:253)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroyBean(DefaultSingletonBeanRegistry.java:578)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingleton(DefaultSingletonBeanRegistry.java:554)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingleton(DefaultListableBeanFactory.java:961)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingletons(DefaultSingletonBeanRegistry.java:523)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingletons(DefaultListableBeanFactory.java:968)
+	at org.springframework.context.support.AbstractApplicationContext.destroyBeans(AbstractApplicationContext.java:1033)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:555)
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:762)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:372)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:316)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1187)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1176)
+	at com.noar.webapp.ApplicationMain.main(ApplicationMain.java:13)
+2018:02:15 02:49:10.982 ERROR --- [main] o.s.b.f.s.DefaultListableBeanFactory : Destroy method on bean with name 'org.springframework.boot.autoconfigure.internalCachingMetadataReaderFactory' threw an exception 
+java.lang.IllegalStateException: ApplicationEventMulticaster not initialized - call 'refresh' before multicasting events via the context: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@5ccbeb64: startup date [Thu Feb 15 02:49:09 KST 2018]; root of context hierarchy
+	at org.springframework.context.support.AbstractApplicationContext.getApplicationEventMulticaster(AbstractApplicationContext.java:404)
+	at org.springframework.context.support.ApplicationListenerDetector.postProcessBeforeDestruction(ApplicationListenerDetector.java:97)
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:253)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroyBean(DefaultSingletonBeanRegistry.java:578)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingleton(DefaultSingletonBeanRegistry.java:554)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingleton(DefaultListableBeanFactory.java:961)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingletons(DefaultSingletonBeanRegistry.java:523)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingletons(DefaultListableBeanFactory.java:968)
+	at org.springframework.context.support.AbstractApplicationContext.destroyBeans(AbstractApplicationContext.java:1033)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:555)
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:762)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:372)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:316)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1187)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1176)
+	at com.noar.webapp.ApplicationMain.main(ApplicationMain.java:13)
+2018:02:15 02:49:10.988 ERROR --- [main] o.s.boot.SpringApplication : Application startup failed 
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'embeddedServletContainerCustomizerBeanPostProcessor': BeanPostProcessor before instantiation of bean failed; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration': Initialization of bean failed; nested exception is java.lang.IllegalArgumentException: warning no match for this type name: com.minu.core.system.handler.RestServiceHandler [Xlint:invalidAbsoluteTypeName]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:479)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.registerBeanPostProcessors(PostProcessorRegistrationDelegate.java:235)
+	at org.springframework.context.support.AbstractApplicationContext.registerBeanPostProcessors(AbstractApplicationContext.java:702)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:527)
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:762)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:372)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:316)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1187)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1176)
+	at com.noar.webapp.ApplicationMain.main(ApplicationMain.java:13)
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration': Initialization of bean failed; nested exception is java.lang.IllegalArgumentException: warning no match for this type name: com.minu.core.system.handler.RestServiceHandler [Xlint:invalidAbsoluteTypeName]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:564)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:372)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1173)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1067)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:513)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.aop.framework.autoproxy.BeanFactoryAdvisorRetrievalHelper.findAdvisorBeans(BeanFactoryAdvisorRetrievalHelper.java:92)
+	at org.springframework.aop.framework.autoproxy.AbstractAdvisorAutoProxyCreator.findCandidateAdvisors(AbstractAdvisorAutoProxyCreator.java:101)
+	at org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator.findCandidateAdvisors(AnnotationAwareAspectJAutoProxyCreator.java:88)
+	at org.springframework.aop.aspectj.autoproxy.AspectJAwareAdvisorAutoProxyCreator.shouldSkip(AspectJAwareAdvisorAutoProxyCreator.java:103)
+	at org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator.postProcessBeforeInstantiation(AbstractAutoProxyCreator.java:248)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyBeanPostProcessorsBeforeInstantiation(AbstractAutowireCapableBeanFactory.java:1037)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.resolveBeforeInstantiation(AbstractAutowireCapableBeanFactory.java:1011)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:473)
+	... 14 common frames omitted
+Caused by: java.lang.IllegalArgumentException: warning no match for this type name: com.minu.core.system.handler.RestServiceHandler [Xlint:invalidAbsoluteTypeName]
+	at org.aspectj.weaver.tools.PointcutParser.parsePointcutExpression(PointcutParser.java:301)
+	at org.springframework.aop.aspectj.AspectJExpressionPointcut.buildPointcutExpression(AspectJExpressionPointcut.java:217)
+	at org.springframework.aop.aspectj.AspectJExpressionPointcut.checkReadyToMatch(AspectJExpressionPointcut.java:190)
+	at org.springframework.aop.aspectj.AspectJExpressionPointcut.getClassFilter(AspectJExpressionPointcut.java:169)
+	at org.springframework.aop.support.AopUtils.canApply(AopUtils.java:220)
+	at org.springframework.aop.support.AopUtils.canApply(AopUtils.java:279)
+	at org.springframework.aop.support.AopUtils.findAdvisorsThatCanApply(AopUtils.java:311)
+	at org.springframework.aop.framework.autoproxy.AbstractAdvisorAutoProxyCreator.findAdvisorsThatCanApply(AbstractAdvisorAutoProxyCreator.java:118)
+	at org.springframework.aop.framework.autoproxy.AbstractAdvisorAutoProxyCreator.findEligibleAdvisors(AbstractAdvisorAutoProxyCreator.java:88)
+	at org.springframework.aop.framework.autoproxy.AbstractAdvisorAutoProxyCreator.getAdvicesAndAdvisorsForBean(AbstractAdvisorAutoProxyCreator.java:69)
+	at org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator.wrapIfNecessary(AbstractAutoProxyCreator.java:346)
+	at org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator.postProcessAfterInitialization(AbstractAutoProxyCreator.java:298)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyBeanPostProcessorsAfterInitialization(AbstractAutowireCapableBeanFactory.java:423)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1633)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:555)
+	... 36 common frames omitted
+2018:02:15 02:50:46.201 INFO  --- [main] com.noar.webapp.ApplicationMain : Starting ApplicationMain on MinuKimui-MacBook-Pro.local with PID 15433 (/Users/minu/git/noar/noar-webapp/bin started by minu in /Users/minu/git/noar/noar-webapp) 
+2018:02:15 02:50:46.211 INFO  --- [main] com.noar.webapp.ApplicationMain : No active profile set, falling back to default profiles: default 
+2018:02:15 02:50:46.252 INFO  --- [main] o.s.b.c.e.AnnotationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@4c51cf28: startup date [Thu Feb 15 02:50:46 KST 2018]; root of context hierarchy 
+2018:02:15 02:50:46.730 INFO  --- [main] o.s.core.annotation.AnnotationUtils : Failed to introspect annotations on [class org.springframework.boot.actuate.autoconfigure.EndpointWebMvcHypermediaManagementContextConfiguration]: java.lang.ArrayStoreException: sun.reflect.annotation.TypeNotPresentExceptionProxy 
+2018:02:15 02:50:46.731 INFO  --- [main] o.s.core.annotation.AnnotationUtils : Failed to introspect annotations on [class org.springframework.boot.actuate.autoconfigure.EndpointWebMvcHypermediaManagementContextConfiguration]: java.lang.ArrayStoreException: sun.reflect.annotation.TypeNotPresentExceptionProxy 
+2018:02:15 02:50:46.952 INFO  --- [main] o.s.b.f.xml.XmlBeanDefinitionReader : Loading XML bean definitions from class path resource [WEB-INF/application-context.xml] 
+2018:02:15 02:50:47.091 INFO  --- [main] o.s.b.f.xml.XmlBeanDefinitionReader : Loading XML bean definitions from class path resource [WEB-INF/dataSource-context.xml] 
+2018:02:15 02:50:47.199 INFO  --- [main] o.s.b.f.s.DefaultListableBeanFactory : Overriding bean definition for bean 'dataSource' with a different definition: replacing [Root bean: class [null]; scope=; abstract=false; lazyInit=false; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=org.springframework.boot.autoconfigure.jdbc.DataSourceConfiguration$Dbcp; factoryMethodName=dataSource; initMethodName=null; destroyMethodName=(inferred); defined in class path resource [org/springframework/boot/autoconfigure/jdbc/DataSourceConfiguration$Dbcp.class]] with [Root bean: class [null]; scope=; abstract=false; lazyInit=false; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=org.springframework.boot.autoconfigure.jdbc.DataSourceConfiguration$Tomcat; factoryMethodName=dataSource; initMethodName=null; destroyMethodName=(inferred); defined in class path resource [org/springframework/boot/autoconfigure/jdbc/DataSourceConfiguration$Tomcat.class]] 
+2018:02:15 02:50:47.319 INFO  --- [main] o.s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode! 
+2018:02:15 02:50:47.352 INFO  --- [main] o.s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode! 
+2018:02:15 02:50:47.548 INFO  --- [main] o.s.c.s.PropertySourcesPlaceholderConfigurer : Loading properties file from class path resource [application.properties] 
+2018:02:15 02:50:47.553 INFO  --- [main] o.s.c.s.PropertySourcesPlaceholderConfigurer : Loading properties file from class path resource [application.properties] 
+2018:02:15 02:50:47.613 WARN  --- [main] o.s.b.c.p.ConfigurationPropertiesBindingPostProcessor : Multiple PropertySourcesPlaceholderConfigurer beans registered [org.springframework.context.support.PropertySourcesPlaceholderConfigurer#0, org.springframework.context.support.PropertySourcesPlaceholderConfigurer#1], falling back to Environment 
+2018:02:15 02:50:47.714 INFO  --- [main] o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker : Bean '(inner bean)#26e0d39c' of type [class org.springframework.aop.aspectj.AspectJAroundAdvice] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying) 
+2018:02:15 02:50:47.757 INFO  --- [main] o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.aop.aspectj.AspectJPointcutAdvisor#0' of type [class org.springframework.aop.aspectj.AspectJPointcutAdvisor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying) 
+2018:02:15 02:50:47.787 INFO  --- [main] o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [class org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$2e8bf21f] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying) 
+2018:02:15 02:50:48.267 INFO  --- [main] o.s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat initialized with port(s): 8080 (http) 
+2018:02:15 02:50:48.279 INFO  --- [main] o.a.catalina.core.StandardService : Starting service Tomcat 
+2018:02:15 02:50:48.280 INFO  --- [main] o.a.catalina.core.StandardEngine : Starting Servlet Engine: Apache Tomcat/8.5.11 
+2018:02:15 02:50:48.364 INFO  --- [localhost-startStop-1] o.a.c.c.C.[Tomcat].[localhost].[/] : Initializing Spring embedded WebApplicationContext 
+2018:02:15 02:50:48.364 INFO  --- [localhost-startStop-1] o.s.web.context.ContextLoader : Root WebApplicationContext: initialization completed in 2112 ms 
+2018:02:15 02:50:48.646 INFO  --- [localhost-startStop-1] o.s.b.w.s.ServletRegistrationBean : Mapping servlet: 'dispatcherServlet' to [/] 
+2018:02:15 02:50:48.654 INFO  --- [localhost-startStop-1] o.s.b.w.s.FilterRegistrationBean : Mapping filter: 'metricsFilter' to: [/*] 
+2018:02:15 02:50:48.654 INFO  --- [localhost-startStop-1] o.s.b.w.s.FilterRegistrationBean : Mapping filter: 'characterEncodingFilter' to: [/*] 
+2018:02:15 02:50:48.655 INFO  --- [localhost-startStop-1] o.s.b.w.s.FilterRegistrationBean : Mapping filter: 'hiddenHttpMethodFilter' to: [/*] 
+2018:02:15 02:50:48.655 INFO  --- [localhost-startStop-1] o.s.b.w.s.FilterRegistrationBean : Mapping filter: 'httpPutFormContentFilter' to: [/*] 
+2018:02:15 02:50:48.655 INFO  --- [localhost-startStop-1] o.s.b.w.s.FilterRegistrationBean : Mapping filter: 'requestContextFilter' to: [/*] 
+2018:02:15 02:50:48.655 INFO  --- [localhost-startStop-1] o.s.b.w.s.FilterRegistrationBean : Mapping filter: 'webRequestLoggingFilter' to: [/*] 
+2018:02:15 02:50:48.656 INFO  --- [localhost-startStop-1] o.s.b.w.s.FilterRegistrationBean : Mapping filter: 'applicationContextIdFilter' to: [/*] 
+2018:02:15 02:50:49.049 INFO  --- [main] o.s.o.j.LocalContainerEntityManagerFactoryBean : Building JPA container EntityManagerFactory for persistence unit 'default' 
+2018:02:15 02:50:49.135 INFO  --- [main] o.h.jpa.internal.util.LogHelper : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...] 
+2018:02:15 02:50:49.255 INFO  --- [main] org.hibernate.Version : HHH000412: Hibernate Core {5.0.11.Final} 
+2018:02:15 02:50:49.257 INFO  --- [main] org.hibernate.cfg.Environment : HHH000206: hibernate.properties not found 
+2018:02:15 02:50:49.259 INFO  --- [main] org.hibernate.cfg.Environment : HHH000021: Bytecode provider name : javassist 
+2018:02:15 02:50:49.329 INFO  --- [main] o.h.annotations.common.Version : HCANN000001: Hibernate Commons Annotations {5.0.1.Final} 
+2018:02:15 02:50:49.486 INFO  --- [main] org.hibernate.dialect.Dialect : HHH000400: Using dialect: org.hibernate.dialect.H2Dialect 
+2018:02:15 02:50:49.966 INFO  --- [main] o.h.tool.hbm2ddl.SchemaExport : HHH000227: Running hbm2ddl schema export 
+2018:02:15 02:50:49.980 INFO  --- [main] o.h.tool.hbm2ddl.SchemaExport : HHH000230: Schema export complete 
+2018:02:15 02:50:50.018 INFO  --- [main] o.s.o.j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default' 
+2018:02:15 02:50:50.187 WARN  --- [main] o.s.b.c.e.AnnotationConfigEmbeddedWebApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'ddlStartUpService': Unsatisfied dependency expressed through field 'ddl'; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'ddl': Injection of resource dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'dml' defined in class path resource [WEB-INF/dataSource-context.xml]: Cannot create inner bean 'xyz.elidom.dbist.processor.impl.VelocityPreprocessor#2a43e0ac' of type [xyz.elidom.dbist.processor.impl.VelocityPreprocessor] while setting bean property 'preprocessor'; nested exception is org.springframework.beans.factory.CannotLoadBeanClassException: Cannot find class [xyz.elidom.dbist.processor.impl.VelocityPreprocessor] for bean with name 'xyz.elidom.dbist.processor.impl.VelocityPreprocessor#2a43e0ac' defined in class path resource [WEB-INF/dataSource-context.xml]; nested exception is java.lang.ClassNotFoundException: xyz.elidom.dbist.processor.impl.VelocityPreprocessor 
+2018:02:15 02:50:50.188 INFO  --- [main] o.s.o.j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default' 
+2018:02:15 02:50:50.188 INFO  --- [main] o.h.tool.hbm2ddl.SchemaExport : HHH000227: Running hbm2ddl schema export 
+2018:02:15 02:50:50.193 INFO  --- [main] o.h.tool.hbm2ddl.SchemaExport : HHH000230: Schema export complete 
+2018:02:15 02:50:50.209 INFO  --- [main] o.s.b.a.l.AutoConfigurationReportLoggingInitializer : 
+
+Error starting ApplicationContext. To display the auto-configuration report re-run your application with 'debug' enabled. 
+2018:02:15 02:50:50.215 ERROR --- [main] o.s.boot.SpringApplication : Application startup failed 
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'ddlStartUpService': Unsatisfied dependency expressed through field 'ddl'; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'ddl': Injection of resource dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'dml' defined in class path resource [WEB-INF/dataSource-context.xml]: Cannot create inner bean 'xyz.elidom.dbist.processor.impl.VelocityPreprocessor#2a43e0ac' of type [xyz.elidom.dbist.processor.impl.VelocityPreprocessor] while setting bean property 'preprocessor'; nested exception is org.springframework.beans.factory.CannotLoadBeanClassException: Cannot find class [xyz.elidom.dbist.processor.impl.VelocityPreprocessor] for bean with name 'xyz.elidom.dbist.processor.impl.VelocityPreprocessor#2a43e0ac' defined in class path resource [WEB-INF/dataSource-context.xml]; nested exception is java.lang.ClassNotFoundException: xyz.elidom.dbist.processor.impl.VelocityPreprocessor
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:588)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:88)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:366)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1264)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:553)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:761)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:866)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:542)
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:762)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:372)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:316)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1187)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1176)
+	at com.noar.webapp.ApplicationMain.main(ApplicationMain.java:13)
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'ddl': Injection of resource dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'dml' defined in class path resource [WEB-INF/dataSource-context.xml]: Cannot create inner bean 'xyz.elidom.dbist.processor.impl.VelocityPreprocessor#2a43e0ac' of type [xyz.elidom.dbist.processor.impl.VelocityPreprocessor] while setting bean property 'preprocessor'; nested exception is org.springframework.beans.factory.CannotLoadBeanClassException: Cannot find class [xyz.elidom.dbist.processor.impl.VelocityPreprocessor] for bean with name 'xyz.elidom.dbist.processor.impl.VelocityPreprocessor#2a43e0ac' defined in class path resource [WEB-INF/dataSource-context.xml]; nested exception is java.lang.ClassNotFoundException: xyz.elidom.dbist.processor.impl.VelocityPreprocessor
+	at org.springframework.context.annotation.CommonAnnotationBeanPostProcessor.postProcessPropertyValues(CommonAnnotationBeanPostProcessor.java:321)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1264)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:553)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:208)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1138)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1066)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:585)
+	... 19 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'dml' defined in class path resource [WEB-INF/dataSource-context.xml]: Cannot create inner bean 'xyz.elidom.dbist.processor.impl.VelocityPreprocessor#2a43e0ac' of type [xyz.elidom.dbist.processor.impl.VelocityPreprocessor] while setting bean property 'preprocessor'; nested exception is org.springframework.beans.factory.CannotLoadBeanClassException: Cannot find class [xyz.elidom.dbist.processor.impl.VelocityPreprocessor] for bean with name 'xyz.elidom.dbist.processor.impl.VelocityPreprocessor#2a43e0ac' defined in class path resource [WEB-INF/dataSource-context.xml]; nested exception is java.lang.ClassNotFoundException: xyz.elidom.dbist.processor.impl.VelocityPreprocessor
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveInnerBean(BeanDefinitionValueResolver.java:313)
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:122)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyPropertyValues(AbstractAutowireCapableBeanFactory.java:1531)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1276)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:553)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.context.annotation.CommonAnnotationBeanPostProcessor.autowireResource(CommonAnnotationBeanPostProcessor.java:522)
+	at org.springframework.context.annotation.CommonAnnotationBeanPostProcessor.getResource(CommonAnnotationBeanPostProcessor.java:496)
+	at org.springframework.context.annotation.CommonAnnotationBeanPostProcessor$ResourceElement.getResourceToInject(CommonAnnotationBeanPostProcessor.java:627)
+	at org.springframework.beans.factory.annotation.InjectionMetadata$InjectedElement.inject(InjectionMetadata.java:169)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:88)
+	at org.springframework.context.annotation.CommonAnnotationBeanPostProcessor.postProcessPropertyValues(CommonAnnotationBeanPostProcessor.java:318)
+	... 30 common frames omitted
+Caused by: org.springframework.beans.factory.CannotLoadBeanClassException: Cannot find class [xyz.elidom.dbist.processor.impl.VelocityPreprocessor] for bean with name 'xyz.elidom.dbist.processor.impl.VelocityPreprocessor#2a43e0ac' defined in class path resource [WEB-INF/dataSource-context.xml]; nested exception is java.lang.ClassNotFoundException: xyz.elidom.dbist.processor.impl.VelocityPreprocessor
+	at org.springframework.beans.factory.support.AbstractBeanFactory.resolveBeanClass(AbstractBeanFactory.java:1385)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:456)
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveInnerBean(BeanDefinitionValueResolver.java:299)
+	... 45 common frames omitted
+Caused by: java.lang.ClassNotFoundException: xyz.elidom.dbist.processor.impl.VelocityPreprocessor
+	at java.net.URLClassLoader.findClass(URLClassLoader.java:381)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:424)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:335)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+	at org.springframework.util.ClassUtils.forName(ClassUtils.java:250)
+	at org.springframework.beans.factory.support.AbstractBeanDefinition.resolveBeanClass(AbstractBeanDefinition.java:401)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doResolveBeanClass(AbstractBeanFactory.java:1432)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.resolveBeanClass(AbstractBeanFactory.java:1377)
+	... 47 common frames omitted
+2018:02:15 02:51:28.785 INFO  --- [main] com.noar.webapp.ApplicationMain : Starting ApplicationMain on MinuKimui-MacBook-Pro.local with PID 15483 (/Users/minu/git/noar/noar-webapp/bin started by minu in /Users/minu/git/noar/noar-webapp) 
+2018:02:15 02:51:28.797 INFO  --- [main] com.noar.webapp.ApplicationMain : No active profile set, falling back to default profiles: default 
+2018:02:15 02:51:28.840 INFO  --- [main] o.s.b.c.e.AnnotationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@112f364d: startup date [Thu Feb 15 02:51:28 KST 2018]; root of context hierarchy 
+2018:02:15 02:51:29.301 INFO  --- [main] o.s.core.annotation.AnnotationUtils : Failed to introspect annotations on [class org.springframework.boot.actuate.autoconfigure.EndpointWebMvcHypermediaManagementContextConfiguration]: java.lang.ArrayStoreException: sun.reflect.annotation.TypeNotPresentExceptionProxy 
+2018:02:15 02:51:29.302 INFO  --- [main] o.s.core.annotation.AnnotationUtils : Failed to introspect annotations on [class org.springframework.boot.actuate.autoconfigure.EndpointWebMvcHypermediaManagementContextConfiguration]: java.lang.ArrayStoreException: sun.reflect.annotation.TypeNotPresentExceptionProxy 
+2018:02:15 02:51:29.531 INFO  --- [main] o.s.b.f.xml.XmlBeanDefinitionReader : Loading XML bean definitions from class path resource [WEB-INF/application-context.xml] 
+2018:02:15 02:51:29.677 INFO  --- [main] o.s.b.f.xml.XmlBeanDefinitionReader : Loading XML bean definitions from class path resource [WEB-INF/dataSource-context.xml] 
+2018:02:15 02:51:29.774 INFO  --- [main] o.s.b.f.s.DefaultListableBeanFactory : Overriding bean definition for bean 'dataSource' with a different definition: replacing [Root bean: class [null]; scope=; abstract=false; lazyInit=false; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=org.springframework.boot.autoconfigure.jdbc.DataSourceConfiguration$Dbcp; factoryMethodName=dataSource; initMethodName=null; destroyMethodName=(inferred); defined in class path resource [org/springframework/boot/autoconfigure/jdbc/DataSourceConfiguration$Dbcp.class]] with [Root bean: class [null]; scope=; abstract=false; lazyInit=false; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=org.springframework.boot.autoconfigure.jdbc.DataSourceConfiguration$Tomcat; factoryMethodName=dataSource; initMethodName=null; destroyMethodName=(inferred); defined in class path resource [org/springframework/boot/autoconfigure/jdbc/DataSourceConfiguration$Tomcat.class]] 
+2018:02:15 02:51:29.896 INFO  --- [main] o.s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode! 
+2018:02:15 02:51:29.931 INFO  --- [main] o.s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode! 
+2018:02:15 02:51:30.132 INFO  --- [main] o.s.c.s.PropertySourcesPlaceholderConfigurer : Loading properties file from class path resource [application.properties] 
+2018:02:15 02:51:30.135 INFO  --- [main] o.s.c.s.PropertySourcesPlaceholderConfigurer : Loading properties file from class path resource [application.properties] 
+2018:02:15 02:51:30.195 WARN  --- [main] o.s.b.c.p.ConfigurationPropertiesBindingPostProcessor : Multiple PropertySourcesPlaceholderConfigurer beans registered [org.springframework.context.support.PropertySourcesPlaceholderConfigurer#0, org.springframework.context.support.PropertySourcesPlaceholderConfigurer#1], falling back to Environment 
+2018:02:15 02:51:30.305 INFO  --- [main] o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker : Bean '(inner bean)#2313db84' of type [class org.springframework.aop.aspectj.AspectJAroundAdvice] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying) 
+2018:02:15 02:51:30.347 INFO  --- [main] o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.aop.aspectj.AspectJPointcutAdvisor#0' of type [class org.springframework.aop.aspectj.AspectJPointcutAdvisor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying) 
+2018:02:15 02:51:30.377 INFO  --- [main] o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [class org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$2ae2a5fb] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying) 
+2018:02:15 02:51:30.728 INFO  --- [main] o.s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat initialized with port(s): 8080 (http) 
+2018:02:15 02:51:30.734 INFO  --- [main] o.a.catalina.core.StandardService : Starting service Tomcat 
+2018:02:15 02:51:30.735 INFO  --- [main] o.a.catalina.core.StandardEngine : Starting Servlet Engine: Apache Tomcat/8.5.11 
+2018:02:15 02:51:30.796 INFO  --- [localhost-startStop-1] o.a.c.c.C.[Tomcat].[localhost].[/] : Initializing Spring embedded WebApplicationContext 
+2018:02:15 02:51:30.797 INFO  --- [localhost-startStop-1] o.s.web.context.ContextLoader : Root WebApplicationContext: initialization completed in 1958 ms 
+2018:02:15 02:51:31.076 INFO  --- [localhost-startStop-1] o.s.b.w.s.ServletRegistrationBean : Mapping servlet: 'dispatcherServlet' to [/] 
+2018:02:15 02:51:31.080 INFO  --- [localhost-startStop-1] o.s.b.w.s.FilterRegistrationBean : Mapping filter: 'metricsFilter' to: [/*] 
+2018:02:15 02:51:31.080 INFO  --- [localhost-startStop-1] o.s.b.w.s.FilterRegistrationBean : Mapping filter: 'characterEncodingFilter' to: [/*] 
+2018:02:15 02:51:31.080 INFO  --- [localhost-startStop-1] o.s.b.w.s.FilterRegistrationBean : Mapping filter: 'hiddenHttpMethodFilter' to: [/*] 
+2018:02:15 02:51:31.081 INFO  --- [localhost-startStop-1] o.s.b.w.s.FilterRegistrationBean : Mapping filter: 'httpPutFormContentFilter' to: [/*] 
+2018:02:15 02:51:31.081 INFO  --- [localhost-startStop-1] o.s.b.w.s.FilterRegistrationBean : Mapping filter: 'requestContextFilter' to: [/*] 
+2018:02:15 02:51:31.081 INFO  --- [localhost-startStop-1] o.s.b.w.s.FilterRegistrationBean : Mapping filter: 'webRequestLoggingFilter' to: [/*] 
+2018:02:15 02:51:31.081 INFO  --- [localhost-startStop-1] o.s.b.w.s.FilterRegistrationBean : Mapping filter: 'applicationContextIdFilter' to: [/*] 
+2018:02:15 02:51:31.374 INFO  --- [main] o.s.o.j.LocalContainerEntityManagerFactoryBean : Building JPA container EntityManagerFactory for persistence unit 'default' 
+2018:02:15 02:51:31.451 INFO  --- [main] o.h.jpa.internal.util.LogHelper : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...] 
+2018:02:15 02:51:31.506 INFO  --- [main] org.hibernate.Version : HHH000412: Hibernate Core {5.0.11.Final} 
+2018:02:15 02:51:31.509 INFO  --- [main] org.hibernate.cfg.Environment : HHH000206: hibernate.properties not found 
+2018:02:15 02:51:31.510 INFO  --- [main] org.hibernate.cfg.Environment : HHH000021: Bytecode provider name : javassist 
+2018:02:15 02:51:31.542 INFO  --- [main] o.h.annotations.common.Version : HCANN000001: Hibernate Commons Annotations {5.0.1.Final} 
+2018:02:15 02:51:31.632 INFO  --- [main] org.hibernate.dialect.Dialect : HHH000400: Using dialect: org.hibernate.dialect.H2Dialect 
+2018:02:15 02:51:31.931 INFO  --- [main] o.h.tool.hbm2ddl.SchemaExport : HHH000227: Running hbm2ddl schema export 
+2018:02:15 02:51:31.938 INFO  --- [main] o.h.tool.hbm2ddl.SchemaExport : HHH000230: Schema export complete 
+2018:02:15 02:51:31.962 INFO  --- [main] o.s.o.j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default' 
+2018:02:15 02:51:32.170 INFO  --- [main] o.s.s.c.ThreadPoolTaskScheduler : Initializing ExecutorService  'defaultSockJsTaskScheduler' 
+2018:02:15 02:51:32.190 WARN  --- [main] o.s.w.s.s.s.WebSocketHandlerMapping : Neither 'urlMap' nor 'mappings' set on SimpleUrlHandlerMapping 
+2018:02:15 02:51:32.352 INFO  --- [main] o.s.s.c.ThreadPoolTaskExecutor : Initializing ExecutorService  'clientInboundChannelExecutor' 
+2018:02:15 02:51:32.363 INFO  --- [main] o.s.s.c.ThreadPoolTaskExecutor : Initializing ExecutorService  'clientOutboundChannelExecutor' 
+2018:02:15 02:51:32.380 INFO  --- [main] o.s.s.c.ThreadPoolTaskScheduler : Initializing ExecutorService  'messageBrokerTaskScheduler' 
+2018:02:15 02:51:32.418 INFO  --- [main] o.s.w.s.s.s.WebSocketHandlerMapping : Mapped URL path [/noar/**] onto handler of type [class org.springframework.web.socket.sockjs.support.SockJsHttpRequestHandler] 
+2018:02:15 02:51:32.434 INFO  --- [main] o.s.s.c.ThreadPoolTaskExecutor : Initializing ExecutorService  'brokerChannelExecutor' 
+2018:02:15 02:51:32.585 INFO  --- [main] o.a.c.c.C.[Tomcat].[localhost].[/] : jolokia: No access restrictor found, access to any MBean is allowed 
+2018:02:15 02:51:32.951 INFO  --- [main] o.s.w.s.m.m.a.RequestMappingHandlerAdapter : Looking for @ControllerAdvice: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@112f364d: startup date [Thu Feb 15 02:51:28 KST 2018]; root of context hierarchy 
+2018:02:15 02:51:33.035 INFO  --- [main] o.s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/**/entity/**/*],produces=[application/json;charset=UTF-8]}" onto public java.lang.Object com.noar.core.system.controller.EntityRestController.restService(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse) throws java.lang.Throwable 
+2018:02:15 02:51:33.037 INFO  --- [main] o.s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/**/service/**/*],produces=[application/json;charset=UTF-8]}" onto public java.lang.Object com.noar.core.system.controller.JsonController.jsonService(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse) throws java.lang.Throwable 
+2018:02:15 02:51:33.039 INFO  --- [main] o.s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/error]}" onto public org.springframework.http.ResponseEntity<java.util.Map<java.lang.String, java.lang.Object>> org.springframework.boot.autoconfigure.web.BasicErrorController.error(javax.servlet.http.HttpServletRequest) 
+2018:02:15 02:51:33.040 INFO  --- [main] o.s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/error],produces=[text/html]}" onto public org.springframework.web.servlet.ModelAndView org.springframework.boot.autoconfigure.web.BasicErrorController.errorHtml(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse) 
+2018:02:15 02:51:33.090 INFO  --- [main] o.s.w.s.h.SimpleUrlHandlerMapping : Mapped URL path [/webjars/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler] 
+2018:02:15 02:51:33.091 INFO  --- [main] o.s.w.s.h.SimpleUrlHandlerMapping : Mapped URL path [/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler] 
+2018:02:15 02:51:33.144 INFO  --- [main] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver : Detected @ExceptionHandler methods in exceptionAdvice 
+2018:02:15 02:51:33.172 INFO  --- [main] o.s.w.s.h.SimpleUrlHandlerMapping : Mapped URL path [/**/favicon.ico] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler] 
+2018:02:15 02:51:33.450 INFO  --- [main] org.mongodb.driver.cluster : Cluster created with settings {hosts=[localhost:27017], mode=SINGLE, requiredClusterType=UNKNOWN, serverSelectionTimeout='30000 ms', maxWaitQueueSize=500} 
+2018:02:15 02:51:33.480 INFO  --- [cluster-ClusterId{value='5a8477255afe343c7b318980', description='null'}-localhost:27017] org.mongodb.driver.cluster : Exception in monitor thread while connecting to server localhost:27017 
+com.mongodb.MongoSocketOpenException: Exception opening socket
+	at com.mongodb.connection.SocketStream.open(SocketStream.java:63)
+	at com.mongodb.connection.InternalStreamConnection.open(InternalStreamConnection.java:114)
+	at com.mongodb.connection.DefaultServerMonitor$ServerMonitorRunnable.run(DefaultServerMonitor.java:128)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: java.net.ConnectException: Connection refused (Connection refused)
+	at java.net.PlainSocketImpl.socketConnect(Native Method)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at com.mongodb.connection.SocketStreamHelper.initialize(SocketStreamHelper.java:50)
+	at com.mongodb.connection.SocketStream.open(SocketStream.java:58)
+	... 3 common frames omitted
+2018:02:15 02:51:33.900 INFO  --- [main] o.s.b.a.e.m.EndpointHandlerMapping : Mapped "{[/metrics/{name:.*}],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.MetricsMvcEndpoint.value(java.lang.String) 
+2018:02:15 02:51:33.900 INFO  --- [main] o.s.b.a.e.m.EndpointHandlerMapping : Mapped "{[/metrics || /metrics.json],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke() 
+2018:02:15 02:51:33.901 INFO  --- [main] o.s.b.a.e.m.EndpointHandlerMapping : Mapped "{[/health || /health.json],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.HealthMvcEndpoint.invoke(java.security.Principal) 
+2018:02:15 02:51:33.904 INFO  --- [main] o.s.b.a.e.m.EndpointHandlerMapping : Mapped "{[/jolokia/**]}" onto public org.springframework.web.servlet.ModelAndView org.springframework.boot.actuate.endpoint.mvc.JolokiaMvcEndpoint.handle(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse) throws java.lang.Exception 
+2018:02:15 02:51:33.905 INFO  --- [main] o.s.b.a.e.m.EndpointHandlerMapping : Mapped "{[/info || /info.json],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke() 
+2018:02:15 02:51:33.905 INFO  --- [main] o.s.b.a.e.m.EndpointHandlerMapping : Mapped "{[/heapdump || /heapdump.json],methods=[GET],produces=[application/octet-stream]}" onto public void org.springframework.boot.actuate.endpoint.mvc.HeapdumpMvcEndpoint.invoke(boolean,javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse) throws java.io.IOException,javax.servlet.ServletException 
+2018:02:15 02:51:33.906 INFO  --- [main] o.s.b.a.e.m.EndpointHandlerMapping : Mapped "{[/trace || /trace.json],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke() 
+2018:02:15 02:51:33.907 INFO  --- [main] o.s.b.a.e.m.EndpointHandlerMapping : Mapped "{[/mappings || /mappings.json],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke() 
+2018:02:15 02:51:33.907 INFO  --- [main] o.s.b.a.e.m.EndpointHandlerMapping : Mapped "{[/dump || /dump.json],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke() 
+2018:02:15 02:51:33.909 INFO  --- [main] o.s.b.a.e.m.EndpointHandlerMapping : Mapped "{[/env/{name:.*}],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EnvironmentMvcEndpoint.value(java.lang.String) 
+2018:02:15 02:51:33.909 INFO  --- [main] o.s.b.a.e.m.EndpointHandlerMapping : Mapped "{[/env || /env.json],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke() 
+2018:02:15 02:51:33.911 INFO  --- [main] o.s.b.a.e.m.EndpointHandlerMapping : Mapped "{[/configprops || /configprops.json],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke() 
+2018:02:15 02:51:33.912 INFO  --- [main] o.s.b.a.e.m.EndpointHandlerMapping : Mapped "{[/beans || /beans.json],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke() 
+2018:02:15 02:51:33.912 INFO  --- [main] o.s.b.a.e.m.EndpointHandlerMapping : Mapped "{[/autoconfig || /autoconfig.json],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke() 
+2018:02:15 02:51:34.074 INFO  --- [main] o.s.w.s.v.v.VelocityConfigurer : ClasspathResourceLoader with name 'springMacro' added to configured VelocityEngine 
+2018:02:15 02:51:34.084 INFO  --- [main] o.s.u.velocity.SpringResourceLoader : SpringResourceLoader for Velocity: using resource loader [org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@112f364d: startup date [Thu Feb 15 02:51:28 KST 2018]; root of context hierarchy] and resource loader paths [classpath:/templates/] 
+2018:02:15 02:51:34.217 WARN  --- [main] o.s.b.a.v.VelocityAutoConfiguration : Cannot find template location: classpath:/templates/ (please add some templates, check your Velocity configuration, or set spring.velocity.checkTemplateLocation=false) 
+2018:02:15 02:51:34.423 INFO  --- [main] o.s.j.e.a.AnnotationMBeanExporter : Registering beans for JMX exposure on startup 
+2018:02:15 02:51:34.437 INFO  --- [main] o.s.c.s.DefaultLifecycleProcessor : Starting beans in phase 0 
+2018:02:15 02:51:34.496 INFO  --- [main] o.s.c.s.DefaultLifecycleProcessor : Starting beans in phase 2147483647 
+2018:02:15 02:51:34.496 INFO  --- [main] o.s.m.s.b.SimpleBrokerMessageHandler : Starting... 
+2018:02:15 02:51:34.497 INFO  --- [main] o.s.m.s.b.SimpleBrokerMessageHandler : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [DefaultSubscriptionRegistry[cache[0 destination(s)], registry[0 sessions]]]] 
+2018:02:15 02:51:34.498 INFO  --- [main] o.s.m.s.b.SimpleBrokerMessageHandler : Started. 
+2018:02:15 02:51:34.575 INFO  --- [main] o.s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat started on port(s): 8080 (http) 
+2018:02:15 02:51:34.583 INFO  --- [main] com.noar.webapp.ApplicationMain : Started ApplicationMain in 6.116 seconds (JVM running for 6.948) 
+2018:02:15 02:51:44.657 INFO  --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/] : Initializing Spring FrameworkServlet 'dispatcherServlet' 
+2018:02:15 02:51:44.657 INFO  --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet : FrameworkServlet 'dispatcherServlet': initialization started 
+2018:02:15 02:51:44.682 INFO  --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet : FrameworkServlet 'dispatcherServlet': initialization completed in 25 ms 
+2018:02:15 02:51:44.879 INFO  --- [Thread-4] c.n.c.s.h.StompWebSocketHandler : Connected Stomp Client. 
+2018:02:15 02:51:50.581 INFO  --- [RMI TCP Connection(6)-127.0.0.1] o.s.b.a.SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested. 
+2018:02:15 02:51:50.582 INFO  --- [RMI TCP Connection(6)-127.0.0.1] o.s.b.c.e.AnnotationConfigEmbeddedWebApplicationContext : Closing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@112f364d: startup date [Thu Feb 15 02:51:28 KST 2018]; root of context hierarchy 
+2018:02:15 02:51:50.587 INFO  --- [RMI TCP Connection(6)-127.0.0.1] o.s.c.s.DefaultLifecycleProcessor : Stopping beans in phase 2147483647 
+2018:02:15 02:51:50.590 INFO  --- [RMI TCP Connection(6)-127.0.0.1] o.s.m.s.b.SimpleBrokerMessageHandler : Stopping... 
+2018:02:15 02:51:50.591 INFO  --- [RMI TCP Connection(6)-127.0.0.1] o.s.m.s.b.SimpleBrokerMessageHandler : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [DefaultSubscriptionRegistry[cache[0 destination(s)], registry[0 sessions]]]] 
+2018:02:15 02:51:50.592 INFO  --- [RMI TCP Connection(6)-127.0.0.1] o.s.m.s.b.SimpleBrokerMessageHandler : Stopped. 
+2018:02:15 02:51:50.592 INFO  --- [RMI TCP Connection(6)-127.0.0.1] o.s.c.s.DefaultLifecycleProcessor : Stopping beans in phase 0 
+2018:02:15 02:51:50.593 INFO  --- [RMI TCP Connection(6)-127.0.0.1] o.s.j.e.a.AnnotationMBeanExporter : Unregistering JMX-exposed beans on shutdown 
+2018:02:15 02:51:50.598 INFO  --- [RMI TCP Connection(6)-127.0.0.1] o.s.s.c.ThreadPoolTaskExecutor : Shutting down ExecutorService 'brokerChannelExecutor' 
+2018:02:15 02:51:50.598 INFO  --- [RMI TCP Connection(6)-127.0.0.1] o.s.s.c.ThreadPoolTaskScheduler : Shutting down ExecutorService 'messageBrokerTaskScheduler' 
+2018:02:15 02:51:50.599 INFO  --- [RMI TCP Connection(6)-127.0.0.1] o.s.s.c.ThreadPoolTaskExecutor : Shutting down ExecutorService 'clientOutboundChannelExecutor' 
+2018:02:15 02:51:50.599 INFO  --- [RMI TCP Connection(6)-127.0.0.1] o.s.s.c.ThreadPoolTaskExecutor : Shutting down ExecutorService 'clientInboundChannelExecutor' 
+2018:02:15 02:51:50.600 INFO  --- [RMI TCP Connection(6)-127.0.0.1] o.s.s.c.ThreadPoolTaskScheduler : Shutting down ExecutorService 'defaultSockJsTaskScheduler' 
+2018:02:15 02:51:50.600 INFO  --- [RMI TCP Connection(6)-127.0.0.1] o.s.o.j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default' 
+2018:02:15 02:51:50.600 INFO  --- [RMI TCP Connection(6)-127.0.0.1] o.h.tool.hbm2ddl.SchemaExport : HHH000227: Running hbm2ddl schema export 
+2018:02:15 02:51:50.607 INFO  --- [RMI TCP Connection(6)-127.0.0.1] o.h.tool.hbm2ddl.SchemaExport : HHH000230: Schema export complete 

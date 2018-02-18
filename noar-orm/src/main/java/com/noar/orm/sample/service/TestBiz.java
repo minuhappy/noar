@@ -1,4 +1,4 @@
-package com.noar.webapp.sample.service;
+package com.noar.orm.sample.service;
 
 public class TestBiz {
 	public String test(String value) {

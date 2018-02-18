@@ -1,97 +1,459 @@
 package com.noar.webapp.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Index;
-import javax.persistence.Table;
+import java.util.Date;
 
-@Entity
-@Table(name = "user", indexes = { 
-		@Index(name = "index_user_on_name", columnList = "name"),
-		@Index(name = "index_user_on_eng_name", columnList = "eng_name") })
+import com.noar.dbist.annotation.Column;
+import com.noar.dbist.annotation.GenerationRule;
+import com.noar.dbist.annotation.Index;
+import com.noar.dbist.annotation.PrimaryKey;
+import com.noar.dbist.annotation.Table;
+
+@Table(name = "users", idStrategy = GenerationRule.NONE, indexes = {
+		@Index(name = "ix_user_1", columnList = "domain_id"), 
+		@Index(name = "ix_user_2", columnList = "login"), 
+		@Index(name = "ix_user_3", columnList = "email"),
+		@Index(name = "ix_user_4", columnList = "name"), 
+		@Index(name = "ix_user_5", columnList = "active_flag"), 
+		@Index(name = "ix_user_6", columnList = "admin_flag") })
 public class User {
-
-	@Id
-	@Column(name = "id", nullable = false, length = 255)
+	@PrimaryKey
+	@Column(name = "id", nullable = false)
 	private String id;
 
-	@Column(name = "password", nullable = false, length = 255)
-	private String password;
+	@Column(name = "login", nullable = false, length = 25)
+	private String login;
 
-	@Column(name = "name", length = 50)
-	private String name;
-
-	@Column(name = "eng_name", length = 500)
-	private String engName;
-
-	@Column(name = "mobile", length = 50)
-	private String mobile;
-
-	@Column(name = "email", length = 500)
+	@Column(name = "email")
 	private String email;
 
-	public String getId() {
-		return id;
-	}
+	@Column(name = "encrypted_password", nullable = false, length = 80)
+	private String encryptedPassword;
 
-	public void setId(String id) {
-		this.id = id;
-	}
+	@Column(name = "reset_password_token", length = 80)
+	private String resetPasswordToken;
 
-	public String getPassword() {
-		return password;
-	}
+	@Column(name = "reset_password_sent_at")
+	private Date resetPasswordSentAt;
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+	@Column(name = "remember_created_at")
+	private Date rememberCreatedAt;
 
-	public String getName() {
-		return name;
-	}
+	@Column(name = "sign_in_count")
+	private Integer signInCount;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+	@Column(name = "current_sign_in_at")
+	private Date currentSignInAt;
 
-	public String getEngName() {
-		return engName;
-	}
+	@Column(name = "last_sign_in_at")
+	private Date lastSignInAt;
 
-	public void setEngName(String engName) {
-		this.engName = engName;
-	}
+	@Column(name = "current_sign_in_ip")
+	private String currentSignInIp;
 
-	public String getMobile() {
-		return mobile;
-	}
+	@Column(name = "last_sign_in_ip")
+	private String lastSignInIp;
 
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
-	}
+	@Column(name = "name", nullable = false, length = 30)
+	private String name;
 
-	public String getEmail() {
-		return email;
-	}
+	@Column(name = "dept")
+	private String dept;
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+	@Column(name = "division")
+	private String division;
+
+	@Column(name = "locale")
+	private String locale;
+
+	@Column(name = "timezone", length = 64)
+	private String timezone;
+
+	@Column(name = "super_user")
+	private Boolean superUser;
+
+	@Column(name = "admin_flag")
+	private Boolean adminFlag;
+
+	@Column(name = "operator_flag")
+	private Boolean operatorFlag;
+
+	@Column(name = "active_flag")
+	private Boolean activeFlag;
+
+	@Column(name = "exclusive_role", length = 20)
+	private String exclusiveRole;
+
+	@Column(name = "account_type", length = 20)
+	private String accountType;
+
+	@Column(name = "password_expire_date", length = 20)
+	private String passwordExpireDate;
+
+	@Column(name = "account_expire_date", length = 20)
+	private String accountExpireDate;
 
 	public User() {
 	}
 
-	public User(String id) {
+	/**
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(String id) {
 		this.id = id;
 	}
-	
-	public User(User user) {
-		this.id = user.getId();
-		this.password = user.getPassword();
-		this.name = user.getName();
-		this.engName = user.getEngName();
-		this.email = user.getEmail();
-		this.mobile = user.getMobile();
+
+	/**
+	 * @return the login
+	 */
+	public String getLogin() {
+		return login;
+	}
+
+	/**
+	 * @param login the login to set
+	 */
+	public void setLogin(String login) {
+		this.login = login;
+	}
+
+	/**
+	 * @return the email
+	 */
+	public String getEmail() {
+		return email;
+	}
+
+	/**
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	/**
+	 * @return the encryptedPassword
+	 */
+	public String getEncryptedPassword() {
+		return encryptedPassword;
+	}
+
+	/**
+	 * @param encryptedPassword the encryptedPassword to set
+	 */
+	public void setEncryptedPassword(String encryptedPassword) {
+		this.encryptedPassword = encryptedPassword;
+	}
+
+	/**
+	 * @return the resetPasswordToken
+	 */
+	public String getResetPasswordToken() {
+		return resetPasswordToken;
+	}
+
+	/**
+	 * @param resetPasswordToken the resetPasswordToken to set
+	 */
+	public void setResetPasswordToken(String resetPasswordToken) {
+		this.resetPasswordToken = resetPasswordToken;
+	}
+
+	/**
+	 * @return the resetPasswordSentAt
+	 */
+	public Date getResetPasswordSentAt() {
+		return resetPasswordSentAt;
+	}
+
+	/**
+	 * @param resetPasswordSentAt the resetPasswordSentAt to set
+	 */
+	public void setResetPasswordSentAt(Date resetPasswordSentAt) {
+		this.resetPasswordSentAt = resetPasswordSentAt;
+	}
+
+	/**
+	 * @return the rememberCreatedAt
+	 */
+	public Date getRememberCreatedAt() {
+		return rememberCreatedAt;
+	}
+
+	/**
+	 * @param rememberCreatedAt the rememberCreatedAt to set
+	 */
+	public void setRememberCreatedAt(Date rememberCreatedAt) {
+		this.rememberCreatedAt = rememberCreatedAt;
+	}
+
+	/**
+	 * @return the signInCount
+	 */
+	public Integer getSignInCount() {
+		return signInCount;
+	}
+
+	/**
+	 * @param signInCount the signInCount to set
+	 */
+	public void setSignInCount(Integer signInCount) {
+		this.signInCount = signInCount;
+	}
+
+	/**
+	 * @return the currentSignInAt
+	 */
+	public Date getCurrentSignInAt() {
+		return currentSignInAt;
+	}
+
+	/**
+	 * @param currentSignInAt the currentSignInAt to set
+	 */
+	public void setCurrentSignInAt(Date currentSignInAt) {
+		this.currentSignInAt = currentSignInAt;
+	}
+
+	/**
+	 * @return the lastSignInAt
+	 */
+	public Date getLastSignInAt() {
+		return lastSignInAt;
+	}
+
+	/**
+	 * @param lastSignInAt the lastSignInAt to set
+	 */
+	public void setLastSignInAt(Date lastSignInAt) {
+		this.lastSignInAt = lastSignInAt;
+	}
+
+	/**
+	 * @return the currentSignInIp
+	 */
+	public String getCurrentSignInIp() {
+		return currentSignInIp;
+	}
+
+	/**
+	 * @param currentSignInIp the currentSignInIp to set
+	 */
+	public void setCurrentSignInIp(String currentSignInIp) {
+		this.currentSignInIp = currentSignInIp;
+	}
+
+	/**
+	 * @return the lastSignInIp
+	 */
+	public String getLastSignInIp() {
+		return lastSignInIp;
+	}
+
+	/**
+	 * @param lastSignInIp the lastSignInIp to set
+	 */
+	public void setLastSignInIp(String lastSignInIp) {
+		this.lastSignInIp = lastSignInIp;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * @return the dept
+	 */
+	public String getDept() {
+		return dept;
+	}
+
+	/**
+	 * @param dept the dept to set
+	 */
+	public void setDept(String dept) {
+		this.dept = dept;
+	}
+
+	/**
+	 * @return the division
+	 */
+	public String getDivision() {
+		return division;
+	}
+
+	/**
+	 * @param division the division to set
+	 */
+	public void setDivision(String division) {
+		this.division = division;
+	}
+
+	/**
+	 * @return the locale
+	 */
+	public String getLocale() {
+		return locale;
+	}
+
+	/**
+	 * @param locale the locale to set
+	 */
+	public void setLocale(String locale) {
+		this.locale = locale;
+	}
+
+	/**
+	 * @return the timezone
+	 */
+	public String getTimezone() {
+		return timezone;
+	}
+
+	/**
+	 * @param timezone the timezone to set
+	 */
+	public void setTimezone(String timezone) {
+		this.timezone = timezone;
+	}
+
+	/**
+	 * @return the adminFlag
+	 */
+	public Boolean getAdminFlag() {
+		return adminFlag;
+	}
+
+	/**
+	 * @param adminFlag the adminFlag to set
+	 */
+	public void setAdminFlag(Boolean adminFlag) {
+		this.adminFlag = adminFlag;
+	}
+
+	/**
+	 * @return the operatorFlag
+	 */
+	public Boolean getOperatorFlag() {
+		return operatorFlag;
+	}
+
+	/**
+	 * @param operatorFlag the operatorFlag to set
+	 */
+	public void setOperatorFlag(Boolean operatorFlag) {
+		this.operatorFlag = operatorFlag;
+	}
+
+	/**
+	 * @return the activeFlag
+	 */
+	public Boolean getActiveFlag() {
+		return activeFlag;
+	}
+
+	/**
+	 * @param activeFlag the activeFlag to set
+	 */
+	public void setActiveFlag(Boolean activeFlag) {
+		this.activeFlag = activeFlag;
+	}
+
+	/**
+	 * @return the superUser
+	 */
+	public Boolean getSuperUser() {
+		return superUser;
+	}
+
+	/**
+	 * @param superUser the superUser to set
+	 */
+	public void setSuperUser(Boolean superUser) {
+		this.superUser = superUser;
+	}
+
+	/**
+	 * @return the exclusiveRole
+	 */
+	public String getExclusiveRole() {
+		return exclusiveRole;
+	}
+
+	/**
+	 * @param exclusiveRole the exclusiveRole to set
+	 */
+	public void setExclusiveRole(String exclusiveRole) {
+		this.exclusiveRole = exclusiveRole;
+	}
+
+	/**
+	 * Get Account Type (ex.user,token,json...)
+	 * 
+	 * @return
+	 */
+	public String getAccountType() {
+		return accountType;
+	}
+
+	/**
+	 * Set Account Type (ex.user,token,json...)
+	 * 
+	 * @param accountType
+	 */
+	public void setAccountType(String accountType) {
+		this.accountType = accountType;
+	}
+
+	/**
+	 * Get Password Expire Date
+	 * 
+	 * @return
+	 */
+	public String getPasswordExpireDate() {
+		return passwordExpireDate;
+	}
+
+	/**
+	 * Set Password Expire Date
+	 * 
+	 * @param passwordExpireDate
+	 */
+	public void setPasswordExpireDate(String passwordExpireDate) {
+		this.passwordExpireDate = passwordExpireDate;
+	}
+
+	/**
+	 * Get Account Expire Date
+	 * 
+	 * @return
+	 */
+	public String getAccountExpireDate() {
+		return accountExpireDate;
+	}
+
+	/**
+	 * Set Account Expire Date
+	 * 
+	 * @param accountExpireDate
+	 */
+	public void setAccountExpireDate(String accountExpireDate) {
+		this.accountExpireDate = accountExpireDate;
 	}
 }
