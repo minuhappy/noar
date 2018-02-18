@@ -27,7 +27,7 @@ import com.noar.core.util.CrudUtil;
 /**
  * @author Administrator
  */
-public class RestServiceHandler {
+public class EntityServiceHandler {
 	private static final Map<String, ServiceInfo> REST_CACHE = new ConcurrentHashMap<String, ServiceInfo>();
 
 	/**

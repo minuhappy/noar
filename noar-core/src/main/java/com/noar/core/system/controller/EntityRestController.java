@@ -16,7 +16,7 @@ import com.noar.common.util.ValueUtil;
 import com.noar.core.Constants;
 import com.noar.core.exception.ServerException;
 import com.noar.core.system.base.ServiceInfo;
-import com.noar.core.system.handler.RestServiceHandler;
+import com.noar.core.system.handler.EntityServiceHandler;
 import com.noar.core.util.TransactionUtil;
 
 @RestController
@@ -34,7 +34,7 @@ public class EntityRestController {
 	}
 
 	private Object doRestService(HttpServletRequest req, HttpServletResponse res) throws Throwable {
-		RestServiceHandler restServiceHandler = BeanUtil.get(RestServiceHandler.class);
+		EntityServiceHandler restServiceHandler = BeanUtil.get(EntityServiceHandler.class);
 		ServiceInfo serviceInfo = restServiceHandler.get(req);
 
 		Object restParam = ThreadPropertyUtil.get(Constants.REST_PARAM);
