@@ -1,10 +1,8 @@
 package com.noar.core.system.handler;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.StringJoiner;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,7 +26,6 @@ import com.noar.core.util.CrudUtil;
  * @author Administrator
  */
 public class EntityServiceHandler {
-	private static final Map<String, ServiceInfo> REST_CACHE = new ConcurrentHashMap<String, ServiceInfo>();
 
 	/**
 	 * Request를 통해 Service 객체 추출.
@@ -37,23 +34,22 @@ public class EntityServiceHandler {
 	 * @return
 	 * @throws Throwable
 	 */
-	public ServiceInfo get(final HttpServletRequest req) throws Throwable {
-		String name = req.getRequestURI();
-		if (name.endsWith("/")) {
-			name = name.substring(0, name.lastIndexOf("/"));
+	public ServiceInfo parseServiceInfo(final HttpServletRequest req) throws Throwable {
+		String uri = req.getRequestURI();
+		if (uri.endsWith("/")) {
+			uri = uri.substring(0, uri.lastIndexOf("/"));
 		}
 
-		return get(name);
+		return parseServiceInfo(uri);
 	}
 
-	public ServiceInfo get(String name) throws Throwable {
+	public ServiceInfo parseServiceInfo(String uri) throws Throwable {
 		// Set Service Info.
-		Map<String, Object> serviceInfoMap = setServiceInfoMap(name);
+		Map<String, Object> serviceInfoMap = setServiceInfoMap(uri);
+		
 		// URL을 변환한 Service Path를 통해, 호출할 Service 경로 추출.
 		String reqPath = String.valueOf(serviceInfoMap.get(Constants.REQUEST_PATH));
-		// if (REST_CACHE.containsKey(reqPath))
-		// return REST_CACHE.get(reqPath);
-		return SynchCtrlUtil.wrap(reqPath, REST_CACHE, reqPath, new IScope<ServiceInfo>() {
+		return SynchCtrlUtil.wrap(reqPath, new HashMap<String, ServiceInfo>(), reqPath, new IScope<ServiceInfo>() {
 			@Override
 			public ServiceInfo execute() throws Exception {
 				Class<?> entityClass = (Class<?>) serviceInfoMap.get(Constants.ENTITY_CLASS);
@@ -80,22 +76,21 @@ public class EntityServiceHandler {
 	public Object invoke(ServiceInfo serviceInfo, String method, String inputParam) throws Throwable {
 		Class<?> entity = serviceInfo.getBean().getClass();
 
-		if (ValueUtil.isEqual(RequestMethod.GET, method) && ValueUtil.isEmpty(inputParam)) {
-			// List 구현
-			return null;
+		if (ValueUtil.isEqual(RequestMethod.GET.name(), method) && ValueUtil.isEmpty(inputParam)) {
+			return CrudUtil.selectList(serviceInfo.getBean());
 		}
 
 		// Read
-		if (ValueUtil.isEqual(RequestMethod.GET, method)) {
+		if (ValueUtil.isEqual(RequestMethod.GET.name(), method)) {
 			 return CrudUtil.select(inputParam);
 		}
 
 		Object input = JsonUtil.jsonToObject(inputParam, entity);
-		if (ValueUtil.isEqual(RequestMethod.POST, method)) {
+		if (ValueUtil.isEqual(RequestMethod.POST.name(), method)) {
 			 CrudUtil.insert(input);
-		} else if (ValueUtil.isEqual(RequestMethod.PUT, method)) {
+		} else if (ValueUtil.isEqual(RequestMethod.PUT.name(), method)) {
 			 CrudUtil.update(input);
-		} else if (ValueUtil.isEqual(RequestMethod.DELETE, method)) {
+		} else if (ValueUtil.isEqual(RequestMethod.DELETE.name(), method)) {
 			 CrudUtil.delete(input);
 		}
 
@@ -145,36 +140,28 @@ public class EntityServiceHandler {
 		String requestPath = null;
 		String param = null;
 
-		List<Map<String, String>> listMap = getClassInfo(uri);
-		for (Map<String, String> map : listMap) {
-			try {
-				String packagePath = map.get(Constants.PACKAGE_PATH);
-				String className = map.get(Constants.CLASS_NAME);
-				// className = className.substring(0, className.lastIndexOf('s'));
-				requestPath = map.get(Constants.REQUEST_PATH);
-				param = map.get(Constants.REST_PARAM);
+		Map<String, String> map = getClassInfo(uri);
 
-				// 하이픈(-)이 포함되어 있을 경우, 제거 또는 CamelCase로 변경.
-				packagePath = StringUtils.replace(packagePath, "-", "_");
-				className = ValueUtil.toCamelCase(className, '-', true);
+		String packagePath = map.get(Constants.PACKAGE_PATH);
+		String className = map.get(Constants.CLASS_NAME);
+		// className = className.substring(0, className.lastIndexOf('s'));
+		requestPath = map.get(Constants.REQUEST_PATH);
+		param = map.get(Constants.REST_PARAM);
 
-				StringBuilder sb = new StringBuilder();
-				sb.append(packagePath).append(Constants.DOT).append(className);
+		// 하이픈(-)이 포함되어 있을 경우, 제거 또는 CamelCase로 변경.
+		packagePath = StringUtils.replace(packagePath, "-", "_");
+		className = ValueUtil.toCamelCase(className, '-', true);
 
-				entityClass = ClassUtil.forName(sb.toString());
-			} catch (Exception e) {
-				entityClass = null;
-				requestPath = null;
-				param = null;
-				continue;
-			}
-			break;
-		}
+		StringBuilder sb = new StringBuilder();
+		sb.append(packagePath).append(Constants.DOT).append(className);
+
+		entityClass = ClassUtil.forName(sb.toString());
 
 		// Set Service Info.
 		Map<String, Object> serviceInfoMap = new HashMap<String, Object>();
 		serviceInfoMap.put(Constants.REQUEST_PATH, requestPath);
 		serviceInfoMap.put(Constants.ENTITY_CLASS, entityClass);
+		
 		// param
 		ThreadPropertyUtil.put(Constants.REST_PARAM, param);
 		return serviceInfoMap;
@@ -186,38 +173,38 @@ public class EntityServiceHandler {
 	 * @param uri
 	 * @return
 	 */
-	private List<Map<String, String>> getClassInfo(String uri) {
-		List<Map<String, String>> list = new ArrayList<>();
+	private Map<String, String> getClassInfo(String uri) {
+		String requestPath = null;
+		String classPath = null;
+		String packagePath = null;
+		String className = null;
+		String restParam = null;
+
 		String servicePath = getServicePath(uri);
-		// http://127.0.0.1:8080/service/class/method
-		{
-			Map<String, String> map = new HashMap<String, String>();
-			String classPath = servicePath.substring(0, servicePath.lastIndexOf(Constants.DOT));
-			String packagePath = servicePath.substring(0, classPath.lastIndexOf(Constants.DOT));
-			String className = classPath.substring(0, classPath.lastIndexOf(Constants.DOT) + 1);
-			String restParam = servicePath.substring(0, classPath.lastIndexOf(Constants.DOT) + 1);
 
-			map.put(Constants.REQUEST_PATH, uri.substring(0, uri.lastIndexOf("/")));
-			map.put(Constants.PACKAGE_PATH, packagePath);
-			map.put(Constants.CLASS_PATH, classPath);
-			map.put(Constants.CLASS_NAME, className);
-			map.put(Constants.REST_PARAM, restParam);
-			list.add(map);
+		try {
+			// http://127.0.0.1:8080/service/class/method
+			requestPath = uri.substring(0, uri.lastIndexOf("/"));
+			classPath = servicePath.substring(0, servicePath.lastIndexOf(Constants.DOT));
+			packagePath = servicePath.substring(0, classPath.lastIndexOf(Constants.DOT));
+			className = classPath.substring(classPath.lastIndexOf(Constants.DOT) + 1);
+			className = ValueUtil.toCamelCase(className, '_', true);
+			restParam = servicePath.substring(servicePath.lastIndexOf(Constants.DOT) + 1);
+
+			ClassUtil.forName(new StringJoiner(".").add(packagePath).add(className).toString());
+		} catch (Exception e) {
+			// Rest-List - http://127.0.0.1:8080/service/class
+			packagePath = servicePath.substring(0, servicePath.lastIndexOf(Constants.DOT));
+			className = servicePath.substring(servicePath.lastIndexOf(Constants.DOT) + 1);
 		}
-		// http://127.0.0.1:8080/service/class
-		{
-			// Rest-List
-			Map<String, String> map = new HashMap<String, String>();
-			String packagePath = servicePath.substring(0, servicePath.lastIndexOf(Constants.DOT));
-			String className = servicePath.substring(servicePath.lastIndexOf(Constants.DOT) + 1);
 
-			map.put(Constants.REQUEST_PATH, uri);
-			map.put(Constants.CLASS_PATH, servicePath);
-			map.put(Constants.PACKAGE_PATH, packagePath);
-			map.put(Constants.CLASS_NAME, className);
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(Constants.REQUEST_PATH, requestPath);
+		map.put(Constants.PACKAGE_PATH, packagePath);
+		map.put(Constants.CLASS_PATH, classPath);
+		map.put(Constants.CLASS_NAME, className);
+		map.put(Constants.REST_PARAM, restParam);
 
-			list.add(map);
-		}
-		return list;
+		return map;
 	}
 }

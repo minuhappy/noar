@@ -144,7 +144,8 @@ public class TransactionUtil {
 		DefaultTransactionDefinition definition = new DefaultTransactionDefinition();
 		definition.setName(name);
 		definition.setPropagationBehavior(propagation);
-		definition.setTimeout(timeout);
+		// FIXME Spring Version Error
+		// definition.setTimeout(timeout);
 		return definition;
 	}
 

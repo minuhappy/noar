@@ -23,7 +23,7 @@ import com.noar.core.util.TransactionUtil;
 @Component
 public class ServiceAspect {
 
-	@Pointcut("execution(* com.noar.core..*Biz.*(..)) || execution(* com.noar.core.system.handler.RestServiceHandler.invoke(..))")
+	@Pointcut("execution(* com.noar.core..*Biz.*(..)) || execution(* com.noar.core.system.handler.EntityServiceHandler.invoke(..))")
 	public void targetMethod() {
 	}
 

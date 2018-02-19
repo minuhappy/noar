@@ -35,7 +35,7 @@ public class EntityRestController {
 
 	private Object doRestService(HttpServletRequest req, HttpServletResponse res) throws Throwable {
 		EntityServiceHandler restServiceHandler = BeanUtil.get(EntityServiceHandler.class);
-		ServiceInfo serviceInfo = restServiceHandler.get(req);
+		ServiceInfo serviceInfo = restServiceHandler.parseServiceInfo(req);
 
 		Object restParam = ThreadPropertyUtil.get(Constants.REST_PARAM);
 		String inputPram = ValueUtil.isNotEmpty(restParam) ? String.valueOf(restParam) : null;

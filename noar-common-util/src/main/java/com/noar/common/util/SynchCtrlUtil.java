@@ -33,25 +33,25 @@ public class SynchCtrlUtil {
 
 		final boolean debug = logger.isDebugEnabled();
 
-//		if (key == null) {
-//			if (debug)
-//				logger.debug("key is null, so execute closure right away.");
-//			return wrap(name, scope);
-//		}
-//
-//		if (cache.containsKey(key)) {
-//			if (debug)
-//				logger.debug("get data from map cache by key: " + key);
-//			return cache.get(key);
-//		}
+		if (key == null) {
+			if (debug)
+				logger.debug("key is null, so execute closure right away.");
+			return wrap(name, scope);
+		}
+
+		if (cache.containsKey(key)) {
+			if (debug)
+				logger.debug("get data from map cache by key: " + key);
+			return cache.get(key);
+		}
 
 		return wrap(name, new IScope<T>() {
 			public T execute() throws Throwable {
-//				if (cache.containsKey(key)) {
-//					if (debug)
-//						logger.debug("get data from map cache by key: " + key);
-//					return cache.get(key);
-//				}
+				if (cache.containsKey(key)) {
+					if (debug)
+						logger.debug("get data from map cache by key: " + key);
+					return cache.get(key);
+				}
 
 				if (debug)
 					logger.debug("get data by executing closure.");
