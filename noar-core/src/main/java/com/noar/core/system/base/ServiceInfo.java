@@ -15,6 +15,9 @@ public class ServiceInfo {
 	private Method method;
 	@JsonIgnore
 	private String inputJsonParam;
+	@JsonIgnore
+	private Object urlParam;
+
 	private Class<?> inputType;
 	private Class<?> outputType;
 	private List<DataType> types;
@@ -57,6 +60,14 @@ public class ServiceInfo {
 
 	public void setInputJsonParam(String inputJsonParam) {
 		this.inputJsonParam = inputJsonParam;
+	}
+
+	public Object getUrlParam() {
+		return urlParam;
+	}
+
+	public void setUrlParam(Object urlParam) {
+		this.urlParam = urlParam;
 	}
 
 	public Class<?> getInputType() {

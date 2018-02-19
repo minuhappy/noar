@@ -121,7 +121,7 @@ public class JsonServiceHandler {
 		}
 
 		StringBuffer sb = new StringBuffer();
-		sb.append(PropertyUtil.getProperty(ConfigConstants.BASE_PATH, "com.noar.core"));
+		sb.append(PropertyUtil.getProperty(ConfigConstants.BASE_ENTITY_PATH, "com.noar.core"));
 		sb.append(Constants.DOT);
 		sb.append((uri.substring(startIndex, lastIndex)).replaceAll("/", "."));
 

@@ -1,7 +1,5 @@
 package com.noar.core.system.controller;
 
-import java.io.BufferedReader;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -12,9 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.noar.common.util.BeanUtil;
 import com.noar.common.util.IScope;
 import com.noar.common.util.ThreadPropertyUtil;
-import com.noar.common.util.ValueUtil;
 import com.noar.core.Constants;
-import com.noar.core.exception.ServerException;
 import com.noar.core.system.base.ServiceInfo;
 import com.noar.core.system.handler.EntityServiceHandler;
 import com.noar.core.util.TransactionUtil;
@@ -34,45 +30,13 @@ public class EntityRestController {
 	}
 
 	private Object doRestService(HttpServletRequest req, HttpServletResponse res) throws Throwable {
-		EntityServiceHandler restServiceHandler = BeanUtil.get(EntityServiceHandler.class);
-		ServiceInfo serviceInfo = restServiceHandler.parseServiceInfo(req);
-
-		Object restParam = ThreadPropertyUtil.get(Constants.REST_PARAM);
-		String inputPram = ValueUtil.isNotEmpty(restParam) ? String.valueOf(restParam) : null;
-		if (ValueUtil.isEmpty(inputPram)) {
-			inputPram = getInputJsonParam(req);
-		}
-
-		final String restInput = inputPram;
 		return TransactionUtil.doScope("RestServiceUtil.Invoke", new IScope<Object>() {
 			@Override
 			public Object execute() throws Throwable {
-				return restServiceHandler.invoke(serviceInfo, req.getMethod(), restInput);
+				EntityServiceHandler restServiceHandler = BeanUtil.get(EntityServiceHandler.class);
+				ServiceInfo serviceInfo = restServiceHandler.parseServiceInfo(req);
+				return restServiceHandler.invoke(req, serviceInfo);
 			}
 		});
-	}
-
-	/**
-	 * Request에서 전송된 Json Prameter를 추출.
-	 * 
-	 * @param request
-	 * @return
-	 */
-	private String getInputJsonParam(HttpServletRequest request) {
-		StringBuffer sb = null;
-
-		try {
-			sb = new StringBuffer();
-			String line = null;
-			BufferedReader reader = request.getReader();
-
-			while ((line = reader.readLine()) != null) {
-				sb.append(line);
-			}
-		} catch (Exception e) {
-			throw new ServerException("Failed to read request body!", e);
-		}
-
-		return sb.toString();
 	}
 }

@@ -2,7 +2,7 @@ package com.noar.core;
 
 public class ConfigConstants {
 	public static final int TX_TIMEOUT = 180;
-	public static final String BASE_PATH = "base.path";
+	public static final String BASE_ENTITY_PATH = "base.path";
 	public static final String REST_PATH = "rest.path";
 	public static final String CACHE_MAP_DATA_ENABLED = "cache.map.data.enabled";
 	public static final String APP_CONTEXT_NAME = "minu";
