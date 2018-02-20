@@ -20,11 +20,13 @@ import com.noar.common.util.PropertyUtil;
 import com.noar.common.util.SynchCtrlUtil;
 import com.noar.common.util.ValueUtil;
 import com.noar.core.ConfigConstants;
+import com.noar.core.Constants;
 import com.noar.core.exception.ServerException;
 import com.noar.core.exception.ServiceException;
 import com.noar.core.system.base.ServiceInfo;
 import com.noar.core.util.CrudUtil;
 import com.noar.dbist.annotation.Table;
+import com.noar.dbist.dml.Query;
 
 /**
  * @author Administrator
@@ -84,26 +86,37 @@ public class EntityServiceHandler {
 
 		Class<?> clazz = serviceInfo.getBean().getClass();
 
-		// List
-		if (ValueUtil.isEqual(RequestMethod.GET.name(), httpMethod) && ValueUtil.isEmpty(urlParam)) {
-			return CrudUtil.selectList(clazz, req.getParameterMap());
-		}
-
-		// Read
 		if (ValueUtil.isEqual(RequestMethod.GET.name(), httpMethod)) {
-			return CrudUtil.select(clazz, urlParam);
+			if (ValueUtil.isNotEmpty(urlParam)) {
+				return CrudUtil.select(clazz, urlParam); // Select One
+			} else {
+				return CrudUtil.selectList(clazz, req.getParameterMap()); // List
+			}
 		}
 
-		Object input = JsonUtil.underScoreJsonToObject(this.getInputJsonParam(req), clazz);
-		if (ValueUtil.isEqual(RequestMethod.POST.name(), httpMethod)) {
-			CrudUtil.insert(clazz, input);
-		} else if (ValueUtil.isEqual(RequestMethod.PUT.name(), httpMethod)) {
+		String requestBody = this.getInputJsonParam(req);
+		Object input = JsonUtil.underScoreJsonToObject(requestBody, clazz);
+
+		switch (httpMethod) {
+		case Constants.HTTP_POST :
+			if (ValueUtil.isEqual(urlParam, Constants.ENTITY_SEARCH)) {
+				Query query = JsonUtil.underScoreJsonToObject(requestBody, Query.class);
+				return CrudUtil.selectPage(clazz, query);
+			} else {
+				CrudUtil.insert(clazz, input);
+			}
+			break;
+		case Constants.HTTP_PUT :
 			CrudUtil.update(clazz, input);
-		} else if (ValueUtil.isEqual(RequestMethod.DELETE.name(), httpMethod) && ValueUtil.isNotEmpty(urlParam)) {
-			CrudUtil.delete(clazz, urlParam);
-		} else if (ValueUtil.isEqual(RequestMethod.DELETE.name(), httpMethod)) {
-			List<?> list = CrudUtil.selectList(clazz, input);
-			CrudUtil.deleteBatch(list);
+			break;
+		case Constants.HTTP_DELETE :
+			if (ValueUtil.isNotEmpty(urlParam)) {
+				CrudUtil.delete(clazz, urlParam);
+			} else {
+				List<?> list = CrudUtil.selectList(clazz, input);
+				CrudUtil.deleteBatch(list);
+			}
+			return true;
 		}
 
 		return input;
