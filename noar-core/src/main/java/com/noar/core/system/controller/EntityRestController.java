@@ -11,7 +11,6 @@ import com.noar.common.util.BeanUtil;
 import com.noar.common.util.IScope;
 import com.noar.common.util.ThreadPropertyUtil;
 import com.noar.core.Constants;
-import com.noar.core.system.base.ServiceInfo;
 import com.noar.core.system.handler.EntityServiceHandler;
 import com.noar.core.util.TransactionUtil;
 
@@ -33,9 +32,7 @@ public class EntityRestController {
 		return TransactionUtil.doScope("RestServiceUtil.Invoke", new IScope<Object>() {
 			@Override
 			public Object execute() throws Throwable {
-				EntityServiceHandler restServiceHandler = BeanUtil.get(EntityServiceHandler.class);
-				ServiceInfo serviceInfo = restServiceHandler.parseServiceInfo(req);
-				return restServiceHandler.invoke(req, serviceInfo);
+				return BeanUtil.get(EntityServiceHandler.class).invoke(req);
 			}
 		});
 	}

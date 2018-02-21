@@ -2,6 +2,7 @@ package com.noar.core;
 
 public class ConfigConstants {
 	public static final int TX_TIMEOUT = 180;
+	
 	public static final String BASE_ENTITY_PATH = "base.path";
 	public static final String REST_PATH = "rest.path";
 	public static final String CACHE_MAP_DATA_ENABLED = "cache.map.data.enabled";
@@ -12,6 +13,8 @@ public class ConfigConstants {
 	
 	public static final String STOMP_SERVER_HOST = "stomp.server.host";
 	public static final String STOMP_SERVER_PORT = "stomp.server.port";
+	
+	public static final String ENTITY_SERVICE_UNDERSOCRE_JSON = "entity.service.undersocre.json";
 	
 	
 	

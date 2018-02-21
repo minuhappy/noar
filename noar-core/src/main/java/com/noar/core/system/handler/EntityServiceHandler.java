@@ -12,7 +12,6 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.noar.common.util.IScope;
 import com.noar.common.util.JsonUtil;
@@ -32,6 +31,60 @@ import com.noar.dbist.dml.Query;
  * @author Administrator
  */
 public class EntityServiceHandler {
+	boolean isUnderScoreCase;
+
+	public EntityServiceHandler() {
+		isUnderScoreCase = ValueUtil.toBoolean(PropertyUtil.getProperty(ConfigConstants.ENTITY_SERVICE_UNDERSOCRE_JSON), true);
+	}
+
+	/**
+	 * Entity 기반의 Rest Service를 수행
+	 * 
+	 * @param serviceInfo
+	 * @param httpMethod
+	 * @param inputParam
+	 * @return
+	 * @throws Throwable
+	 */
+	public Object invoke(HttpServletRequest req) throws Throwable {
+		String httpMethod = req.getMethod();
+
+		ServiceInfo serviceInfo = parseServiceInfo(req);
+		String urlParam = ValueUtil.isNotEmpty(serviceInfo.getUrlParam()) ? String.valueOf(serviceInfo.getUrlParam()) : null;
+
+		Class<?> clazz = serviceInfo.getBean().getClass();
+
+		// 조회
+		if (ValueUtil.isEqual(Constants.HTTP_GET, httpMethod)) {
+			return this.doGet(clazz, urlParam, req.getParameterMap());
+		}
+
+		// Validation check
+		String requestBody = this.getInputJsonParam(req);
+		if (ValueUtil.isEmpty(requestBody)) {
+			throw new ServiceException("Reqeust Body is empty.");
+		}
+
+		Object input;
+		boolean isArray = JsonUtil.isJsonArray(requestBody);
+
+		if (!isArray) {
+			input = JsonUtil.jsonToObject(requestBody, clazz, isUnderScoreCase);
+		} else {
+			input = JsonUtil.jsonArrayToObjectList(requestBody, clazz, isUnderScoreCase);
+		}
+
+		switch (httpMethod) {
+		case Constants.HTTP_POST :
+			return this.doPost(clazz, urlParam, requestBody, input);
+		case Constants.HTTP_PUT :
+			return this.doPut(clazz, input);
+		case Constants.HTTP_DELETE :
+			return this.doDelete(clazz, urlParam, input);
+		}
+
+		throw new ServiceException("Method Type(" + httpMethod + ") is not supported.");
+	}
 
 	/**
 	 * Request를 통해 Service 객체 추출.
@@ -71,55 +124,61 @@ public class EntityServiceHandler {
 		});
 	}
 
-	/**
-	 * Entity 기반의 Rest Service를 수행
-	 * 
-	 * @param serviceInfo
-	 * @param httpMethod
-	 * @param inputParam
-	 * @return
-	 * @throws Throwable
-	 */
-	public Object invoke(HttpServletRequest req, ServiceInfo serviceInfo) throws Throwable {
-		String httpMethod = req.getMethod();
-		String urlParam = ValueUtil.isNotEmpty(serviceInfo.getUrlParam()) ? String.valueOf(serviceInfo.getUrlParam()) : null;
+	@SuppressWarnings("rawtypes")
+	private Object doGet(Class<?> clazz, String urlParam, Map parameterMap) throws Exception {
+		if (ValueUtil.isNotEmpty(urlParam)) {
+			return CrudUtil.select(clazz, urlParam); // Select One
+		} else {
+			return CrudUtil.selectList(clazz, parameterMap); // List
+		}
+	}
 
-		Class<?> clazz = serviceInfo.getBean().getClass();
-
-		if (ValueUtil.isEqual(RequestMethod.GET.name(), httpMethod)) {
-			if (ValueUtil.isNotEmpty(urlParam)) {
-				return CrudUtil.select(clazz, urlParam); // Select One
-			} else {
-				return CrudUtil.selectList(clazz, req.getParameterMap()); // List
-			}
+	@SuppressWarnings("unchecked")
+	private <T> Object doPost(Class<T> clazz, String urlParam, String requestBody, Object input) throws Exception {
+		// Page 조회.
+		if (ValueUtil.isEqual(urlParam, Constants.ENTITY_SEARCH)) {
+			Query query = JsonUtil.jsonToObject(requestBody, Query.class, isUnderScoreCase);
+			return CrudUtil.selectPage(clazz, query);
 		}
 
-		String requestBody = this.getInputJsonParam(req);
-		Object input = JsonUtil.underScoreJsonToObject(requestBody, clazz);
-
-		switch (httpMethod) {
-		case Constants.HTTP_POST :
-			if (ValueUtil.isEqual(urlParam, Constants.ENTITY_SEARCH)) {
-				Query query = JsonUtil.underScoreJsonToObject(requestBody, Query.class);
-				return CrudUtil.selectPage(clazz, query);
-			} else {
-				CrudUtil.insert(clazz, input);
-			}
-			break;
-		case Constants.HTTP_PUT :
-			CrudUtil.update(clazz, input);
-			break;
-		case Constants.HTTP_DELETE :
-			if (ValueUtil.isNotEmpty(urlParam)) {
-				CrudUtil.delete(clazz, urlParam);
-			} else {
-				List<?> list = CrudUtil.selectList(clazz, input);
-				CrudUtil.deleteBatch(list);
-			}
-			return true;
+		// Delete
+		if (ValueUtil.isEqual(urlParam, Constants.ENTITY_DELETE)) {
+			return doDelete(clazz, null, input);
 		}
 
+		if (input instanceof List) {
+			List<T> list = (List<T>) input;
+			CrudUtil.insertBatch(list);
+		} else {
+			CrudUtil.insert(clazz, input);
+		}
 		return input;
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T> Object doPut(Class<T> clazz, Object input) throws Exception {
+		if (input instanceof List) {
+			List<T> list = (List<T>) input;
+			CrudUtil.updateBatch(list);
+		} else {
+			CrudUtil.update(clazz, input);
+		}
+		return input;
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T> boolean doDelete(Class<T> clazz, String urlParam, Object input) throws Exception {
+		if (ValueUtil.isNotEmpty(urlParam)) {
+			CrudUtil.delete(clazz, urlParam);
+		} else {
+			if (input instanceof List) {
+				List<T> list = (List<T>) input;
+				CrudUtil.deleteBatch(list);
+			} else {
+				CrudUtil.delete(clazz, input);
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -170,7 +229,6 @@ public class EntityServiceHandler {
 				}
 			}
 		}
-
 		return ENTITY_MAP.get(tableName);
 	}
 }

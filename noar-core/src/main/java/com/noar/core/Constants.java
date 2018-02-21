@@ -18,6 +18,7 @@ public class Constants {
 	
 	public static final String BASE_PATH = "BASE_PATH";
 	public static final String ENTITY_SEARCH = "search";
+	public static final String ENTITY_DELETE = "delete";
 	
 	public static final String HTTP_GET = "GET";
 	public static final String HTTP_POST = "POST";
