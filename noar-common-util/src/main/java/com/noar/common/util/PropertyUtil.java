@@ -27,8 +27,7 @@ public class PropertyUtil {
 		} catch (NoSuchMessageException e) {
 			return null;
 		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
+			throw new RuntimeException(e);
 		}
 	}
 }

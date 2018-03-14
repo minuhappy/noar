@@ -1,30 +1,43 @@
 package com.noar.common.util.config.property;
 
-public interface PropertyService {
-	
-	/**
-	 * 프로퍼티 그룹을 조회하여 PropertyGroup을 리턴한다.
-	 * 
-	 * @param 프러퍼티 그룹 ID
-	 * @return PropertyGroup
-	 * @throws 
-	 */
-	public PropertyGroup getPropertyGroup(String propertyGroupName);
-	
-	/**
-	 * 프로퍼티 그룹 ID 와 프로퍼티 Key 값으로 해당 key값의 value 조회서비스를 사용자에게 제공한다.
-	 * 
-	 * @param 프러퍼티 그룹 ID, 프러퍼티 Key
-	 * @return String
-	 * @throws 
-	 */
-	public String getProperty(String groupName, String propertyName);
-	
-	
-	/**
-	 * Default Property Group 을 기준으로 property를 조회.
-	 * @param propertyName
-	 * @return
-	 */
-	public String getProperty(String propertyName);
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.context.MessageSource;
+
+public class PropertyService {
+
+	private String defaultPropertyGroupName;
+	private Map<String, PropertyGroup> propertyList = new HashMap<String, PropertyGroup>();
+	private Map<String, MessageSource> propertyResources;
+
+	public void setDefaultPropertyGroupName(String defaultPropertyGroupName) {
+		this.defaultPropertyGroupName = defaultPropertyGroupName;
+	}
+
+	public String getDefaultPropertyGroupName() {
+		return defaultPropertyGroupName;
+	}
+
+	public void setPropertyResources(Map<String, MessageSource> propertyResources) {
+		this.propertyResources = propertyResources;
+	}
+
+	public PropertyGroup getPropertyGroup(String propertyGroupName) {
+		if (!propertyList.containsKey(propertyGroupName)) {
+			PropertyGroup property = new PropertyGroup(propertyGroupName, propertyResources.get(propertyGroupName));
+			propertyList.put(propertyGroupName, property);
+			return property;
+		}
+		return propertyList.get(propertyGroupName);
+	}
+
+	public String getProperty(String groupName, String propertyName) {
+		return getPropertyGroup(groupName).getProperty(propertyName);
+	}
+
+	public String getProperty(String propertyName) {
+		PropertyGroup propertyGroup = getPropertyGroup(defaultPropertyGroupName);
+		return propertyGroup.getProperty(propertyName);
+	}
 }

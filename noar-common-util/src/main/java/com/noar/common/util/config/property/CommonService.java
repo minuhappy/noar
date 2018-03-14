@@ -7,8 +7,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.util.StringUtils;
 
-import com.noar.common.util.config.property.impl.PropertyServiceImpl;
-
 /*
  * Common Service provides interfaces for User application.
  * Every single member of this classes must be injected.
@@ -30,13 +28,13 @@ public class CommonService {
 		CommonService.propertyService = propertyService();
 	}
 
-	private static PropertyServiceImpl propertyService() {
+	private static PropertyService propertyService() {
 		MessageSource propertiesSource = propertiesSource();
 
 		Map<String, MessageSource> paramMap = new HashMap<String, MessageSource>();
 		paramMap.put(DEFAULT_PROPERTY_GROUP_NAME, propertiesSource);
 
-		PropertyServiceImpl propertyService = new PropertyServiceImpl();
+		PropertyService propertyService = new PropertyService();
 		propertyService.setPropertyResources(paramMap);
 		propertyService.setDefaultPropertyGroupName(DEFAULT_PROPERTY_GROUP_NAME);
 
