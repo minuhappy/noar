@@ -115,8 +115,13 @@ public class AuthenticationFilter extends AbstractSecurityWebApplicationInitiali
 	}
 
 	public Authentication doAuthenticate(String id, String password) {
+		// ReflectionSaltSource rss = new ReflectionSaltSource();
+		// rss.setUserPropertyToUse("salt");
+
 		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
 		daoAuthenticationProvider.setUserDetailsService(userDetailsService);
+		// daoAuthenticationProvider.setSaltSource(rss);
+		// daoAuthenticationProvider.setPasswordEncoder(new MessageDigestPasswordEncoder(Constants.PASSWORD_ENCODER_ALGORITHM_SHA256));
 
 		List<AuthenticationProvider> list = new ArrayList<AuthenticationProvider>();
 		list.add(daoAuthenticationProvider);
