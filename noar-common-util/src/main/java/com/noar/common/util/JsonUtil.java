@@ -13,12 +13,32 @@ import com.google.gson.GsonBuilder;
 
 public class JsonUtil {
 	private static Gson simpleGson;
+	private static Gson simplePrettyGson;
 	private static Gson underScoreGson;
+	private static Gson underScorePrettyGson;
 
 	static {
-		simpleGson = new GsonBuilder().setDateFormat(DateUtil.DEFAULT_DATE_FORMAT).setPrettyPrinting().create();
-		underScoreGson = new GsonBuilder().setDateFormat(DateUtil.DEFAULT_DATE_FORMAT).setPrettyPrinting().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-				.create();
+		{
+			GsonBuilder gsonBuilder = new GsonBuilder();
+			gsonBuilder.setDateFormat(DateUtil.DEFAULT_DATE_FORMAT);
+
+			simpleGson = gsonBuilder.create();
+
+			gsonBuilder.setPrettyPrinting();
+			simplePrettyGson = gsonBuilder.create();
+		}
+
+		{
+			GsonBuilder gsonBuilder = new GsonBuilder();
+			gsonBuilder.setDateFormat(DateUtil.DEFAULT_DATE_FORMAT);
+			gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
+
+			underScoreGson = gsonBuilder.create();
+
+			gsonBuilder.setPrettyPrinting();
+			underScorePrettyGson = gsonBuilder.create();
+
+		}
 	}
 
 	/**

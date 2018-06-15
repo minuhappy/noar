@@ -7,7 +7,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.noar.boot.auth.Constants;
-import com.noar.boot.auth.security.EcoUserDetails;
+import com.noar.boot.auth.security.NoarUserDetails;
 import com.noar.boot.auth.security.IUser;
 import com.noar.common.util.BeanUtil;
 
@@ -51,7 +51,7 @@ public class SecurityUtil {
 			return null;
 		}
 
-		EcoUserDetails elidomUserDetails = (EcoUserDetails) auth.getPrincipal();
+		NoarUserDetails elidomUserDetails = (NoarUserDetails) auth.getPrincipal();
 		return elidomUserDetails.getUser();
 	}
 

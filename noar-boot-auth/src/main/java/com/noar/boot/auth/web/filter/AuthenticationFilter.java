@@ -56,7 +56,7 @@ public class AuthenticationFilter extends AbstractSecurityWebApplicationInitiali
 			return;
 		}
 
-		/**
+		/*
 		 * 인증된 사용자일 경우, 인증을 실행하지 않음.
 		 */
 		if (!SecurityUtil.isAnonymous()) {
@@ -77,7 +77,7 @@ public class AuthenticationFilter extends AbstractSecurityWebApplicationInitiali
 				// HttpSender를 통한 JSON 호출 시, 인증 실행.
 				String authKey = request.getHeader(Constants.AUTH_KEY);
 
-				/**
+				/*
 				 * Type에 따른 인증 실행
 				 */
 

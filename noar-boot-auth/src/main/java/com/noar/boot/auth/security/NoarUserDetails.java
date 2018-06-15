@@ -12,11 +12,11 @@ import org.springframework.security.core.userdetails.UserDetails;
  * @author Minu.Kim
  */
 @SuppressWarnings("serial")
-public class EcoUserDetails implements UserDetails {
+public class NoarUserDetails implements UserDetails {
 
 	private IUser userDetail;
 
-	public EcoUserDetails(final IUser user) {
+	public NoarUserDetails(final IUser user) {
 		super();
 		this.userDetail = user;
 	}
@@ -67,7 +67,7 @@ public class EcoUserDetails implements UserDetails {
 
 	@Override
 	public boolean equals(Object object) {
-		return object != null && object instanceof EcoUserDetails && ((EcoUserDetails) object).getUsername().equals(getUsername());
+		return object != null && object instanceof NoarUserDetails && ((NoarUserDetails) object).getUsername().equals(getUsername());
 	}
 
 	@Override

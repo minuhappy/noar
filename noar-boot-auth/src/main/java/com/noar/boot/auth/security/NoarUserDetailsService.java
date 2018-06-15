@@ -15,7 +15,7 @@ import com.noar.common.util.BeanUtil;
  * @author Minu.Kim
  */
 @Service
-public class EcoUserDetailsService implements UserDetailsService {
+public class NoarUserDetailsService implements UserDetailsService {
 	@Autowired
 	Environment env;
 
@@ -31,6 +31,6 @@ public class EcoUserDetailsService implements UserDetailsService {
 			throw new UsernameNotFoundException("User [" + username + "] is not exist.");
 		}
 
-		return new EcoUserDetails(user);
+		return new NoarUserDetails(user);
 	}
 }
