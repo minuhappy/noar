@@ -5,9 +5,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
-import javax.servlet.Filter;
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -26,8 +24,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 import org.springframework.stereotype.Service;
+import org.springframework.web.filter.GenericFilterBean;
 
 import com.noar.boot.auth.Constants;
 import com.noar.boot.auth.security.IUser;
@@ -39,7 +37,8 @@ import com.noar.common.util.JsonUtil;
 import com.noar.common.util.ValueUtil;
 
 @Service
-public class AuthenticationFilter extends AbstractSecurityWebApplicationInitializer implements Filter {
+// public class AuthenticationFilter extends AbstractSecurityWebApplicationInitializer implements Filter {
+public class AuthenticationFilter extends GenericFilterBean {
 	private static final String APPNAME_LOGOUT_URL = "/auth/logout";
 
 	@Autowired
@@ -82,15 +81,15 @@ public class AuthenticationFilter extends AbstractSecurityWebApplicationInitiali
 				 */
 
 				switch (authType) {
-				case Constants.AUTH_TYPE_JSON :
-					this.doJsonAuth(authKey, request, response);
-					break;
+					case Constants.AUTH_TYPE_JSON :
+						this.doJsonAuth(authKey, request, response);
+						break;
 
-				case Constants.AUTH_TYPE_TOKEN :
-					this.doTokenAuth(authKey);
-					break;
-				default :
-					throw new AccessDeniedException("Invalid Auth Type.[" + authType + "]");
+					case Constants.AUTH_TYPE_TOKEN :
+						this.doTokenAuth(authKey);
+						break;
+					default :
+						throw new AccessDeniedException("Invalid Auth Type.[" + authType + "]");
 				}
 			}
 		} catch (Exception e) {
@@ -221,9 +220,9 @@ public class AuthenticationFilter extends AbstractSecurityWebApplicationInitiali
 		return true;
 	}
 
-	@Override
-	public void init(FilterConfig filterConfig) throws ServletException {
-	}
+	// @Override
+	// public void init(FilterConfig filterConfig) throws ServletException {
+	// }
 
 	@Override
 	public void destroy() {
