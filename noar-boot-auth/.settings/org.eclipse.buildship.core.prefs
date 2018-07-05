@@ -1,7 +1,7 @@
-#Fri Dec 15 18:10:17 KST 2017
-connection.gradle.distribution=GRADLE_DISTRIBUTION(VERSION(4.4))
-override.workspace.settings=true
-gradle.user.home=
-connection.project.dir=
-offline.mode=false
 build.scans.enabled=false
+connection.gradle.distribution=GRADLE_DISTRIBUTION(VERSION(4.4))
+connection.project.dir=../noar-webapp
+eclipse.preferences.version=1
+gradle.user.home=
+offline.mode=false
+override.workspace.settings=true

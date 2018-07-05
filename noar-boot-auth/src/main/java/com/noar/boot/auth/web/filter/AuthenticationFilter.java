@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
@@ -57,61 +56,56 @@ public class AuthenticationFilter extends GenericFilterBean {
 
 		/*
 		 * 인증된 사용자일 경우, 인증을 실행하지 않음.
+		 * TODO All permit URL 설정 추가.
 		 */
-		if (!SecurityUtil.isAnonymous()) {
+		if (!SecurityUtil.isAnonymous() || appName.startsWith("/noar")) {
 			chain.doFilter(req, res);
 			return;
 		}
 
-		try {
-			String authType = request.getHeader(Constants.AUTH_TYPE);
+		String authType = request.getHeader(Constants.AUTH_TYPE);
 
-			// 기본 인증.
-			if (ValueUtil.isEmpty(authType)) {
-				String userId = request.getHeader(Constants.PARAMNAME_USERNAME);
-				String userPwd = request.getHeader(Constants.PARAMNAME_PASSWORD);
+		// 기본 인증.
+		if (ValueUtil.isEmpty(authType)) {
+			String userId = request.getHeader(Constants.PARAMNAME_USERNAME);
+			String userPwd = request.getHeader(Constants.PARAMNAME_PASSWORD);
 
-				this.doAuthenticate(userId, userPwd);
-			} else {
-				// HttpSender를 통한 JSON 호출 시, 인증 실행.
-				String authKey = request.getHeader(Constants.AUTH_KEY);
+			this.doAuthenticate(userId, userPwd);
+		} else {
+			// HttpSender를 통한 JSON 호출 시, 인증 실행.
+			String authKey = request.getHeader(Constants.AUTH_KEY);
 
-				/*
-				 * Type에 따른 인증 실행
-				 */
+			/*
+			 * Type에 따른 인증 실행
+			 */
+			switch (authType) {
+				case Constants.AUTH_TYPE_JSON :
+					this.doJsonAuth(authKey, request, response);
+					break;
 
-				switch (authType) {
-					case Constants.AUTH_TYPE_JSON :
-						this.doJsonAuth(authKey, request, response);
-						break;
-
-					case Constants.AUTH_TYPE_TOKEN :
-						this.doTokenAuth(authKey);
-						break;
-					default :
-						throw new AccessDeniedException("Invalid Auth Type.[" + authType + "]");
-				}
+				case Constants.AUTH_TYPE_TOKEN :
+					this.doTokenAuth(authKey);
+					break;
+				default :
+					throw new AccessDeniedException("Invalid Auth Type.[" + authType + "]");
 			}
-		} catch (Exception e) {
-			this.processUnauthorized(request, response);
-			return;
 		}
 
 		chain.doFilter(req, res);
 	}
 
-	/**
-	 * 인증이 안 된 경우 처리
-	 * 
-	 * @param request
-	 * @param response
-	 * @throws IOException
-	 */
-	private void processUnauthorized(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		response.setStatus(HttpStatus.UNAUTHORIZED.value());
-		response.setCharacterEncoding(Constants.CHAR_SET_UTF8);
-		response.setContentType(Constants.CONTENT_TYPE_JSON_UTF_8);
-	}
+//	/**
+//	 * 인증이 안 된 경우 처리
+//	 * 
+//	 * @param request
+//	 * @param response
+//	 * @throws IOException
+//	 */
+//	private void processUnauthorized(HttpServletRequest request, HttpServletResponse response) throws IOException {
+//		response.setStatus(HttpStatus.UNAUTHORIZED.value());
+//		response.setCharacterEncoding(Constants.CHAR_SET_UTF8);
+//		response.setContentType(Constants.CONTENT_TYPE_JSON_UTF_8);
+//	}
 
 	public Authentication doAuthenticate(String id, String password) {
 		// ReflectionSaltSource rss = new ReflectionSaltSource();
@@ -220,9 +214,9 @@ public class AuthenticationFilter extends GenericFilterBean {
 		return true;
 	}
 
-	// @Override
-	// public void init(FilterConfig filterConfig) throws ServletException {
-	// }
+//	 @Override
+//	 public void init(FilterConfig filterConfig) throws ServletException {
+//	 }
 
 	@Override
 	public void destroy() {

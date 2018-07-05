@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,8 +19,9 @@ import com.noar.core.system.base.ServiceInfo;
 import com.noar.core.system.handler.JsonServiceHandler;
 
 @RestController
-public class JsonController {
-	@RequestMapping(value = "**/service/**/*", headers = "Accept=application/json;charset=UTF-8")
+public class ServiceController {
+	// @RequestMapping(value = "**/service/**/*", headers = "Accept=application/json;charset=UTF-8")
+	@RequestMapping(value = "/service/**/*", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody Object jsonService(HttpServletRequest req, HttpServletResponse res) throws Throwable {
 		return ThreadPropertyUtil.doScope(new IScope<Object>() {
 			@Override
@@ -30,7 +32,7 @@ public class JsonController {
 			}
 		});
 	}
-	
+
 	private Object doJsonService(HttpServletRequest req, HttpServletResponse res) throws Throwable {
 		JsonServiceHandler jsonService = BeanUtil.get(JsonServiceHandler.class);
 		ServiceInfo serviceInfo = jsonService.get(req.getRequestURI());

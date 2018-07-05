@@ -2,6 +2,7 @@ package com.noar.boot.auth.security;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 import com.noar.boot.auth.Constants;
+import com.noar.boot.auth.web.filter.AuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -21,6 +23,9 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Resource
 	private Environment env;
+	
+	@Autowired
+	AuthenticationFilter authenticationFilter;
 	
 	/**
 	 * 암호화 Algorithm 설정
@@ -69,6 +74,18 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
 	// {
 	// auth.userDetailsService(userDetailsService).passwordEncoder(messageDigestPasswordEncoder);
 	// }
+	
+//	@Bean(name = "springSecurityFilterChain")
+//	public FilterChainProxy getFilterChainProxy() throws ServletException, Exception {
+//		List<SecurityFilterChain> listOfFilterChains = new ArrayList<SecurityFilterChain>();
+//		// listOfFilterChains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher("/home**")));
+//		// listOfFilterChains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher("/resources/**")));
+//		// listOfFilterChains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher("/**"), securityContextPersistenceFilter(), logoutFilter(),
+//		// usernamePasswordAuthenticationFilter(), exceptionTranslationFilter(), filterSecurityInterceptor()));
+//		
+//		listOfFilterChains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher("/*.json"), authenticationFilter));
+//		return new FilterChainProxy(listOfFilterChains);
+//	}
 	
 	/*private Filter csrfHeaderFilter() {
 		return new OncePerRequestFilter() {

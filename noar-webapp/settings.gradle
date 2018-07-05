@@ -1,5 +1,8 @@
-include ':noar-common-util', ':noar-dbist', ':noar-core'
+include ':noar-common-util', ':noar-dbist', ':noar-core', ':noar-boot-auth'
+
 project(':noar-common-util').projectDir = new File(settingsDir, '../noar-common-util')
 project(':noar-dbist').projectDir = new File(settingsDir, '../noar-dbist')
 project(':noar-core').projectDir = new File(settingsDir, '../noar-core')
-rootProject.name = 'noar-webapp'
+project(':noar-boot-auth').projectDir = new File(settingsDir, '../noar-boot-auth')
+
+//rootProject.name = 'noar-webapp'

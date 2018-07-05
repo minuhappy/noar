@@ -46,4 +46,5 @@ dependencies {
 	compile project(':noar-common-util')
 	compile project(':noar-dbist')
     compile project(':noar-core')
+//    compile project(':noar-boot-auth')
 }
