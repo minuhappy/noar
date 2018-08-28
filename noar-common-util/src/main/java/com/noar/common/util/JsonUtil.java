@@ -1,15 +1,17 @@
 package com.noar.common.util;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
+import org.json.JSONTokener;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 public class JsonUtil {
 	private static Gson simpleGson;
@@ -56,21 +58,23 @@ public class JsonUtil {
 	}
 
 	public static String toJsonString(Object item, boolean isUnderScore, boolean pretty) {
-		if (pretty) {
-			return simpleGson.toJson(item);
-		} else {
-			return new Gson().toJson(item);
-		}
+		return isUnderScore ? toUnderScoreJsonString(item, pretty) : toSimpleJsonString(item, pretty);
 	}
 
-	/**
-	 * Convert Object To JSON String
-	 * 
-	 * @param item
-	 * @return
-	 */
+	public static String toSimpleJsonString(Object item) {
+		return simpleGson.toJson(item);
+	}
+
+	public static String toSimpleJsonString(Object item, boolean pretty) {
+		return pretty ? simplePrettyGson.toJson(item) : simpleGson.toJson(item);
+	}
+
 	public static String toUnderScoreJsonString(Object item) {
 		return underScoreGson.toJson(item);
+	}
+
+	public static String toUnderScoreJsonString(Object item, boolean pretty) {
+		return pretty ? underScorePrettyGson.toJson(item) : underScoreGson.toJson(item);
 	}
 
 	/**
@@ -92,11 +96,11 @@ public class JsonUtil {
 		return underScoreGson.fromJson(jsonStr, inputType);
 	}
 
-	// public static <T> List<T> jsonToList(Class<T> clazz, String value) {
-	// Type listType = new TypeToken<ArrayList<T>>() {
-	// }.getType();
-	// return simpleGson.fromJson(value, listType);
-	// }
+	public static <T> List<T> jsonToList(Class<T> clazz, String value) {
+		Type listType = new TypeToken<ArrayList<T>>() {
+		}.getType();
+		return simpleGson.fromJson(value, listType);
+	}
 
 	public static <T> List<T> jsonArrayToObjectList(String content, Class<T> clazz) throws Exception {
 		return jsonArrayToObjectList(content, clazz, false);
@@ -115,10 +119,6 @@ public class JsonUtil {
 		return list;
 	}
 
-	public static boolean isJsonArray(String value) {
-		return ValueUtil.checkValue(StringUtils.trim(value), "").startsWith("[");
-	}
-
 	/**
 	 * json Content를 JSONArray로 파싱
 	 * 
@@ -129,14 +129,17 @@ public class JsonUtil {
 		return (JSONArray) new JSONParser().parse(content);
 	}
 
-	// public static <T> List<T> underScoreJsonToList(Class<T> clazz, String value) {
-	// Type listType = new TypeToken<ArrayList<T>>() {
-	// }.getType();
-	// return simpleGson.fromJson(value, listType);
-	// }
+	public static <T> List<T> underScoreJsonToList(Class<T> clazz, String value) {
+		Type listType = new TypeToken<ArrayList<T>>() {
+		}.getType();
+		return simpleGson.fromJson(value, listType);
+	}
+
+	public static boolean isJsonArray(String value) {
+		return new JSONTokener(value).nextValue() instanceof org.json.JSONArray;
+	}
 
 	// public static boolean isJsonArray(String value) {
-	// Object json = new JSONTokener(value).nextValue();
-	// return json instanceof org.json.JSONArray;
+	// return ValueUtil.checkValue(StringUtils.trim(value), "").startsWith("[");
 	// }
 }
