@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.converter.MessageConverter;
 import org.springframework.messaging.converter.StringMessageConverter;
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.AbstractWebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
@@ -14,12 +15,18 @@ import com.noar.stomp.Constants;
 
 @Configuration
 @EnableWebSocketMessageBroker
-public class WebSocketMessageBrokerConfig extends AbstractWebSocketMessageBrokerConfigurer {
+public class StompMessageBrokerConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
 	@Override
 	public boolean configureMessageConverters(List<MessageConverter> converters) {
 		converters.add(new StringMessageConverter());
 		return false;
+	}
+	
+	@Override
+	public void configureMessageBroker(MessageBrokerRegistry config) {
+		config.enableSimpleBroker(Constants.DEFAULT_STOMP_DEFAULT_BROKER);
+		// config.setApplicationDestinationPrefixes("/stomp");
 	}
 
 	@Override
