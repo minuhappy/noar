@@ -41,6 +41,7 @@ ext {
 dependencies {
     // Spring Boot
 	compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
-	compile("org.springframework:spring-messaging:4.3.6.RELEASE")
-	compile("org.springframework:spring-websocket:4.3.6.RELEASE")
+	compile("org.springframework:spring-aspects:4.3.18.RELEASE")
+	// Mail
+	compile("com.microsoft.ews-java-api:ews-java-api:2.0")
 }

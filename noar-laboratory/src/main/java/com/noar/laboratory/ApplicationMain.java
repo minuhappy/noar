@@ -17,6 +17,5 @@ public class ApplicationMain {
 
 		Environment env = configurableApplicationContext.getBean(Environment.class);
 		System.out.println(env.getClass().getSimpleName());
-		
 	}
 }
