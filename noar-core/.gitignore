@@ -1,2 +1,10 @@
-/.gradle/
 /bin/
+/build/
+/logs/
+/.gradle/
+/.settings/
+/.apt_generated/
+.classpath
+.project
+*.log
+.DS_Store
