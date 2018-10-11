@@ -143,8 +143,11 @@ class SimpleThread {
 	public String start(Map<String, Object> properties) {
 		double start = System.currentTimeMillis();
 		ThreadUtil.putAll(properties);
-		runnable.run();
-		ThreadUtil.removeAll();
+		try {
+			runnable.run();
+		} finally {
+			ThreadUtil.removeAll();
+		}
 		return ValueUtil.toString(System.currentTimeMillis() - start);
 	}
 }
