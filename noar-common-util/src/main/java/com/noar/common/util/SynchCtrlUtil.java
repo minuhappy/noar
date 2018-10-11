@@ -29,7 +29,7 @@ public class SynchCtrlUtil {
 
 	public static <K, T> T wrap(final String name, final Map<K, T> cache, final K key, final IScope<T> scope) throws Throwable {
 		ValueUtil.assertNotEmpty("name", name);
-//		ValueUtil.assertNotEmpty("cache", cache);
+		// ValueUtil.assertNotEmpty("cache", cache);
 
 		final boolean debug = logger.isDebugEnabled();
 
