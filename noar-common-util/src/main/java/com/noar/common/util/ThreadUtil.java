@@ -82,7 +82,7 @@ public class ThreadUtil {
 			try {
 				scope.execute();
 			} catch (Throwable e) {
-				e.printStackTrace();
+				throw new RuntimeException(e);
 			}
 		}).start(properties);
 	}
