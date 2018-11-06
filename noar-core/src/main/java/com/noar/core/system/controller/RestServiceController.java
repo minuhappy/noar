@@ -12,11 +12,11 @@ import com.noar.common.util.BeanUtil;
 import com.noar.common.util.IScope;
 import com.noar.common.util.ThreadPropertyUtil;
 import com.noar.core.Constants;
-import com.noar.core.system.handler.EntityServiceHandler;
+import com.noar.core.system.handler.RestServiceHandler;
 import com.noar.core.util.TransactionUtil;
 
 @RestController
-public class EntityRestController {
+public class RestServiceController {
 //	@RequestMapping(value = "**/entity/**/*", headers = "Accept=application/json;charset=UTF-8")
 	@RequestMapping(value = "/rest/**/*", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody Object restService(HttpServletRequest req, HttpServletResponse res) throws Throwable {
@@ -46,7 +46,7 @@ public class EntityRestController {
 		return TransactionUtil.doScope("RestServiceUtil.Invoke", new IScope<Object>() {
 			@Override
 			public Object execute() throws Throwable {
-				return BeanUtil.get(EntityServiceHandler.class).invoke(req);
+				return BeanUtil.get(RestServiceHandler.class).invoke(req);
 			}
 		});
 	}

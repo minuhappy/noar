@@ -6,9 +6,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.noar.common.util.IScope;
 import com.noar.core.exception.ServerException;
@@ -23,29 +21,26 @@ import com.noar.core.util.TransactionUtil;
 @Component
 public class ServiceAspect {
 
-	@Pointcut("execution(* com.noar.core..*Biz.*(..)) || execution(* com.noar.core.system.handler.EntityServiceHandler.invoke(..))")
-	public void targetMethod() {
-	}
+	// @Pointcut("execution(* com.noar.core..*Biz.*(..)) || execution(* com.noar.core.system.handler.RestServiceHandler.invoke(..))")
+	// public void targetMethod() {
+	// }
 
 	/**
 	 * 서비스 핸들러가 실행되기 전 Filtering 과정을 수행한다.
 	 * 
 	 * @param joinPoint
 	 */
-	@Around("targetMethod()")
+	// @Around("targetMethod()")
+	@Around("execution(* com.noar.core..*Biz.*(..)) || execution(* com.noar.core.system.handler.RestServiceHandler.invoke(..))")
 	public Object invoke(ProceedingJoinPoint call) throws Throwable {
 		/**
 		 * Meta-Info
 		 */
 		final Class<? extends Object> clazz = call.getTarget().getClass();
 		final Method method = this.getMethod(call.getSignature());
-
-		// @Transaction 정보 추출
-		Transactional transactional = method == null ? null : method.getAnnotation(Transactional.class);
-
 		String name = new StringBuffer().append(clazz.getName()).append(".").append(method.getName()).toString();
 
-		return TransactionUtil.doScope(name, transactional, new IScope<Object>() {
+		return TransactionUtil.doScope(name, null, new IScope<Object>() {
 			@Override
 			public Object execute() throws Throwable {
 				return call.proceed();

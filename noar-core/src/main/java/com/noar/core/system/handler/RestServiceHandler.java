@@ -30,10 +30,10 @@ import com.noar.dbist.dml.Query;
 /**
  * @author Administrator
  */
-public class EntityServiceHandler {
+public class RestServiceHandler {
 	boolean isUnderScoreCase;
 
-	public EntityServiceHandler() {
+	public RestServiceHandler() {
 		isUnderScoreCase = ValueUtil.toBoolean(PropertyUtil.getProperty(ConfigConstants.ENTITY_SERVICE_UNDERSOCRE_JSON), true);
 	}
 
@@ -110,7 +110,7 @@ public class EntityServiceHandler {
 				// Get Service Class
 				Class<?> entityClass = getEntityByTableName(tableName);
 				if (entityClass == null)
-					throw new ServiceException("Invalide Table Name : " + tableName);
+					throw new ServiceException("Invalide Entity Name : " + tableName);
 
 				ServiceInfo service = new ServiceInfo();
 				service.setBean(entityClass.newInstance());

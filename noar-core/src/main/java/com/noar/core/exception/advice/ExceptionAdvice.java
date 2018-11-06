@@ -1,4 +1,4 @@
-package com.noar.core.system.controller.Advice;
+package com.noar.core.exception.advice;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
