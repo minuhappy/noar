@@ -56,11 +56,21 @@ public class WebSocketConfig implements WebSocketConfigurer {
 		this.logger.info("WebSocket Configuration Starting ...");
 		String MessageBufferSize = env.getProperty(ConfigConstants.WEBSOCKET_MAX_TEXT_MESSAGE_BUFFER_SIZE, "20242880");
 		String BinaryBufferSize = env.getProperty(ConfigConstants.WEBSOCKET_MAX_BINARY_MESSAGE_BUFFER_SIZE, "20242880");
+		long maxSessionIdleTimeout = env.getProperty(ConfigConstants.WEBSOCKET_MAX_SESSION_IDLE_TIMEOUT, Long.class, 0L);
+		long asyncSendTimeout = env.getProperty(ConfigConstants.WEBSOCKET_ASYNC_SEND_TIMEOUT, Long.class, 0L);
 
 		ServletServerContainerFactoryBean container = new ServletServerContainerFactoryBean();
 		container.setMaxTextMessageBufferSize(Integer.parseInt(MessageBufferSize));
 		container.setMaxBinaryMessageBufferSize(Integer.parseInt(BinaryBufferSize));
+
+		if (maxSessionIdleTimeout > 0L)
+			container.setMaxSessionIdleTimeout(maxSessionIdleTimeout);
+
+		if (asyncSendTimeout > 0L)
+			container.setAsyncSendTimeout(asyncSendTimeout);
+
 		this.logger.info("WebSocket Configuration Finished ...");
+
 		return container;
 	}
 }

@@ -26,5 +26,6 @@ public class StompClientExample {
 		DefaultStompSession session = stompConnection.connect(host, port, Constants.DEFAULT_STOMP_SERVER_ENDPOINT, stompSessionHandler);
 
 		session.send(subject, "Success".getBytes(Charset.forName("UTF-8")));
+		session.subscribe(subject, stompSessionHandler);
 	}
 }

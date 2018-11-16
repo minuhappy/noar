@@ -8,7 +8,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.event.EventListener;
 import org.springframework.messaging.converter.SimpleMessageConverter;
 import org.springframework.messaging.simp.stomp.ConnectionLostException;
 import org.springframework.messaging.simp.stomp.DefaultStompSession;
@@ -20,9 +19,7 @@ import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
-import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 import org.springframework.web.socket.sockjs.client.RestTemplateXhrTransport;
 import org.springframework.web.socket.sockjs.client.SockJsClient;
@@ -150,17 +147,5 @@ public class StompConnection {
 	private boolean disconnect(DefaultStompSession stompSession) {
 		stompSession.disconnect();
 		return true;
-	}
-
-	/**
-	 * Session이 disconnect될 때 핸들러
-	 * 
-	 * @param event
-	 */
-	@EventListener
-	private void handleSessionDisconnect(SessionDisconnectEvent event) {
-		String sessionId = event.getSessionId();
-		CloseStatus status = event.getCloseStatus();
-		logger.error("Session disconnected : sessionId " + sessionId + ", close status : " + status.getReason());
 	}
 }
