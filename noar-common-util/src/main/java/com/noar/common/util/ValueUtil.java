@@ -36,10 +36,6 @@ public class ValueUtil {
 	public static final String DATEPATTERN_SMALLDATETIME_SHORT = "yyyyMMddHHmmss";
 	public static final String DATEPATTERN_DATE_SHORT = "yyyyMMdd";
 
-	public static final int DELIMITERCASETYPE_LOWER = 0;
-	public static final int DELIMITERCASETYPE_UPPER = 1;
-	public static final int DELIMITERCASETYPE_UPPERANDLOWER = 2;
-
 	private static final List<String> DATEPATTERN_LIST;
 	static {
 		DATEPATTERN_LIST = new ArrayList<String>();
@@ -591,24 +587,24 @@ public class ValueUtil {
 		}
 		return e instanceof Exception ? (Exception) e : new Exception(e);
 	}
-	
+
 	/**
 	 * Proxy 객체를 원래의 타입으로 변환.
 	 * 
 	 * @param obj
 	 * @return
 	 */
-//	public static <T> T deProxy(T obj) {
-//		if (obj == null)
-//			return obj;
-//		if (obj instanceof HibernateProxy) {
-//			HibernateProxy proxy = (HibernateProxy) obj;
-//			LazyInitializer li = proxy.getHibernateLazyInitializer();
-//			return (T) li.getImplementation();
-//		}
-//		return obj;
-//	}
-	
+	// public static <T> T deProxy(T obj) {
+	// if (obj == null)
+	// return obj;
+	// if (obj instanceof HibernateProxy) {
+	// HibernateProxy proxy = (HibernateProxy) obj;
+	// LazyInitializer li = proxy.getHibernateLazyInitializer();
+	// return (T) li.getImplementation();
+	// }
+	// return obj;
+	// }
+
 	/**
 	 * 화면에 에러 메시지를 표시하기 위한 형태로 객체 변경.
 	 * 
@@ -616,56 +612,56 @@ public class ValueUtil {
 	 * @return
 	 * @throws Exception
 	 */
-//	public static Object toMessage(Throwable t) throws Exception {
-//		AbstractEntity abstractInOutData = new AbstractEntity();
-//		abstractInOutData.setSuccess(false);
-//		Exception e = unwrapException(t);
-//
-//		// 정보성 Error의 경우 Message의 내용만 Setting하여 Return
-//		if (e instanceof ServiceException) {
-//			abstractInOutData.setMessage(e.getMessage());
-//			return abstractInOutData;
-//		}
-//
-//		// TODO Exception 타입별 Message 지정 해야 함.
-//		String message = null;
-//		String detailMessage = null;
-//		if (e instanceof SystemException) {
-//			// AbstractException 구현체는 UserMessage를 우선 적용.
-//			String userMsg = ((SystemException) e).getMessage();
-//			message = ValueUtils.isEmpty(userMsg) ? e.getMessage() : userMsg;
-//		}
-//		// Normal Bug Exception
-//		else if (e instanceof NullPointerException) {
-//			message = "NullPointerException";
-//		}
-//		// DB Program Bug Exception
-//		else if (e instanceof BadSqlGrammarException) {
-//			message = "BadSqlGrammarException";
-//		} else if (e instanceof DataIntegrityViolationException) {
-//			message = "DataIntegrityViolationException";
-//		}
-//		// DB Server Exception
-//		else if (t instanceof SQLRecoverableException) {
-//			message = "SQLRecoverableException";
-//		} else if (t instanceof TransientDataAccessResourceException) {
-//			message = "TransientDataAccessResourceException";
-//		} else if (t instanceof SQLTimeoutException) {
-//			message = "SQLTimeoutException";
-//		} else {
-//			message = e.getMessage();
-//		}
-//
-//		if (ValueUtil.isEmpty(detailMessage)) {
-//			detailMessage = e.toString();
-//		}
-//
-//		abstractInOutData.setMessage(message);
-//		abstractInOutData.setDetailMessage(detailMessage);
-//		abstractInOutData.setErrTrace(ValueUtil.getErrorStackTraceToString(e));
-//
-//		LOGGER.error(ValueUtil.getAllErrorStackTraceToString(e));
-//
-//		return abstractInOutData;
-//	}
+	// public static Object toMessage(Throwable t) throws Exception {
+	// AbstractEntity abstractInOutData = new AbstractEntity();
+	// abstractInOutData.setSuccess(false);
+	// Exception e = unwrapException(t);
+	//
+	// // 정보성 Error의 경우 Message의 내용만 Setting하여 Return
+	// if (e instanceof ServiceException) {
+	// abstractInOutData.setMessage(e.getMessage());
+	// return abstractInOutData;
+	// }
+	//
+	// // TODO Exception 타입별 Message 지정 해야 함.
+	// String message = null;
+	// String detailMessage = null;
+	// if (e instanceof SystemException) {
+	// // AbstractException 구현체는 UserMessage를 우선 적용.
+	// String userMsg = ((SystemException) e).getMessage();
+	// message = ValueUtils.isEmpty(userMsg) ? e.getMessage() : userMsg;
+	// }
+	// // Normal Bug Exception
+	// else if (e instanceof NullPointerException) {
+	// message = "NullPointerException";
+	// }
+	// // DB Program Bug Exception
+	// else if (e instanceof BadSqlGrammarException) {
+	// message = "BadSqlGrammarException";
+	// } else if (e instanceof DataIntegrityViolationException) {
+	// message = "DataIntegrityViolationException";
+	// }
+	// // DB Server Exception
+	// else if (t instanceof SQLRecoverableException) {
+	// message = "SQLRecoverableException";
+	// } else if (t instanceof TransientDataAccessResourceException) {
+	// message = "TransientDataAccessResourceException";
+	// } else if (t instanceof SQLTimeoutException) {
+	// message = "SQLTimeoutException";
+	// } else {
+	// message = e.getMessage();
+	// }
+	//
+	// if (ValueUtil.isEmpty(detailMessage)) {
+	// detailMessage = e.toString();
+	// }
+	//
+	// abstractInOutData.setMessage(message);
+	// abstractInOutData.setDetailMessage(detailMessage);
+	// abstractInOutData.setErrTrace(ValueUtil.getErrorStackTraceToString(e));
+	//
+	// LOGGER.error(ValueUtil.getAllErrorStackTraceToString(e));
+	//
+	// return abstractInOutData;
+	// }
 }

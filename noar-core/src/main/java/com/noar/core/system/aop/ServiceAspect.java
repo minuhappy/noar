@@ -57,12 +57,12 @@ public class ServiceAspect {
 	private Method getMethod(Signature signature) {
 		try {
 			Method getMethod = signature.getClass().getMethod("getMethod");
-			if (getMethod == null) {
+			if (getMethod == null)
 				return null;
-			}
-			if (!getMethod.isAccessible()) {
+
+			if (!getMethod.isAccessible())
 				getMethod.setAccessible(true);
-			}
+
 			return (Method) getMethod.invoke(signature);
 		} catch (Exception e) {
 			throw new ServerException("Check signature concrete type: " + signature.getClass());

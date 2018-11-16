@@ -17,7 +17,6 @@ import com.noar.core.util.TransactionUtil;
 
 @RestController
 public class RestServiceController {
-//	@RequestMapping(value = "**/entity/**/*", headers = "Accept=application/json;charset=UTF-8")
 	@RequestMapping(value = "/rest/**/*", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody Object restService(HttpServletRequest req, HttpServletResponse res) throws Throwable {
 		return ThreadPropertyUtil.doScope(new IScope<Object>() {

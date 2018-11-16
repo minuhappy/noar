@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.noar.common.util.BeanUtil;
+import com.noar.common.util.ValueUtil;
 import com.noar.dbist.dml.Dml;
 import com.noar.dbist.dml.Page;
 import com.noar.dbist.dml.Query;
@@ -12,10 +13,7 @@ public class DbistWrapper implements IOrmWrapper {
 	private Dml dml;
 
 	private Dml getDml() {
-		if (dml == null) {
-			dml = BeanUtil.get(Dml.class);
-		}
-		return dml;
+		return ValueUtil.checkValue(dml, BeanUtil.get(Dml.class));
 	}
 
 	public <T> T select(T data) throws Exception {

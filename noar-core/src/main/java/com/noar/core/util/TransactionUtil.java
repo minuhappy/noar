@@ -9,6 +9,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.noar.common.util.BeanUtil;
 import com.noar.common.util.IScope;
+import com.noar.common.util.ValueUtil;
 import com.noar.core.ConfigConstants;
 import com.noar.core.exception.ServerException;
 
@@ -16,22 +17,16 @@ import com.noar.core.exception.ServerException;
  * @author Minu.Kim
  */
 public class TransactionUtil {
-	private static PlatformTransactionManager manager;
 
 	private static Integer timeout;
+	private static PlatformTransactionManager manager;
 
 	public static PlatformTransactionManager getManager() {
-		if (manager == null) {
-			manager = BeanUtil.get("transactionManager", PlatformTransactionManager.class);
-		}
-		return manager;
+		return ValueUtil.checkValue(manager, BeanUtil.get("transactionManager", PlatformTransactionManager.class));
 	}
 
 	public static int getTimeout() {
-		if (timeout == null) {
-			timeout = ConfigConstants.TX_TIMEOUT;
-		}
-		return timeout;
+		return ValueUtil.checkValue(timeout, ConfigConstants.TX_TIMEOUT);
 	}
 
 	/**

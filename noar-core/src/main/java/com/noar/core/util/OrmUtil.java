@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.noar.common.util.BeanUtil;
+import com.noar.common.util.ValueUtil;
 import com.noar.core.orm.wrapper.DbistWrapper;
 import com.noar.core.orm.wrapper.IOrmWrapper;
 import com.noar.dbist.dml.Page;
@@ -14,239 +15,236 @@ import com.noar.dbist.dml.Query;
  * 
  * @author Minu.Kim
  */
-public class CrudUtil {
+public class OrmUtil {
 
 	private static IOrmWrapper ormWrapper;
 
-	static {
-		ormWrapper = BeanUtil.get(DbistWrapper.class);
-	}
-	
-	// private static IOrmWrapper getOrmWrapper() {
-	// if (ormWrapper == null) {
-	// ormWrapper = BeanUtil.get(DbistWrapper.class);
-	// }
-	// return ormWrapper;
+	// static {
+	// getOrmWrapper() = BeanUtil.get(DbistWrapper.class);
 	// }
 
+	private static IOrmWrapper getOrmWrapper() {
+		return ValueUtil.checkValue(ormWrapper, BeanUtil.get(DbistWrapper.class));
+	}
+
 	public static <T> T select(T data) throws Exception {
-		return ormWrapper.select(data);
+		return getOrmWrapper().select(data);
 	}
 
 	public static <T> T selectWithLock(T data) throws Exception {
-		return ormWrapper.selectWithLock(data);
+		return getOrmWrapper().selectWithLock(data);
 	}
 
 	public static <T> T select(Class<T> clazz, Object... pkCondition) throws Exception {
-		return ormWrapper.select(clazz, pkCondition);
+		return getOrmWrapper().select(clazz, pkCondition);
 	}
 
 	public static <T> T selectWithLock(Class<T> clazz, Object... pkCondition) throws Exception {
-		return ormWrapper.select(clazz, pkCondition);
+		return getOrmWrapper().select(clazz, pkCondition);
 	}
 
 	public static <T> T selectByCondition(T data) throws Exception {
-		return ormWrapper.selectByCondition(data);
+		return getOrmWrapper().selectByCondition(data);
 	}
 
 	public static <T> T selectByCondition(Class<T> clazz, T condition) throws Exception {
-		return ormWrapper.selectByCondition(clazz, condition);
+		return getOrmWrapper().selectByCondition(clazz, condition);
 	}
 
 	public static <T> T selectByConditionWithLock(Class<T> clazz, Object condition) throws Exception {
-		return ormWrapper.selectByConditionWithLock(clazz, condition);
+		return getOrmWrapper().selectByConditionWithLock(clazz, condition);
 	}
 
 	public static <T> T select(String tableName, Object pkCondition, Class<T> requiredType) throws Exception {
-		return ormWrapper.select(tableName, pkCondition, requiredType);
+		return getOrmWrapper().select(tableName, pkCondition, requiredType);
 	}
 
 	public static <T> T selectWithLock(String tableName, Object pkCondition, Class<T> requiredType) throws Exception {
-		return ormWrapper.selectWithLock(tableName, pkCondition, requiredType);
+		return getOrmWrapper().selectWithLock(tableName, pkCondition, requiredType);
 	}
 
 	public static <T> T selectByCondition(String tableName, Object condition, Class<T> requiredType) throws Exception {
-		return ormWrapper.selectByCondition(tableName, condition, requiredType);
+		return getOrmWrapper().selectByCondition(tableName, condition, requiredType);
 	}
 
 	public static <T> T selectByConditionWithLock(String tableName, Object condition, Class<T> requiredType) throws Exception {
-		return ormWrapper.selectByConditionWithLock(tableName, condition, requiredType);
+		return getOrmWrapper().selectByConditionWithLock(tableName, condition, requiredType);
 	}
 
 	public static <T> T selectByQl(String ql, Map<String, ?> paramMap, Class<T> requiredType) throws Exception {
-		return ormWrapper.selectByQl(ql, paramMap, requiredType);
+		return getOrmWrapper().selectByQl(ql, paramMap, requiredType);
 	}
 
 	public static <T> T selectByQlPath(String qlPath, Map<String, ?> paramMap, Class<T> requiredType) throws Exception {
-		return ormWrapper.selectByQlPath(qlPath, paramMap, requiredType);
+		return getOrmWrapper().selectByQlPath(qlPath, paramMap, requiredType);
 	}
 
 	public static <T> T selectBySql(String sql, Map<String, ?> paramMap, Class<T> requiredType) throws Exception {
-		return ormWrapper.selectBySql(sql, paramMap, requiredType);
+		return getOrmWrapper().selectBySql(sql, paramMap, requiredType);
 	}
 
 	public static <T> T selectBySqlPath(String sqlPath, Map<String, ?> paramMap, Class<T> requiredType) throws Exception {
-		return ormWrapper.selectBySqlPath(sqlPath, paramMap, requiredType);
+		return getOrmWrapper().selectBySqlPath(sqlPath, paramMap, requiredType);
 	}
 
 	public static void insert(Object data) throws Exception {
-		ormWrapper.insert(data);
+		getOrmWrapper().insert(data);
 	}
 
 	public static void insertBatch(List<?> list) throws Exception {
-		ormWrapper.insertBatch(list);
+		getOrmWrapper().insertBatch(list);
 	}
 
 	public static <T> T insert(Class<T> clazz, Object data) throws Exception {
-		return ormWrapper.insert(clazz, data);
+		return getOrmWrapper().insert(clazz, data);
 	}
 
 	public static void insertBatch(Class<?> clazz, List<?> list) throws Exception {
-		ormWrapper.insertBatch(clazz, list);
+		getOrmWrapper().insertBatch(clazz, list);
 	}
 
 	public static void insert(String tableName, Object data) throws Exception {
-		ormWrapper.insert(data);
+		getOrmWrapper().insert(data);
 	}
 
 	public static void insertBatch(String tableName, List<?> list) throws Exception {
-		ormWrapper.insertBatch(tableName, list);
+		getOrmWrapper().insertBatch(tableName, list);
 	}
 
 	public static void update(Object data) throws Exception {
-		ormWrapper.update(data);
+		getOrmWrapper().update(data);
 	}
 
 	public static void updateBatch(List<?> list) throws Exception {
-		ormWrapper.updateBatch(list);
+		getOrmWrapper().updateBatch(list);
 	}
 
 	public static void update(Object data, String... fieldNames) throws Exception {
-		ormWrapper.update(data, fieldNames);
+		getOrmWrapper().update(data, fieldNames);
 	}
 
 	public static void updateBatch(List<?> list, String... fieldNames) throws Exception {
-		ormWrapper.updateBatch(list, fieldNames);
+		getOrmWrapper().updateBatch(list, fieldNames);
 	}
 
 	public static <T> T update(Class<T> clazz, Object data) throws Exception {
-		return ormWrapper.update(clazz, data);
+		return getOrmWrapper().update(clazz, data);
 	}
 
 	public static <T> T update(Class<T> clazz, Object data, String... fieldNames) throws Exception {
-		return ormWrapper.update(clazz, data, fieldNames);
+		return getOrmWrapper().update(clazz, data, fieldNames);
 	}
 
 	public static void update(String tableName, Object data) throws Exception {
-		ormWrapper.update(tableName, data);
+		getOrmWrapper().update(tableName, data);
 	}
 
 	public static void updateBatch(String tableName, List<?> list) throws Exception {
-		ormWrapper.updateBatch(tableName, list);
+		getOrmWrapper().updateBatch(tableName, list);
 	}
 
 	public static void update(String tableName, Object data, String... fieldNames) throws Exception {
-		ormWrapper.update(tableName, data, fieldNames);
+		getOrmWrapper().update(tableName, data, fieldNames);
 	}
 
 	public static void updateBatch(String tableName, List<?> list, String... fieldNames) throws Exception {
-		ormWrapper.updateBatch(tableName, list, fieldNames);
+		getOrmWrapper().updateBatch(tableName, list, fieldNames);
 	}
 
 	public static void upsert(Object data) throws Exception {
-		ormWrapper.upsert(data);
+		getOrmWrapper().upsert(data);
 	}
 
 	public static void upsertBatch(List<?> list) throws Exception {
-		ormWrapper.upsertBatch(list);
+		getOrmWrapper().upsertBatch(list);
 	}
 
 	public static <T> T upsert(Class<T> clazz, Object data) throws Exception {
-		return ormWrapper.upsert(clazz, data);
+		return getOrmWrapper().upsert(clazz, data);
 	}
 
 	public static void upsertBatch(Class<?> clazz, List<?> list) throws Exception {
-		ormWrapper.upsertBatch(clazz, list);
+		getOrmWrapper().upsertBatch(clazz, list);
 	}
 
 	public static void upsert(String tableName, Object data) throws Exception {
-		ormWrapper.upsert(tableName, data);
+		getOrmWrapper().upsert(tableName, data);
 	}
 
 	public static void upsertBatch(String tableName, List<?> list) throws Exception {
-		ormWrapper.upsertBatch(tableName, list);
+		getOrmWrapper().upsertBatch(tableName, list);
 	}
 
 	public static void delete(Object data) throws Exception {
-		ormWrapper.delete(data);
+		getOrmWrapper().delete(data);
 	}
 
 	public static void deleteBatch(List<?> list) throws Exception {
-		ormWrapper.deleteBatch(list);
+		getOrmWrapper().deleteBatch(list);
 	}
 
 	public static <T> T delete(Class<T> clazz, Object... pkCondition) throws Exception {
-		return ormWrapper.delete(clazz, pkCondition);
+		return getOrmWrapper().delete(clazz, pkCondition);
 	}
 
 	public static void deleteBatch(Class<?> clazz, List<?> list) throws Exception {
-		ormWrapper.deleteBatch(clazz, list);
+		getOrmWrapper().deleteBatch(clazz, list);
 	}
 
 	public static <T> T deleteByCondition(T condition) throws Exception {
-		return ormWrapper.deleteByCondition(condition);
+		return getOrmWrapper().deleteByCondition(condition);
 	}
 
 	public static <T> T deleteByCondition(Class<T> clazz, Object condition) throws Exception {
-		return ormWrapper.deleteByCondition(clazz, condition);
+		return getOrmWrapper().deleteByCondition(clazz, condition);
 	}
 
 	public static void delete(String tableName, Object... pkCondition) throws Exception {
-		ormWrapper.delete(tableName, pkCondition);
+		getOrmWrapper().delete(tableName, pkCondition);
 	}
 
 	public static void deleteBatch(String tableName, List<?> list) throws Exception {
-		ormWrapper.deleteBatch(tableName, list);
+		getOrmWrapper().deleteBatch(tableName, list);
 	}
 
 	public static void deleteByCondition(String tableName, Object condition) throws Exception {
-		ormWrapper.deleteByCondition(tableName, condition);
+		getOrmWrapper().deleteByCondition(tableName, condition);
 	}
 
 	public static int selectSize(Class<?> clazz, Object condition) throws Exception {
-		return ormWrapper.selectSize(clazz, condition);
+		return getOrmWrapper().selectSize(clazz, condition);
 	}
 
 	public static <T> List<T> selectList(T condition) throws Exception {
-		return ormWrapper.selectList(condition);
+		return getOrmWrapper().selectList(condition);
 	}
 
 	public static <T> List<T> selectList(Class<T> clazz, Object condition) throws Exception {
-		return ormWrapper.selectList(clazz, condition);
+		return getOrmWrapper().selectList(clazz, condition);
 	}
 
 	public static <T> List<T> selectListWithLock(Class<T> clazz, Object condition) throws Exception {
-		return ormWrapper.selectListWithLock(clazz, condition);
+		return getOrmWrapper().selectListWithLock(clazz, condition);
 	}
 
 	public static <T> Page<T> selectPage(Class<T> clazz, Query query) throws Exception {
-		return ormWrapper.selectPage(clazz, query);
+		return getOrmWrapper().selectPage(clazz, query);
 	}
 
 	public static <T> int selectSize(String tableName, Object condition) throws Exception {
-		return ormWrapper.selectSize(tableName, condition);
+		return getOrmWrapper().selectSize(tableName, condition);
 	}
 
 	public static <T> List<T> selectList(String tableName, Object condition, Class<T> requiredType) throws Exception {
-		return ormWrapper.selectList(tableName, condition, requiredType);
+		return getOrmWrapper().selectList(tableName, condition, requiredType);
 	}
 
 	public static <T> List<T> selectListWithLock(String tableName, Object condition, Class<T> requiredType) throws Exception {
-		return ormWrapper.selectListWithLock(tableName, condition, requiredType);
+		return getOrmWrapper().selectListWithLock(tableName, condition, requiredType);
 	}
 
 	public static <T> Page<T> selectPage(String tableName, Query query, Class<T> requiredType) throws Exception {
-		return ormWrapper.selectPage(tableName, query, requiredType);
+		return getOrmWrapper().selectPage(tableName, query, requiredType);
 	}
 
 	public static <T> List<T> selectListByQl(String ql, Map<String, ?> paramMap, Class<T> requiredType) throws Exception {
@@ -254,7 +252,7 @@ public class CrudUtil {
 	}
 
 	public static <T> List<T> selectListByQl(String ql, Map<String, ?> paramMap, Class<T> requiredType, int pageIndex, int pageSize) throws Exception {
-		return ormWrapper.selectListByQl(ql, paramMap, requiredType, pageIndex, pageSize);
+		return getOrmWrapper().selectListByQl(ql, paramMap, requiredType, pageIndex, pageSize);
 	}
 
 	public static <T> Page<T> selectPageByQl(String ql, Map<String, ?> paramMap, Class<T> requiredType) throws Exception {
@@ -262,11 +260,11 @@ public class CrudUtil {
 	}
 
 	public static <T> Page<T> selectPageByQl(String ql, Map<String, ?> paramMap, Class<T> requiredType, int pageIndex, int pageSize) throws Exception {
-		return ormWrapper.selectPageByQl(ql, paramMap, requiredType, pageIndex, pageSize);
+		return getOrmWrapper().selectPageByQl(ql, paramMap, requiredType, pageIndex, pageSize);
 	}
 
 	public static int selectSizeByQl(String ql, Map<String, ?> paramMap) throws Exception {
-		return ormWrapper.selectSizeByQl(ql, paramMap);
+		return getOrmWrapper().selectSizeByQl(ql, paramMap);
 	}
 
 	public static <T> List<T> selectListByQlPath(String qlPath, Map<String, ?> paramMap, Class<T> requiredType) throws Exception {
@@ -274,7 +272,7 @@ public class CrudUtil {
 	}
 
 	public static <T> List<T> selectListByQlPath(String qlPath, Map<String, ?> paramMap, Class<T> requiredType, int pageIndex, int pageSize) throws Exception {
-		return ormWrapper.selectListByQlPath(qlPath, paramMap, requiredType, pageIndex, pageSize);
+		return getOrmWrapper().selectListByQlPath(qlPath, paramMap, requiredType, pageIndex, pageSize);
 	}
 
 	public static <T> Page<T> selectPageByQlPath(String qlPath, Map<String, ?> paramMap, Class<T> requiredType) throws Exception {
@@ -282,11 +280,11 @@ public class CrudUtil {
 	}
 
 	public static <T> Page<T> selectPageByQlPath(String qlPath, Map<String, ?> paramMap, Class<T> requiredType, int pageIndex, int pageSize) throws Exception {
-		return ormWrapper.selectPageByQlPath(qlPath, paramMap, requiredType, pageIndex, pageSize);
+		return getOrmWrapper().selectPageByQlPath(qlPath, paramMap, requiredType, pageIndex, pageSize);
 	}
 
 	public static int selectSizeByQlPath(String qlPath, Map<String, ?> paramMap) throws Exception {
-		return ormWrapper.selectSizeByQlPath(qlPath, paramMap);
+		return getOrmWrapper().selectSizeByQlPath(qlPath, paramMap);
 	}
 
 	public static <T> List<T> selectListBySql(String sql, Map<String, ?> paramMap, Class<T> requiredType) throws Exception {
@@ -294,7 +292,7 @@ public class CrudUtil {
 	}
 
 	public static <T> List<T> selectListBySql(String sql, Map<String, ?> paramMap, Class<T> requiredType, int pageIndex, int pageSize) throws Exception {
-		return ormWrapper.selectListBySql(sql, paramMap, requiredType, pageIndex, pageSize);
+		return getOrmWrapper().selectListBySql(sql, paramMap, requiredType, pageIndex, pageSize);
 	}
 
 	public static <T> Page<T> selectPageBySql(String sql, Map<String, ?> paramMap, Class<T> requiredType) throws Exception {
@@ -302,19 +300,19 @@ public class CrudUtil {
 	}
 
 	public static <T> Page<T> selectPageBySql(String sql, Map<String, ?> paramMap, Class<T> requiredType, int pageIndex, int pageSize) throws Exception {
-		return ormWrapper.selectPageBySql(sql, paramMap, requiredType, pageIndex, pageSize);
+		return getOrmWrapper().selectPageBySql(sql, paramMap, requiredType, pageIndex, pageSize);
 	}
 
 	public static int selectSizeBySql(String sql, Map<String, ?> paramMap) throws Exception {
-		return ormWrapper.selectSizeBySql(sql, paramMap);
+		return getOrmWrapper().selectSizeBySql(sql, paramMap);
 	}
 
 	public static <T> List<T> selectListBySqlPath(String sqlPath, Map<String, ?> paramMap, Class<T> requiredType) throws Exception {
-		return ormWrapper.selectListBySqlPath(sqlPath, paramMap, requiredType, 0, 0);
+		return getOrmWrapper().selectListBySqlPath(sqlPath, paramMap, requiredType, 0, 0);
 	}
 
 	public static <T> List<T> selectListBySqlPath(String sqlPath, Map<String, ?> paramMap, Class<T> requiredType, int pageIndex, int pageSize) throws Exception {
-		return ormWrapper.selectListBySqlPath(sqlPath, paramMap, requiredType, pageIndex, pageSize);
+		return getOrmWrapper().selectListBySqlPath(sqlPath, paramMap, requiredType, pageIndex, pageSize);
 	}
 
 	public static <T> Page<T> selectPageBySqlPath(String sqlPath, Map<String, ?> paramMap, Class<T> requiredType) throws Exception {
@@ -322,34 +320,34 @@ public class CrudUtil {
 	}
 
 	public static <T> Page<T> selectPageBySqlPath(String sqlPath, Map<String, ?> paramMap, Class<T> requiredType, int pageIndex, int pageSize) throws Exception {
-		return ormWrapper.selectPageBySqlPath(sqlPath, paramMap, requiredType, pageIndex, pageSize);
+		return getOrmWrapper().selectPageBySqlPath(sqlPath, paramMap, requiredType, pageIndex, pageSize);
 	}
 
 	public static int selectSizeBySqlPath(String sqlPath, Map<String, ?> paramMap) throws Exception {
-		return ormWrapper.selectSizeBySqlPath(sqlPath, paramMap);
+		return getOrmWrapper().selectSizeBySqlPath(sqlPath, paramMap);
 	}
 
 	public static <T> int deleteList(T condition) throws Exception {
-		return ormWrapper.deleteList(condition);
+		return getOrmWrapper().deleteList(condition);
 	}
 
 	public static int deleteList(Class<?> clazz, Object condition) throws Exception {
-		return ormWrapper.deleteList(clazz, condition);
+		return getOrmWrapper().deleteList(clazz, condition);
 	}
 
 	public static int executeByQl(String ql, Map<String, ?> paramMap) throws Exception {
-		return ormWrapper.executeByQl(ql, paramMap);
+		return getOrmWrapper().executeByQl(ql, paramMap);
 	}
 
 	public static int executeByQlPath(String qlPath, Map<String, ?> paramMap) throws Exception {
-		return ormWrapper.executeByQlPath(qlPath, paramMap);
+		return getOrmWrapper().executeByQlPath(qlPath, paramMap);
 	}
 
 	public static int executeBySql(String sql, Map<String, ?> paramMap) throws Exception {
-		return ormWrapper.executeBySql(sql, paramMap);
+		return getOrmWrapper().executeBySql(sql, paramMap);
 	}
 
 	public static int executeBySqlPath(String sqlPath, Map<String, ?> paramMap) throws Exception {
-		return ormWrapper.executeBySqlPath(sqlPath, paramMap);
+		return getOrmWrapper().executeBySqlPath(sqlPath, paramMap);
 	}
 }

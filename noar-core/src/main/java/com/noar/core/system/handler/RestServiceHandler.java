@@ -23,7 +23,7 @@ import com.noar.core.Constants;
 import com.noar.core.exception.ServerException;
 import com.noar.core.exception.ServiceException;
 import com.noar.core.system.base.ServiceInfo;
-import com.noar.core.util.CrudUtil;
+import com.noar.core.util.OrmUtil;
 import com.noar.dbist.annotation.Table;
 import com.noar.dbist.dml.Query;
 
@@ -127,9 +127,9 @@ public class RestServiceHandler {
 	@SuppressWarnings("rawtypes")
 	private Object doGet(Class<?> clazz, String urlParam, Map parameterMap) throws Exception {
 		if (ValueUtil.isNotEmpty(urlParam)) {
-			return CrudUtil.select(clazz, urlParam); // Select One
+			return OrmUtil.select(clazz, urlParam); // Select One
 		} else {
-			return CrudUtil.selectList(clazz, parameterMap); // List
+			return OrmUtil.selectList(clazz, parameterMap); // List
 		}
 	}
 
@@ -138,7 +138,7 @@ public class RestServiceHandler {
 		// Page 조회.
 		if (ValueUtil.isEqual(urlParam, Constants.ENTITY_SEARCH)) {
 			Query query = JsonUtil.jsonToObject(requestBody, Query.class, isUnderScoreCase);
-			return CrudUtil.selectPage(clazz, query);
+			return OrmUtil.selectPage(clazz, query);
 		}
 
 		// Delete
@@ -148,9 +148,9 @@ public class RestServiceHandler {
 
 		if (input instanceof List) {
 			List<T> list = (List<T>) input;
-			CrudUtil.insertBatch(list);
+			OrmUtil.insertBatch(list);
 		} else {
-			CrudUtil.insert(clazz, input);
+			OrmUtil.insert(clazz, input);
 		}
 		return input;
 	}
@@ -159,9 +159,9 @@ public class RestServiceHandler {
 	private <T> Object doPut(Class<T> clazz, Object input) throws Exception {
 		if (input instanceof List) {
 			List<T> list = (List<T>) input;
-			CrudUtil.updateBatch(list);
+			OrmUtil.updateBatch(list);
 		} else {
-			CrudUtil.update(clazz, input);
+			OrmUtil.update(clazz, input);
 		}
 		return input;
 	}
@@ -169,13 +169,13 @@ public class RestServiceHandler {
 	@SuppressWarnings("unchecked")
 	private <T> boolean doDelete(Class<T> clazz, String urlParam, Object input) throws Exception {
 		if (ValueUtil.isNotEmpty(urlParam)) {
-			CrudUtil.delete(clazz, urlParam);
+			OrmUtil.delete(clazz, urlParam);
 		} else {
 			if (input instanceof List) {
 				List<T> list = (List<T>) input;
-				CrudUtil.deleteBatch(list);
+				OrmUtil.deleteBatch(list);
 			} else {
-				CrudUtil.delete(clazz, input);
+				OrmUtil.delete(clazz, input);
 			}
 		}
 		return true;
