@@ -10,6 +10,7 @@ import com.noar.dbist.dml.Page;
 import com.noar.dbist.dml.Query;
 
 public class DbistWrapper implements IOrmWrapper {
+
 	private Dml dml;
 
 	private Dml getDml() {
@@ -34,8 +35,7 @@ public class DbistWrapper implements IOrmWrapper {
 
 	@SuppressWarnings("unchecked")
 	public <T> T selectByCondition(T data) throws Exception {
-		Class<T> clazz = (Class<T>) data.getClass();
-		return (T) getDml().selectByCondition(clazz, data);
+		return (T) getDml().selectByCondition(data.getClass(), data);
 	}
 
 	public <T> T selectByCondition(Class<T> clazz, T condition) throws Exception {
@@ -322,10 +322,8 @@ public class DbistWrapper implements IOrmWrapper {
 		return getDml().selectSizeBySqlPath(sqlPath, paramMap);
 	}
 
-	@SuppressWarnings("unchecked")
 	public <T> int deleteList(T condition) throws Exception {
-		Class<T> clazz = (Class<T>) condition.getClass();
-		return getDml().deleteList(clazz, condition);
+		return getDml().deleteList(condition.getClass(), condition);
 	}
 
 	public int deleteList(Class<?> clazz, Object condition) throws Exception {

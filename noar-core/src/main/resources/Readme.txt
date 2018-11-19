@@ -1,0 +1,14 @@
+- ThreadProperties 영역 설정
+- Authentication Filter Chain 설정
+- JNDI
+- Project별 Properties 관리를 위한 프로세스 적용
+- Cache (EHCache, Redis 등)
+- Service 호출 구조(공통 Abstract 개발?)
+- 최근 수행한 쿼리 Buffer에 담기
+- Authentication
+- Websocket
+- Properties Encoding (jasypt)
+- Mail
+- Print
+- RSA
+- CRUD Hook (Event Base?)
