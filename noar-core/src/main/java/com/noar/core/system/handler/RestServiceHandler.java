@@ -219,6 +219,18 @@ public class RestServiceHandler {
 	private Map<String, Class<?>> ENTITY_MAP = new ConcurrentHashMap<String, Class<?>>();
 
 	/**
+	 * 테이블 명을 이용하여, Entity Class가져오기 실행.
+	 * 
+	 * @param tableName
+	 * @return
+	 * @throws Exception
+	 */
+	private Class<?> getEntityByTableName(String tableName) throws Exception {
+		this.doTableEntityMapping();
+		return ENTITY_MAP.get(tableName);
+	}
+	
+	/**
 	 * Table 이름과 Entity 객체 맵핑.
 	 * 
 	 * @throws Exception
@@ -239,17 +251,5 @@ public class RestServiceHandler {
 				ENTITY_MAP.put(clazz.getAnnotation(Table.class).name(), clazz);
 			}
 		}
-	}
-
-	/**
-	 * 테이블 명을 이용하여, Entity Class가져오기 실행.
-	 * 
-	 * @param tableName
-	 * @return
-	 * @throws Exception
-	 */
-	private Class<?> getEntityByTableName(String tableName) throws Exception {
-		this.doTableEntityMapping();
-		return ENTITY_MAP.get(tableName);
 	}
 }
