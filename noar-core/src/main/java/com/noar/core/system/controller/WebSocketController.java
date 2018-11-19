@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import com.noar.common.util.BeanUtil;
 import com.noar.core.system.base.ServiceInfo;
-import com.noar.core.system.handler.JsonServiceHandler;
+import com.noar.core.system.handler.HttpServiceHandler;
 
 /**
  * WebSocket Controller
@@ -39,7 +39,7 @@ public class WebSocketController {
 		String url = session.getRequestURI().getPath();
 
 		try {
-			JsonServiceHandler jsonService = BeanUtil.get(JsonServiceHandler.class);
+			HttpServiceHandler jsonService = BeanUtil.get(HttpServiceHandler.class);
 			ServiceInfo serviceInfo = jsonService.get(url);
 			return jsonService.invoke(serviceInfo, message);
 		} catch (Throwable e) {

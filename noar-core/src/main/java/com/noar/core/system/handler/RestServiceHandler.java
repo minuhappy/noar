@@ -10,13 +10,17 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.noar.common.util.IScope;
 import com.noar.common.util.JsonUtil;
 import com.noar.common.util.PropertyUtil;
 import com.noar.common.util.SynchCtrlUtil;
+import com.noar.common.util.ThreadUtil;
 import com.noar.common.util.ValueUtil;
 import com.noar.core.ConfigConstants;
 import com.noar.core.Constants;
@@ -30,11 +34,18 @@ import com.noar.dbist.dml.Query;
 /**
  * @author Administrator
  */
+@Service
 public class RestServiceHandler {
 	boolean isUnderScoreCase;
 
 	public RestServiceHandler() {
 		isUnderScoreCase = ValueUtil.toBoolean(PropertyUtil.getProperty(ConfigConstants.ENTITY_SERVICE_UNDERSOCRE_JSON), true);
+	}
+	
+	@EventListener({ ContextRefreshedEvent.class })
+	public void init() throws Exception {
+		// Table Name & Entity Mapping
+		ThreadUtil.doAsynch(() -> this.doTableEntityMapping());
 	}
 
 	/**
@@ -75,12 +86,12 @@ public class RestServiceHandler {
 		}
 
 		switch (httpMethod) {
-		case Constants.HTTP_POST :
-			return this.doPost(clazz, urlParam, requestBody, input);
-		case Constants.HTTP_PUT :
-			return this.doPut(clazz, input);
-		case Constants.HTTP_DELETE :
-			return this.doDelete(clazz, urlParam, input);
+			case Constants.HTTP_POST :
+				return this.doPost(clazz, urlParam, requestBody, input);
+			case Constants.HTTP_PUT :
+				return this.doPut(clazz, input);
+			case Constants.HTTP_DELETE :
+				return this.doDelete(clazz, urlParam, input);
 		}
 
 		throw new ServiceException("Method Type(" + httpMethod + ") is not supported.");
@@ -208,6 +219,29 @@ public class RestServiceHandler {
 	private Map<String, Class<?>> ENTITY_MAP = new ConcurrentHashMap<String, Class<?>>();
 
 	/**
+	 * Table 이름과 Entity 객체 맵핑.
+	 * 
+	 * @throws Exception
+	 */
+	private void doTableEntityMapping() throws Exception {
+		if (!ENTITY_MAP.isEmpty())
+			return;
+
+		String basePackage = PropertyUtil.getProperty(ConfigConstants.BASE_ENTITY_PATH, "com.noar");
+		String[] entityPaths = StringUtils.tokenizeToStringArray(basePackage, ",");
+
+		ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
+		scanner.addIncludeFilter(new AnnotationTypeFilter(Table.class));
+
+		for (String entityPath : entityPaths) {
+			for (BeanDefinition bd : scanner.findCandidateComponents(entityPath)) {
+				Class<?> clazz = Class.forName(bd.getBeanClassName());
+				ENTITY_MAP.put(clazz.getAnnotation(Table.class).name(), clazz);
+			}
+		}
+	}
+
+	/**
 	 * 테이블 명을 이용하여, Entity Class가져오기 실행.
 	 * 
 	 * @param tableName
@@ -215,20 +249,7 @@ public class RestServiceHandler {
 	 * @throws Exception
 	 */
 	private Class<?> getEntityByTableName(String tableName) throws Exception {
-		if (ENTITY_MAP.isEmpty()) {
-			String basePackage = PropertyUtil.getProperty(ConfigConstants.BASE_ENTITY_PATH, "com.noar");
-			String[] entityPaths = StringUtils.tokenizeToStringArray(basePackage, ",");
-
-			ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
-			scanner.addIncludeFilter(new AnnotationTypeFilter(Table.class));
-
-			for (String entityPath : entityPaths) {
-				for (BeanDefinition bd : scanner.findCandidateComponents(entityPath)) {
-					Class<?> clazz = Class.forName(bd.getBeanClassName());
-					ENTITY_MAP.put(clazz.getAnnotation(Table.class).name(), clazz);
-				}
-			}
-		}
+		this.doTableEntityMapping();
 		return ENTITY_MAP.get(tableName);
 	}
 }

@@ -96,11 +96,11 @@ public class ThreadUtil {
 	 * 
 	 * @param runnable
 	 */
-	public static void doAsynch(IScope<Object> scope) {
+	public static void doAsynch(IAsynchScope scope) {
 		doAsynch(scope, null);
 	}
 
-	public static void doAsynch(IScope<Object> scope, Map<String, Object> properties) {
+	public static void doAsynch(IAsynchScope scope, Map<String, Object> properties) {
 		new AsynchThread(() -> {
 			try {
 				scope.execute();

@@ -21,7 +21,7 @@ import com.noar.core.exception.ServerException;
 import com.noar.core.system.base.ServiceInfo;
 import com.noar.core.util.TransactionUtil;
 
-public class JsonServiceHandler {
+public class HttpServiceHandler {
 	private static final Map<String, ServiceInfo> CACHE = new ConcurrentHashMap<String, ServiceInfo>();
 
 	public ServiceInfo get(String name) throws Throwable {

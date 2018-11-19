@@ -16,7 +16,7 @@ import com.noar.common.util.ThreadPropertyUtil;
 import com.noar.core.Constants;
 import com.noar.core.exception.ServerException;
 import com.noar.core.system.base.ServiceInfo;
-import com.noar.core.system.handler.JsonServiceHandler;
+import com.noar.core.system.handler.HttpServiceHandler;
 
 @RestController
 public class ServiceController {
@@ -34,7 +34,7 @@ public class ServiceController {
 	}
 
 	private Object doJsonService(HttpServletRequest req, HttpServletResponse res) throws Throwable {
-		JsonServiceHandler jsonService = BeanUtil.get(JsonServiceHandler.class);
+		HttpServiceHandler jsonService = BeanUtil.get(HttpServiceHandler.class);
 		ServiceInfo serviceInfo = jsonService.get(req.getRequestURI());
 		String inputPram = this.getInputJsonParam(req);
 		return jsonService.invoke(serviceInfo, inputPram);
