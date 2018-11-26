@@ -5,13 +5,16 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.noar.common.util.ValueUtil;
 import com.noar.core.exception.SystemException;
+import com.noar.core.exception.UnAuthorizedException;
 
 /**
  * RestController에 대한 Controller Advice (ExceptionHandler)
@@ -36,6 +39,13 @@ public class ExceptionAdvice {
 
 	@ExceptionHandler(value = { SystemException.class })
 	public Object handleElidomException(HttpServletRequest req, HttpServletResponse res, SystemException ex) {
+		logger.error("Error", ex);
+		return null;
+	}
+	
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	@ExceptionHandler(value = { UnAuthorizedException.class })
+	public Object handleUnAuthorizedException(HttpServletRequest req, HttpServletResponse res, SystemException ex) {
 		logger.error("Error", ex);
 		return null;
 	}
