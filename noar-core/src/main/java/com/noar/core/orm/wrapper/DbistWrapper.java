@@ -95,7 +95,7 @@ public class DbistWrapper implements IOrmWrapper {
 	}
 
 	public void insert(String tableName, Object data) throws Exception {
-		getDml().insert(data);
+		getDml().insert(tableName, data);
 	}
 
 	public void insertBatch(String tableName, List<?> list) throws Exception {

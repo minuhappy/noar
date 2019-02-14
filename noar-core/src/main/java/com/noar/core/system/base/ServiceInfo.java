@@ -4,19 +4,17 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class ServiceInfo {
 	private String name;
 	private String description;
-	@JsonIgnore
+	private String requestUri;
+	private String httpMethod;
+	private String requestBody;
+	private PathVariables pathVariable;
+	private Map<String, String> parameterMap;
+
 	private Object bean;
-	@JsonIgnore
 	private Method method;
-	@JsonIgnore
-	private String inputJsonParam;
-	@JsonIgnore
-	private Object urlParam;
 
 	private Class<?> inputType;
 	private Class<?> outputType;
@@ -38,6 +36,46 @@ public class ServiceInfo {
 		this.description = description;
 	}
 
+	public String getRequestUri() {
+		return requestUri;
+	}
+
+	public void setRequestUri(String requestUri) {
+		this.requestUri = requestUri;
+	}
+
+	public String getHttpMethod() {
+		return httpMethod;
+	}
+
+	public void setHttpMethod(String httpMethod) {
+		this.httpMethod = httpMethod;
+	}
+
+	public String getRequestBody() {
+		return requestBody;
+	}
+
+	public void setRequestBody(String requestBody) {
+		this.requestBody = requestBody;
+	}
+
+	public Map<String, String> getParameterMap() {
+		return parameterMap;
+	}
+
+	public void setParameterMap(Map<String, String> parameterMap) {
+		this.parameterMap = parameterMap;
+	}
+
+	public PathVariables getPathVariable() {
+		return pathVariable;
+	}
+
+	public void setPathVariable(PathVariables pathVariable) {
+		this.pathVariable = pathVariable;
+	}
+
 	public Object getBean() {
 		return bean;
 	}
@@ -52,22 +90,6 @@ public class ServiceInfo {
 
 	public void setMethod(Method method) {
 		this.method = method;
-	}
-
-	public String getInputJsonParam() {
-		return inputJsonParam;
-	}
-
-	public void setInputJsonParam(String inputJsonParam) {
-		this.inputJsonParam = inputJsonParam;
-	}
-
-	public Object getUrlParam() {
-		return urlParam;
-	}
-
-	public void setUrlParam(Object urlParam) {
-		this.urlParam = urlParam;
 	}
 
 	public Class<?> getInputType() {
@@ -94,7 +116,7 @@ public class ServiceInfo {
 		this.types = types;
 	}
 
-	public static class DataType {
+	public class DataType {
 		private String name;
 		private Map<String, ?> constants;
 		private List<DataField> fields;
@@ -124,7 +146,7 @@ public class ServiceInfo {
 		}
 	}
 
-	public static class DataField {
+	public class DataField {
 		private String name;
 		private String type;
 		private Object value;
@@ -151,6 +173,54 @@ public class ServiceInfo {
 
 		public void setValue(Object value) {
 			this.value = value;
+		}
+	}
+
+	public class PathVariables {
+		String contextPath;
+		String name;
+		String param;
+		String detail;
+		String detailParam;
+
+		public String getContextPath() {
+			return contextPath;
+		}
+
+		public void setContextPath(String contextPath) {
+			this.contextPath = contextPath;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public String getParam() {
+			return param;
+		}
+
+		public void setParam(String param) {
+			this.param = param;
+		}
+
+		public String getDetail() {
+			return detail;
+		}
+
+		public void setDetail(String detail) {
+			this.detail = detail;
+		}
+
+		public String getDetailParam() {
+			return detailParam;
+		}
+
+		public void setDetailParam(String detailParam) {
+			this.detailParam = detailParam;
 		}
 	}
 }

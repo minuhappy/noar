@@ -8,7 +8,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
-import com.noar.common.util.IScope;
 import com.noar.core.exception.ServerException;
 import com.noar.core.util.TransactionUtil;
 
@@ -31,7 +30,8 @@ public class ServiceAspect {
 	 * @param joinPoint
 	 */
 	// @Around("targetMethod()")
-	@Around("execution(* com.noar.core..*Biz.*(..)) || execution(* com.noar.core.system.handler.RestServiceHandler.invoke(..))")
+	// @Around("execution(* com.noar.core..*Biz.*(..)) || execution(* com.noar.core.system.handler.RestServiceHandler.invoke(..))")
+	@Around("@within(org.springframework.web.bind.annotation.RestController) || @within(org.springframework.web.bind.annotation.RequestMapping)")
 	public Object invoke(ProceedingJoinPoint call) throws Throwable {
 		/**
 		 * Meta-Info
@@ -40,12 +40,7 @@ public class ServiceAspect {
 		final Method method = this.getMethod(call.getSignature());
 		String name = new StringBuffer().append(clazz.getName()).append(".").append(method.getName()).toString();
 
-		return TransactionUtil.doScope(name, null, new IScope<Object>() {
-			@Override
-			public Object execute() throws Throwable {
-				return call.proceed();
-			}
-		});
+		return TransactionUtil.doScope(name, null, () -> call.proceed());
 	}
 
 	/**

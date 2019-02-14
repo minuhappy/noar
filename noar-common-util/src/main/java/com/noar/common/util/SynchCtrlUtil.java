@@ -1,127 +1,135 @@
 package com.noar.common.util;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * <pre>
- * com.samsung.gmes2.base.util
- * MonitorUtil.java
  * 
  * 클래스 개요 : 동시성을 제어하는 기능을 합니다.
  * </pre>
  */
 public class SynchCtrlUtil {
-	private static final Logger logger = LoggerFactory.getLogger(SynchCtrlUtil.class);
-
-	public static <T> T wrap(String name, IScope<T> closure) throws Throwable {
+	public static Object doScope(String name, IScope scope) {
 		synchronized (get(name)) {
 			try {
-				return closure.execute();
+				return execute(scope);
 			} finally {
-				release(name);
+				remove(name);
 			}
 		}
 	}
 
-	public static <K, T> T wrap(final String name, final Map<K, T> cache, final K key, final IScope<T> scope) throws Throwable {
-		ValueUtil.assertNotEmpty("name", name);
-		// ValueUtil.assertNotEmpty("cache", cache);
+	public static <K, V> V doScope(final String name, final Map<K, V> cache, final K key, final IScope scope) {
+		return doScope(name, cache, key, false, scope);
+	}
 
-		final boolean debug = logger.isDebugEnabled();
+	@SuppressWarnings("unchecked")
+	public static <K, V> V doScope(final String name, final Map<K, V> cache, final K key, final boolean doClone, final IScope scope) {
+		/**
+		 * MapCache 이용 시
+		 */
 
-		if (key == null) {
-			if (debug)
-				logger.debug("key is null, so execute closure right away.");
-			return wrap(name, scope);
+		if (cache == null) {
+			throw new RuntimeException("cache is null.");
+		} else if (key == null) {
+			return null;
 		}
-
 		if (cache.containsKey(key)) {
-			if (debug)
-				logger.debug("get data from map cache by key: " + key);
-			return cache.get(key);
+			return adjustData(cache.get(key), doClone);
 		}
+		return (V) doScope(name, () -> {
+			if (cache.containsKey(key))
+				return adjustData(cache.get(key), doClone);
 
-		return wrap(name, new IScope<T>() {
-			public T execute() throws Throwable {
-				if (cache.containsKey(key)) {
-					if (debug)
-						logger.debug("get data from map cache by key: " + key);
-					return cache.get(key);
-				}
+			V data = (V) SynchCtrlUtil.execute(scope);
+			if (data != null)
+				cache.put(key, data);
 
-				if (debug)
-					logger.debug("get data by executing closure.");
-				T value = scope.execute();
-				if (value != null) {
-					if (debug)
-						logger.debug("put data to map cache by key: " + key);
-					cache.put(key, value);
-				}
-				return value;
-			}
+			return adjustData(data, doClone);
 		});
 	}
 
-	private static Map<String, Monitor> cache = new ConcurrentHashMap<String, Monitor>();
+	private static Object execute(IScope scope) {
+		try {
+			return scope.execute();
+		} catch (Throwable t) {
+			throw new RuntimeException(t);
+		}
+	}
 
-	public static Object get(String name) {
-		ValueUtil.assertNotEmpty("name", name);
+	@SuppressWarnings("unchecked")
+	private static <T> T adjustData(T data, boolean doClone) {
+		if (data == null || !doClone) {
+			return data;
+		} else if (data instanceof List) {
+			return (T) new ArrayList<Object>((List<?>) data);
+		}
+		return data;
+	}
 
-		final boolean debug = logger.isDebugEnabled();
+	private static Map<String, Object> cache = new ConcurrentHashMap<String, Object>();
+	private static Map<String, Integer> sizeCache = new ConcurrentHashMap<String, Integer>();
+
+	/**
+	 * synchronized 영역을 위한 명명된 모니터 객체를 반환합니다.<br>
+	 * 아래와 같은 형식으로 사용합니다. <code>
+	 * <pre>
+	 * synchronized (getMonitoer(name)) {
+	 * 	try {
+	 * 		...
+	 * 	} finally {
+	 * 		expireMonitor(name);
+	 * 	}
+	 * }
+	 * </pre>
+	 * </code>
+	 * 
+	 * @param name
+	 * @return
+	 */
+	private static Object get(String name) {
+		if (name == null)
+			ValueUtil.assertNotEmpty("Name", name);
 
 		synchronized (cache) {
-			Monitor monitor = null;
-			try {
-				if (cache.containsKey(name)) {
-					monitor = cache.get(name);
-					monitor.i++;
+			if (cache.containsKey(name)) {
+				int size = sizeCache.get(name) + 1;
+				sizeCache.put(name, size);
+				return cache.get(name);
+			}
+			
+			Object obj = new Object();
+			sizeCache.put(name, 0);
+			cache.put(name, obj);
+			return obj;
+		}
+	}
+
+	/**
+	 * 명명된 모니터 객체를 제거합니다.
+	 * 
+	 * @param name
+	 */
+	private static void remove(String name) {
+		if (name == null)
+			ValueUtil.assertNotEmpty("Name", name);
+
+		synchronized (cache) {
+			if (sizeCache.containsKey(name)) {
+				int size = sizeCache.get(name);
+				if (size > 0) {
+					size--;
+					sizeCache.put(name, size);
 				} else {
-					monitor = Monitor.newInstance();
-					cache.put(name, monitor);
+					cache.remove(name);
+					sizeCache.remove(name);
 				}
-			} finally {
-				if (debug)
-					logger.debug("get monitor name: " + name + ", index: " + monitor.i);
+			} else if (cache.containsKey(name)) {
+				cache.remove(name);
 			}
-			return monitor;
 		}
-	}
-
-	public static void release(String name) {
-		ValueUtil.assertNotEmpty("name", name);
-
-		final boolean debug = logger.isDebugEnabled();
-
-		synchronized (cache) {
-			if (!cache.containsKey(name)) {
-				if (debug)
-					logger.debug("the monitor was not released because there was not any monitor with name: " + name);
-				return;
-			}
-
-			Monitor monitor = cache.get(name);
-			if (monitor.i > 0) {
-				if (debug)
-					logger.debug("release monitor name: " + name + ", index: " + monitor.i);
-				monitor.i--;
-				return;
-			}
-
-			if (debug)
-				logger.debug("remove monitor name: " + name + ", index: " + monitor.i);
-			cache.remove(name);
-		}
-	}
-
-	static class Monitor {
-		static Monitor newInstance() {
-			return new Monitor();
-		}
-
-		int i = 0;
 	}
 }

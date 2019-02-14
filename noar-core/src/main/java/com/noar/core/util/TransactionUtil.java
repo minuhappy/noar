@@ -38,7 +38,7 @@ public class TransactionUtil {
 	 * @return
 	 * @throws Throwable
 	 */
-	public static <T> T doScope(String name, IScope<T> scope) throws Throwable {
+	public static Object doScope(String name, IScope scope) throws Throwable {
 		return doScope(name, TransactionDefinition.PROPAGATION_REQUIRED, getTimeout(), scope);
 	}
 
@@ -51,7 +51,7 @@ public class TransactionUtil {
 	 * @return
 	 * @throws Throwable
 	 */
-	public static <T> T doNewScope(String name, IScope<T> scope) throws Throwable {
+	public static Object doNewScope(String name, IScope scope) throws Throwable {
 		return doScope(name, TransactionDefinition.PROPAGATION_REQUIRES_NEW, getTimeout(), scope);
 	}
 
@@ -67,7 +67,7 @@ public class TransactionUtil {
 	 * @return
 	 * @throws Throwable
 	 */
-	public static <T> T doScope(String name, Transactional tran, IScope<T> scope) throws Throwable {
+	public static Object doScope(String name, Transactional tran, IScope scope) throws Throwable {
 		int propagation = TransactionDefinition.PROPAGATION_REQUIRED;
 		int timeout = getTimeout();
 		if (tran != null) {
@@ -92,11 +92,11 @@ public class TransactionUtil {
 	 * @return
 	 * @throws Throwable
 	 */
-	private static <T> T doScope(final String name, final int propagation, final int timeout, final IScope<T> scope) throws Throwable {
+	private static Object doScope(final String name, final int propagation, final int timeout, final IScope scope) throws Throwable {
 		return doTranScope(name, propagation, timeout, scope);
 	}
 
-	private static <T> T doTranScope(String name, int propagation, int timeout, IScope<T> scope) throws Throwable {
+	private static Object doTranScope(String name, int propagation, int timeout, IScope scope) throws Throwable {
 		PlatformTransactionManager manager = getManager();
 
 		/**
@@ -104,7 +104,7 @@ public class TransactionUtil {
 		 */
 		TransactionStatus status = begin(manager, name, propagation, timeout);
 
-		T res = null;
+		Object res = null;
 		try {
 			res = scope.execute();
 			/**

@@ -10,7 +10,6 @@ import org.springframework.util.StringUtils;
 
 import com.noar.common.util.BeanUtil;
 import com.noar.common.util.ClassUtil;
-import com.noar.common.util.IScope;
 import com.noar.common.util.JsonUtil;
 import com.noar.common.util.PropertyUtil;
 import com.noar.common.util.SynchCtrlUtil;
@@ -27,33 +26,31 @@ public class HttpServiceHandler {
 	public ServiceInfo get(String name) throws Throwable {
 		if (CACHE.containsKey(name))
 			return CACHE.get(name);
-		return SynchCtrlUtil.wrap(name, CACHE, name, new IScope<ServiceInfo>() {
-			@Override
-			public ServiceInfo execute() throws Exception {
-				// Set Service Info.
-				Map<String, Object> serviceInfoMap = setServiceInfoMap(name);
-				Class<?> serviceClass = (Class<?>) serviceInfoMap.get(Constants.SERVICE_CLASS);
-				String classPath = (String) serviceInfoMap.get(Constants.CLASS_PATH);
-				String methodName = (String) serviceInfoMap.get(Constants.METHOD_NAME);
 
-				// Method Info.
-				Method method = getServiceMethod(serviceClass, methodName);
+		return SynchCtrlUtil.doScope(name, CACHE, name, () -> {
+			// Set Service Info.
+			Map<String, Object> serviceInfoMap = setServiceInfoMap(name);
+			Class<?> serviceClass = (Class<?>) serviceInfoMap.get(Constants.SERVICE_CLASS);
+			String classPath = (String) serviceInfoMap.get(Constants.CLASS_PATH);
+			String methodName = (String) serviceInfoMap.get(Constants.METHOD_NAME);
 
-				if (method == null) {
-					throw new ServerException("Service [" + classPath + "] has no method [" + methodName + "]", null);
-				}
+			// Method Info.
+			Method method = getServiceMethod(serviceClass, methodName);
 
-				Class<?> inputClass = method.getParameterCount() == 0 ? null : method.getParameterTypes()[0];
-				Class<?> outputClass = method.getReturnType();
+			if (method == null)
+				throw new ServerException("Service [" + classPath + "] has no method [" + methodName + "]", null);
 
-				// Make ServiceInfo Object.
-				ServiceInfo service = new ServiceInfo();
-				service.setBean(BeanUtil.get(serviceClass));
-				service.setMethod(method);
-				service.setInputType(inputClass);
-				service.setOutputType(outputClass);
-				return service;
-			}
+			Class<?> inputClass = method.getParameterCount() == 0 ? null : method.getParameterTypes()[0];
+			Class<?> outputClass = method.getReturnType();
+
+			// Make ServiceInfo Object.
+			ServiceInfo service = new ServiceInfo();
+			service.setBean(BeanUtil.get(serviceClass));
+			service.setMethod(method);
+			service.setInputType(inputClass);
+			service.setOutputType(outputClass);
+
+			return service;
 		});
 	}
 
@@ -86,12 +83,9 @@ public class HttpServiceHandler {
 		final Object inputObject = inputObj;
 
 		// 2. Dynamic Invocation
-		Object outputObject = TransactionUtil.doScope("ServiceUtil.Invoke", new IScope<Object>() {
-			@Override
-			public Object execute() throws Throwable {
-				boolean isEmptyParam = method.getParameterCount() == 0;
-				return isEmptyParam ? method.invoke(clazz) : method.invoke(clazz, inputObject);
-			}
+		Object outputObject = TransactionUtil.doScope("ServiceUtil.Invoke", () -> {
+			boolean isEmptyParam = method.getParameterCount() == 0;
+			return isEmptyParam ? method.invoke(clazz) : method.invoke(clazz, inputObject);
 		});
 
 		// 3. Convert Output Object To JSON String
@@ -140,17 +134,17 @@ public class HttpServiceHandler {
 		Method[] methods = clazz.getMethods();
 		for (Method m : methods) {
 			// Check Method.
-			if (Modifier.isStatic(m.getModifiers())) {
+			if (Modifier.isStatic(m.getModifiers()))
 				continue;
-			}
+
 			// Check Parameter Count.
-			if (m.getParameterCount() > 1) {
+			if (m.getParameterCount() > 1)
 				continue;
-			}
+
 			// Check Method Name.
-			if (!m.getName().equalsIgnoreCase(methodName)) {
+			if (!m.getName().equalsIgnoreCase(methodName))
 				continue;
-			}
+
 			return m;
 		}
 		return null;
@@ -164,9 +158,8 @@ public class HttpServiceHandler {
 	 * @throws Exception
 	 */
 	private Map<String, Object> setServiceInfoMap(String uri) throws Exception {
-		if (uri.endsWith("/")) {
+		if (uri.endsWith("/"))
 			uri = uri.substring(0, uri.lastIndexOf('/'));
-		}
 
 		// Get Service Class
 		String servicePath = getServicePath(uri);

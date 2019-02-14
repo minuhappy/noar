@@ -11,32 +11,23 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.noar.common.util.BeanUtil;
-import com.noar.common.util.IScope;
-import com.noar.common.util.ThreadPropertyUtil;
-import com.noar.core.Constants;
 import com.noar.core.exception.ServerException;
 import com.noar.core.system.base.ServiceInfo;
 import com.noar.core.system.handler.HttpServiceHandler;
 
 @RestController
-public class ServiceController {
+public class HttpServiceController {
 	// @RequestMapping(value = "**/service/**/*", headers = "Accept=application/json;charset=UTF-8")
 	@RequestMapping(value = "/service/**/*", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody Object jsonService(HttpServletRequest req, HttpServletResponse res) throws Throwable {
-		return ThreadPropertyUtil.doScope(new IScope<Object>() {
-			@Override
-			public Object execute() throws Throwable {
-				// Controller 앞 단에 실행 될 수 있도록 수정.
-				ThreadPropertyUtil.put(Constants.HTTP_REQUEST, req);
-				return doJsonService(req, res);
-			}
-		});
+		return doJsonService(req, res);
 	}
 
 	private Object doJsonService(HttpServletRequest req, HttpServletResponse res) throws Throwable {
 		HttpServiceHandler jsonService = BeanUtil.get(HttpServiceHandler.class);
 		ServiceInfo serviceInfo = jsonService.get(req.getRequestURI());
 		String inputPram = this.getInputJsonParam(req);
+		
 		return jsonService.invoke(serviceInfo, inputPram);
 	}
 

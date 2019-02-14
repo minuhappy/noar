@@ -6,11 +6,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Minu.Kim
- *
  */
 @SuppressWarnings("all")
 public class ThreadPropertyUtil {
-	public static <T> T doScope(IScope<T> scope) throws Throwable {
+	public static Object doScope(IScope scope) throws Throwable {
 		boolean wasRemoveAllEnabled = isRemoveAllEnabled();
 		if (wasRemoveAllEnabled) {
 			setRemoveAllEnabled(false);

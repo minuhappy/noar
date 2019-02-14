@@ -120,6 +120,20 @@ public class JsonUtil {
 	}
 
 	/**
+	 * Json String을 Object로 변환.
+	 * 
+	 * @param jsonStr
+	 * @param inputType
+	 * @return
+	 */
+	public static Object jsonToObjectOrList(String jsonStr, Class<?> inputType, boolean isUnderScore) throws Exception {
+		if (isJsonArray(jsonStr))
+			return JsonUtil.jsonArrayToObjectList(jsonStr, inputType, isUnderScore);
+		else
+			return JsonUtil.jsonToObject(jsonStr, inputType, isUnderScore);
+	}
+
+	/**
 	 * json Content를 JSONArray로 파싱
 	 * 
 	 * @param content

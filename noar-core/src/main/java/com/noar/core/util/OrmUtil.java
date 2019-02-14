@@ -104,7 +104,7 @@ public class OrmUtil {
 	}
 
 	public static void insert(String tableName, Object data) throws Exception {
-		getOrmWrapper().insert(data);
+		getOrmWrapper().insert(tableName, data);
 	}
 
 	public static void insertBatch(String tableName, List<?> list) throws Exception {

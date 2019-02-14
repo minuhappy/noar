@@ -18,12 +18,12 @@ import com.noar.core.system.handler.HttpServiceHandler;
  * @author Minu
  */
 @ServerEndpoint("/service/{service}/{methods}")
-public class WebSocketController {
+public class WebSocketServiceController {
 
 	/**
 	 * Logger
 	 */
-	private static final Logger logger = LoggerFactory.getLogger(WebSocketController.class);
+	private static final Logger logger = LoggerFactory.getLogger(WebSocketServiceController.class);
 
 	/**
 	 * WebSocket Event 처리를 위한 Controller

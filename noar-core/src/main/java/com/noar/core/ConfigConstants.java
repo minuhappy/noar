@@ -16,6 +16,8 @@ public class ConfigConstants {
 	
 	public static final String ENTITY_SERVICE_UNDERSOCRE_JSON = "entity.service.undersocre.json";
 	
+	public static final String REST_TABLE_SERVICE_ENABLED = "rest.table.service.enabled";
+	
 	
 	
 //	public static final String WEBSOCKET_BLOCK = "/blank";

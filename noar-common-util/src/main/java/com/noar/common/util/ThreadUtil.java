@@ -73,11 +73,11 @@ public class ThreadUtil {
 	 * 
 	 * @param runnable
 	 */
-	public static String doScope(IScope<Object> scope) {
+	public static String doScope(IScope scope) {
 		return doScope(scope, null);
 	}
 
-	public static String doScope(IScope<Object> scope, Map<String, Object> properties) {
+	public static String doScope(IScope scope, Map<String, Object> properties) {
 		return new SimpleThread(() -> {
 			try {
 				scope.execute();
